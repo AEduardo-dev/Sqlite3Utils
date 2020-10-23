@@ -27,21 +27,31 @@ public:
 		/*********************************************************************
 		                        CREATION AND ADDITION
 		*********************************************************************/
-		bool createTable(std::string table_name, std::pair<std::string, std::string> primary_key, std::vector<std::pair<std::string, std::string> > columns);
+		bool createTable(std::string table_name, std::pair<std::string, std::string> primary_key, \
+		                 std::vector<std::pair<std::string, std::string> > columns);
+
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
 
 		/*********************************************************************
 		                        DELETION AND REMOVING
 		*********************************************************************/
+		bool deleteRecords(std::string table_name, std::string condition);
 		bool dropTable(std::string table_name);
-		bool deleteRecord();
 		bool removedb();
 
 		/*********************************************************************
 		                          DATA OPERATIONS
 		*********************************************************************/
-		bool search();
+		bool selectRecords();
 		bool updatedb();
+
+		/*********************************************************************
+		                  CALLBACKS AND CUSTOM EXECUTION
+		*********************************************************************/
+		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
+		                  std::vector<std::string> &data);
+
+		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 		/*********************************************************************
 		                            OVERLOADS
@@ -49,11 +59,10 @@ public:
 		dbHandler operator<<(dbHandler);
 
 		/*********************************************************************
-		                  CALLBACKS AND CUSTOM EXECUTION
+		                       GETTERS (AND SETTERS)
 		*********************************************************************/
-		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
-		                  std::vector<std::string> &data);
-		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
+		std::vector<std::string> getFields(std::string table_name);
+
 
 protected:
 private:

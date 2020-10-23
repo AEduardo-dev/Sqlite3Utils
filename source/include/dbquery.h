@@ -19,16 +19,23 @@ const std::string cl_between           = "BETWEEN ";
 const std::string cl_count             = "COUNT ";
 const std::string cl_distinct          = "DISTINCT ";
 const std::string cl_exists            = "EXISTS ";
-const std::string cl_glob              = "GLOB ";
+const std::string cl_for               = "FOR ";
+const std::string cl_for_each          = "FOR EACH ";
+const std::string cl_from              = "FROM ";
+const std::string cl_glob(const std::string pattern);
 const std::string cl_group_by          = "GROUP BY ";
 const std::string cl_having            = "HAVING ";
 const std::string cl_in                = "IN ";
-const std::string cl_like              = "LIKE ";
+const std::string cl_like(const std::string pattern);
+const std::string cl_limit(int limit_value);
 const std::string cl_not(const std::string clause);
+const std::string cl_offset(int offset_value);
 const std::string cl_on                = "ON ";
 const std::string cl_or                = "OR ";
 const std::string cl_order_by          = "ORDER BY ";
 const std::string cl_sum               = "SUM ";
+const std::string cl_values            = "VALUES ";
+const std::string cl_where             = "WHERE ";
 
 /*********************************************************************
                         DB-QUERY STATEMENTS
@@ -53,9 +60,6 @@ const std::string cmd_drop_table        = "DROP TABLE ";
 const std::string cmd_drop_trigger      = "DROP TRIGGER ";
 const std::string cmd_drop_view         = "DROP VIEW ";
 const std::string cmd_explain           = "EXPLAIN ";
-const std::string cmd_for               = "FOR ";
-const std::string cmd_for_each          = "FOR EACH ";
-const std::string cmd_from              = "FROM ";
 const std::string cmd_insert            = "INSERT ";
 const std::string cmd_insert_into       = "INSERT INTO ";
 const std::string cmd_insert_on         = "INSERT ON ";
@@ -70,8 +74,6 @@ const std::string cmd_select            = "SELECT ";
 const std::string cmd_update            = "UPDATE ";
 const std::string cmd_using             = "USING ";
 const std::string cmd_vacuum            = "VACUUM";
-const std::string cmd_values            = "VALUES ";
-const std::string cmd_where             = "WHERE ";
 
 /*********************************************************************
                         DATATYPES AND DB TYPES

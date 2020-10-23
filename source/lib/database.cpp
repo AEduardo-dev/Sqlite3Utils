@@ -30,8 +30,8 @@ database::dbHandler::dbHandler() {
 				 */
 
 				std::string exec_string = query::cmd_select + "name " + \
-				                          query::cmd_from + "sqlite_master " + \
-				                          query::cmd_where + query::opt_type(query::db_table) + \
+				                          query::cl_from + "sqlite_master " + \
+				                          query::cl_where + query::opt_type(query::db_table) + \
 				                          query::cl_order_by + "name" + query::end_query;
 
 				sql = exec_string.c_str();
@@ -103,8 +103,8 @@ database::dbHandler::dbHandler(std::string db_name) {
 				 */
 
 				exec_string = query::cmd_select + "name " + \
-				              query::cmd_from + "sqlite_master " + \
-				              query::cmd_where + query::opt_type(query::db_table) + \
+				              query::cl_from + "sqlite_master " + \
+				              query::cl_where + query::opt_type(query::db_table) + \
 				              query::cl_order_by + "name" + query::end_query;
 
 				sql = exec_string.c_str();
@@ -187,7 +187,7 @@ bool database::dbHandler::createTable(std::string table_name, \
 		sql = exec_string.c_str();
 
 		/* Execute SQL exec_string with callback*/
-		rc = sqlite3_exec(db, sql, database::dbHandler::callback, 0, &zErrMsg);
+		rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
 
 		/*Return failure if the command did not Execute properly.
 		   Else, return success */
@@ -295,11 +295,11 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 				/* Create SQL query depending of the use case */
 				if (!fields.empty()) {
 						exec_string = query::cmd_insert_into + table_name + " (" + fields + " )"+ \
-						              query::cmd_values + "(" + values_to_insert + ")"+ \
+						              query::cl_values + "(" + values_to_insert + ")"+ \
 						              query::end_query;
 				} else {
 						exec_string = query::cmd_insert_into + table_name + \
-						              query::cmd_values + "(" + values_to_insert + ")"+ \
+						              query::cl_values + "(" + values_to_insert + ")"+ \
 						              query::end_query;
 				}
 
@@ -307,7 +307,7 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 
 				/* Execute SQL exec_string using the callback to see the insertion,
 				   no other information is extracted here*/
-				rc = sqlite3_exec(db, sql, database::dbHandler::callback, 0, &zErrMsg);
+				rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
 
 				if( rc != SQLITE_OK ) {
 						fprintf(stderr, "SQL error: %s\n", zErrMsg);
@@ -322,6 +322,39 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 		}
 }
 
+/******************************deleteRecord***********************************
+   Delete records from table table_name that fit a certain condition given.
+   If this condition is "all", every record in the table will be deleted.
+ ****************************************************************************/
+bool database::dbHandler::deleteRecords(std::string table_name, std::string condition){
+		std::string exec_string;
+
+		if(condition == "all") {
+				exec_string = query::cmd_delete + query::cl_from+table_name + \
+				              query::end_query;
+		} else{
+				exec_string = query::cmd_delete + query::cl_from+table_name + \
+				              query::cl_where + condition + \
+				              query::end_query;
+		}
+
+		/* Execute SQL exec_string using the callback since no information
+		   needs to be extracted */
+		rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+
+		if( rc != SQLITE_OK ) {
+				fprintf(stderr, "SQL error: %s\n", zErrMsg);
+				sqlite3_free(zErrMsg);
+				return EXIT_FAILURE;
+
+		} else {
+				fprintf(stdout, "Records deleted successfully.\n");
+				/* Then exit with success value */
+				return EXIT_SUCCESS;
+		}
+}
+
+
 
 /******************************dropTable*************************************
    Drops the table table_name from the database linked to this handler
@@ -335,7 +368,7 @@ bool database::dbHandler::dropTable(std::string table_name){
 		sql = exec_string.c_str();
 
 		/* Execute SQL exec_string using the callback */
-		rc = sqlite3_exec(db, sql, database::dbHandler::callback, 0, &zErrMsg);
+		rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
 
 		if( rc != SQLITE_OK ) {
 				fprintf(stderr, "SQL error: %s\n", zErrMsg);
@@ -350,9 +383,6 @@ bool database::dbHandler::dropTable(std::string table_name){
 				/* Then exit with succes flag*/
 				return EXIT_SUCCESS;
 		}
-
-
-		return EXIT_SUCCESS;
 }
 
 /******************************executeQuery*************************************
