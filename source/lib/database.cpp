@@ -29,10 +29,10 @@ database::dbHandler::dbHandler() {
 				                          "ORDER BY name;";
 				 */
 
-				std::string exec_string = query::cmd_select + "name " \
-				                          +query::cmd_from + "sqlite_master " \
-				                          +query::cmd_where + query::opt_type(query::db_table) \
-				                          +query::cl_order_by + "name" + query::end_query;
+				std::string exec_string = query::cmd_select + "name " + \
+				                          query::cmd_from + "sqlite_master " + \
+				                          query::cmd_where + query::opt_type(query::db_table) + \
+				                          query::cl_order_by + "name" + query::end_query;
 
 				sql = exec_string.c_str();
 
@@ -102,10 +102,10 @@ database::dbHandler::dbHandler(std::string db_name) {
 				                          "ORDER BY name;";
 				 */
 
-				exec_string = query::cmd_select + "name " \
-				              +query::cmd_from + "sqlite_master " \
-				              +query::cmd_where + query::opt_type(query::db_table) \
-				              +query::cl_order_by + "name"+query::end_query;
+				exec_string = query::cmd_select + "name " + \
+				              query::cmd_from + "sqlite_master " + \
+				              query::cmd_where + query::opt_type(query::db_table) + \
+				              query::cl_order_by + "name" + query::end_query;
 
 				sql = exec_string.c_str();
 
@@ -162,14 +162,14 @@ bool database::dbHandler::createTable(std::string table_name, \
 		std::string extra_options;
 
 		/* Create SQL exec_string base */
-		exec_string = query::cmd_create_table + table_name \
-		              + "(" + primary_key.first + " " + primary_key.second +",";
+		exec_string = query::cmd_create_table + table_name + \
+		              "(" + primary_key.first + " " + primary_key.second +",";
 
 		/* Generate each of the fields options in the table */
 		for (size_t i = 0; i < fields.size(); ++i) {
 				extra_options += fields[i].first + " " + fields[i].second;
 
-				/* For all the fields but the last one we need a coma at the end of the exec_string*/
+				/* For all the fields but the last one we need a comma at the end of the exec_string*/
 				if (i < fields.size() - 1) {
 						extra_options += ",";
 				}
@@ -223,10 +223,16 @@ bool database::dbHandler::createTable(std::string table_name, \
 
 /**********************************insertRecord*******************************
    Insert a row into the table "table_name" which field values correspond to
-         the ones stored in the "values" vector.
+   the ones stored in the "values" vector. It can execute in two ways:
+
+   - If the user wants to give a value to each of the fields of the table,
+   then the query will not contain the names of them.
+
+   -If, otherwise, the user wants to set only certain values, the ones passed
+   in the values vector as the empty string "" will not be added to the query
  ****************************************************************************/
-bool database::dbHandler::insertRecord(std::string table_name, \
-                                       std::vector<std::string> values){
+bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::string> values){
+
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
 
@@ -245,43 +251,58 @@ bool database::dbHandler::insertRecord(std::string table_name, \
 		// 				std::cout << "in vector = "<< x << '\n';
 		// 		}
 		// }
-		/* Prepare the name of the fields needed to define the format of the data to insert */
-		for (size_t i = 0; i < this->tables[key].size(); i++) {
 
-				std::string field_name(this->tables[key][i]);
-
-				if (i < this->tables[key].size() - 1) {
-						fields += field_name + ",";
-				} else {
-						fields += field_name;
-				}
-
-		}
-
-		/* Now check if number of values is equal to the number of fields, if not-> insert error */
-		/*TODO:12/10/2020.- Add control of null/not null if possible. Maybe use the values with the
-		   names of the fields so the user can decide which ones to fill */
+		/* Check if number of values is equal to the number of fields, if not-> insert error */
 
 		if (values.size() != this->tables[key].size()) {
 				fprintf(stderr, "SQL error: Number of variables differs from number of fields. Insert operation not possible\n");
 				return EXIT_FAILURE;
 
 		} else {
-				/* Now we get all the values to be inserted in the row */
-				for (size_t j = 0; j < values.size(); j++) {
-						/* The last element does not have a coma after it */
-						if (j < values.size() - 1) {
-								values_to_insert += values[j] + ",";
-						} else {
-								values_to_insert += values[j];
+
+				/* Check if we need to get the names of the fields to fill with data */
+				if (std::binary_search(values.begin(), values.end(), "")) {
+
+						/* Prepare the name of the fields needed to define the format of the data to insert */
+						for (size_t i = 0; i < this->tables[key].size(); i++) {
+
+								/* If the value is not empty we add it to the fields list */
+								if (values[i] != "") {
+
+										/* Get the name of the field*/
+										std::string field_name(this->tables[key][i]);
+
+										/* For all of them add a comma at the end*/
+										fields += field_name + ",";
+								}
 						}
+
+						/* Once the last one was written, get rid of the trailing comma */
+						fields.pop_back();
 				}
 
+				/* Now we get all the values to be inserted in the row */
+				for (size_t j = 0; j < values.size(); j++) {
 
-				/* Create SQL query */
-				exec_string = query::cmd_insert_into + table_name + " (" + fields + " )"+ \
-				              query::cmd_values + "(" + values_to_insert + ")"+ \
-				              query::end_query;
+						if (values[j] != "") {
+								values_to_insert += values[j] + ",";
+						}
+				}
+				/* The last element does not have a comma after it */
+				values_to_insert.pop_back();
+
+
+				/* Create SQL query depending of the use case */
+				if (!fields.empty()) {
+						exec_string = query::cmd_insert_into + table_name + " (" + fields + " )"+ \
+						              query::cmd_values + "(" + values_to_insert + ")"+ \
+						              query::end_query;
+				} else {
+						exec_string = query::cmd_insert_into + table_name + \
+						              query::cmd_values + "(" + values_to_insert + ")"+ \
+						              query::end_query;
+				}
+
 				sql = exec_string.c_str();
 
 				/* Execute SQL exec_string using the callback to see the insertion,
@@ -292,11 +313,46 @@ bool database::dbHandler::insertRecord(std::string table_name, \
 						fprintf(stderr, "SQL error: %s\n", zErrMsg);
 						sqlite3_free(zErrMsg);
 						return EXIT_FAILURE;
+
 				} else {
-						fprintf(stdout, "Records created successfully\n");
+						fprintf(stdout, "Records created successfully.\n");
+						/* Then exit with success value */
 						return EXIT_SUCCESS;
 				}
 		}
+}
+
+
+/******************************dropTable*************************************
+   Drops the table table_name from the database linked to this handler
+ ***************************************************************************/
+bool database::dbHandler::dropTable(std::string table_name){
+		std::string exec_string;
+
+		exec_string = query::cmd_drop_table + table_name \
+		              + query::end_query;
+
+		sql = exec_string.c_str();
+
+		/* Execute SQL exec_string using the callback */
+		rc = sqlite3_exec(db, sql, database::dbHandler::callback, 0, &zErrMsg);
+
+		if( rc != SQLITE_OK ) {
+				fprintf(stderr, "SQL error: %s\n", zErrMsg);
+				sqlite3_free(zErrMsg);
+				return EXIT_FAILURE;
+		} else {
+				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
+
+				/* After dropping it we need to delete it from the tables map as well */
+				this->tables.erase(table_name.c_str());
+
+				/* Then exit with succes flag*/
+				return EXIT_SUCCESS;
+		}
+
+
+		return EXIT_SUCCESS;
 }
 
 /******************************executeQuery*************************************

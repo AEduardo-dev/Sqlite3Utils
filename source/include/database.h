@@ -18,17 +18,39 @@ namespace database {
 
 class dbHandler {
 public:
+		/*********************************************************************
+		                       CONSTRUCTORS AND DESTRUCTOR
+		*********************************************************************/
 		dbHandler();
 		dbHandler(std::string db_name);
 		~dbHandler();
+		/*********************************************************************
+		                        CREATION AND ADDITION
+		*********************************************************************/
 		bool createTable(std::string table_name, std::pair<std::string, std::string> primary_key, std::vector<std::pair<std::string, std::string> > columns);
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
-		bool updatedb();
+
+		/*********************************************************************
+		                        DELETION AND REMOVING
+		*********************************************************************/
+		bool dropTable(std::string table_name);
 		bool deleteRecord();
-		bool search();
 		bool removedb();
 
+		/*********************************************************************
+		                          DATA OPERATIONS
+		*********************************************************************/
+		bool search();
+		bool updatedb();
+
+		/*********************************************************************
+		                            OVERLOADS
+		*********************************************************************/
 		dbHandler operator<<(dbHandler);
+
+		/*********************************************************************
+		                  CALLBACKS AND CUSTOM EXECUTION
+		*********************************************************************/
 		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
 		                  std::vector<std::string> &data);
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
