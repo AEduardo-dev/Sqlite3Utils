@@ -43,7 +43,6 @@ public:
 		                          DATA OPERATIONS
 		*********************************************************************/
 		bool selectRecords();
-		bool updatedb();
 
 		/*********************************************************************
 		                  CALLBACKS AND CUSTOM EXECUTION
@@ -63,8 +62,6 @@ public:
 		*********************************************************************/
 		std::vector<std::string> getFields(std::string table_name);
 
-
-protected:
 private:
 		/* Indicator of succes or failure */
 		int rc;
