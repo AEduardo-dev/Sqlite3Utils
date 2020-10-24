@@ -3,8 +3,6 @@
 
 using database::dbHandler;
 
-//TODO: 24/10/2020 Include descrition of arguments in methods docstrings
-
 /******************************Constructor (test)***************************
    Constructor for testing, it does not have any further use as it directly
    connects to the database test.db
@@ -379,21 +377,26 @@ bool database::dbHandler::dropTable(std::string table_name){
    recommended as well. Any other argument has a default value that causes
    the condition to not be included in the query.
  ***************************************************************************/
-bool database::dbHandler::selectRecords(std::string table_name, std::vector<std::string> fields, \
-                                        bool select_distinct, std::string where_cond, \
-                                        std::vector<std::string> group_by, \
-                                        std::string having_cond, \
-                                        std::vector<std::string> order_by, \
-                                        std::string order_type, int limit, int offset){
+std::vector<std::string>  database::dbHandler::selectRecords(std::string table_name, std::vector<std::string> fields, \
+                                                             bool select_distinct, std::string where_cond, \
+                                                             std::vector<std::string> group_by, \
+                                                             std::string having_cond, \
+                                                             std::vector<std::string> order_by, \
+                                                             std::string order_type, int limit, int offset){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
+		std::vector<int> data_indexes;
+		std::vector<std::string> select_data;
 
 		/* If it is not the wildcard */
-		if (fields[0] != "*" && fields[0] != "") {
+		if (fields[0] != "*") {
 
-				/* Compose the fields we want to select */
+				data_indexes.push_back(0);
+				/* Compose the fields we want to select and the indexes of the data that
+				   will be extracted from the execution of the query*/
 				for(auto field : fields) {
 						fields_list += field+",";
+						data_indexes.push_back(data_indexes.back()+1);
 				}
 
 				/* Then remove the last comma and add a space */
@@ -401,6 +404,11 @@ bool database::dbHandler::selectRecords(std::string table_name, std::vector<std:
 		}
 		else {
 				fields_list = fields[0];
+
+				for (unsigned int i = 0; i < this->tables[table_name.c_str()].size(); ++i) {
+						data_indexes.push_back(i);
+				}
+
 		}
 
 		/* If we want to group the results */
@@ -427,10 +435,6 @@ bool database::dbHandler::selectRecords(std::string table_name, std::vector<std:
 				order_list.replace(order_list.end()-1, order_list.end(), " ");
 		}
 
-
-
-
-
 		exec_string = query::cmd_select + ((select_distinct) ? query::cl_distinct : "") \
 		              + fields_list + query::cl_from + table_name+ \
 		              ((where_cond != "") ? query::cl_where + where_cond : "")+ \
@@ -441,8 +445,17 @@ bool database::dbHandler::selectRecords(std::string table_name, std::vector<std:
 		              ((offset != 0) ? query::cl_offset(offset) : "") + \
 		              query::end_query;
 
+		sql = exec_string.c_str();
 
-		return EXIT_SUCCESS;
+		if(executeQuery(sql, data_indexes, select_data) == EXIT_SUCCESS) {
+				return select_data;
+		} else{
+				fprintf(stdout, "Select operation failed, no data loaded\n");
+				select_data.clear();
+				return select_data;
+		}
+
+
 
 }
 
@@ -452,8 +465,10 @@ bool database::dbHandler::selectRecords(std::string table_name, std::vector<std:
    to retrieve from the output as arguments, and returns the data in the vector
    passed as reference and a success flag.
  ***************************************************************************/
-bool database::dbHandler::executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
-                                       std::vector<std::string> &data){
+bool database::dbHandler::executeQuery(const char *sql_query, \
+                                       std::vector<int> indexes_stmt, \
+                                       std::vector<std::string> &data, \
+                                       bool verbose){
 
 		/* First make sure we are working with an empty vector */
 		data.clear();
@@ -477,8 +492,12 @@ bool database::dbHandler::executeQuery(const char *sql_query, std::vector<int> i
 										/* Extract the data in text format and then put it in the vector */
 										data.push_back(reinterpret_cast< char const* > \
 										               (sqlite3_column_text(stmt, x)));
+										(verbose) ? std::cout << sqlite3_column_text(stmt, x) << "  " : \
+										    std::cout <<"";
 								}
 						}
+						(verbose) ? std::cout << '\n' : \
+						    std::cout <<"";
 				}
 		}
 		/*

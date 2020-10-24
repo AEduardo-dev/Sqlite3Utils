@@ -12,6 +12,9 @@
 
 //TODO: 24/10/2020 DOCSTRING for dbHandler class
 
+
+//TODO: 24/10/2020 Include descrition of arguments in methods docstrings
+
 /******************************dbHandler Class******************************
    DOCSTRING
 ***************************************************************************/
@@ -43,18 +46,19 @@ public:
 		/*********************************************************************
 		                          DATA OPERATIONS
 		*********************************************************************/
-		bool selectRecords(std::string table_name, std::vector<std::string> fields = {""},  \
-		                   bool select_distinct = false, \
-		                   std::string where_cond = "", std::vector<std::string> group_by = {""}, \
-		                   std::string having_cond = "", std::vector<std::string> order_by = {""}, \
-		                   std::string order_type = "ASC", \
-		                   int limit = 0, int offset = 0);
+		std::vector<std::string>  selectRecords(std::string table_name, \
+		                                        std::vector<std::string> fields = {"*"},  \
+		                                        bool select_distinct = false, \
+		                                        std::string where_cond = "", std::vector<std::string> group_by = {""}, \
+		                                        std::string having_cond = "", std::vector<std::string> order_by = {""}, \
+		                                        std::string order_type = "ASC", \
+		                                        int limit = 0, int offset = 0);
 
 		/*********************************************************************
 		                  CALLBACKS AND CUSTOM EXECUTION
 		*********************************************************************/
 		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
-		                  std::vector<std::string> &data);
+		                  std::vector<std::string> &data, bool verbose = false);
 
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
