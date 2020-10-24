@@ -149,6 +149,11 @@ database::dbHandler::dbHandler(std::string db_path) {
 		}
 }
 
+
+void database::dbHandler::closeConnection(){
+		delete this;
+}
+
 /*********************************createTable**********************************
    Create a table inside the database with name table_name, name of the primary key field as
    primary_key and as many extra fields as we may desire sending them as a vector of pairs.
@@ -405,7 +410,7 @@ std::vector<std::string>  database::dbHandler::selectRecords(std::string table_n
 		else {
 				fields_list = fields[0];
 
-				for (unsigned int i = 0; i < this->tables[table_name.c_str()].size(); ++i) {
+				for (unsigned int i = 0; i < tables[table_name.c_str()].size(); ++i) {
 						data_indexes.push_back(i);
 				}
 

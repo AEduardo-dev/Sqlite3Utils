@@ -28,6 +28,7 @@ public:
 		*********************************************************************/
 		dbHandler();
 		dbHandler(std::string db_name);
+		void closeConnection();
 		~dbHandler();
 		/*********************************************************************
 		                        CREATION AND ADDITION
@@ -65,12 +66,40 @@ public:
 		/*********************************************************************
 		                            OVERLOADS
 		*********************************************************************/
-		dbHandler operator<<(dbHandler);
+		friend std::ostream &operator<< (std::ostream &output, const dbHandler &database){
+				std::string table_name;
+
+				output << "Handler for database "<< database.db_name << '\n';
+				output << '\n' << "The following information is managed: "<< '\n';
+				output << database.tables.size() << " number of tables...";
+
+				for (auto table : database.tables) {
+
+						table_name = table.first;
+						output << "Table: " <<table_name << '\n';
+						output << "With "<< table.second.size() << \
+						    " number of fields, which are:"<< '\n';
+
+						for (auto field : table.second) {
+								output << field << "  ";
+						}
+						output << '\n'<< '\n';
+				}
+
+				return output;
+		};
 
 		/*********************************************************************
 		                       GETTERS (AND SETTERS)
 		*********************************************************************/
-		std::vector<std::string> getFields(std::string table_name);
+		std::vector<std::string> getFields(std::string table_name){
+				std::vector<std::string> fields;
+
+				for(auto field : this->tables[table_name.c_str()]) {
+						fields.push_back(field);
+				}
+				return fields;
+		};
 
 private:
 		/* Indicator of succes or failure */
