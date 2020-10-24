@@ -10,6 +10,8 @@
 #include <vector>
 #include <map>
 
+//TODO: 24/10/2020 DOCSTRING for dbHandler class
+
 /******************************dbHandler Class******************************
    DOCSTRING
 ***************************************************************************/
@@ -37,12 +39,16 @@ public:
 		*********************************************************************/
 		bool deleteRecords(std::string table_name, std::string condition);
 		bool dropTable(std::string table_name);
-		bool removedb();
 
 		/*********************************************************************
 		                          DATA OPERATIONS
 		*********************************************************************/
-		bool selectRecords();
+		bool selectRecords(std::string table_name, std::vector<std::string> fields = {""},  \
+		                   bool select_distinct = false, \
+		                   std::string where_cond = "", std::vector<std::string> group_by = {""}, \
+		                   std::string having_cond = "", std::vector<std::string> order_by = {""}, \
+		                   std::string order_type = "ASC", \
+		                   int limit = 0, int offset = 0);
 
 		/*********************************************************************
 		                  CALLBACKS AND CUSTOM EXECUTION
@@ -65,6 +71,8 @@ public:
 private:
 		/* Indicator of succes or failure */
 		int rc;
+		/* Path to database file */
+		const char *db_name;
 		/* Pointer to database */
 		sqlite3 *db;
 		/* Command to be executed in the sql */

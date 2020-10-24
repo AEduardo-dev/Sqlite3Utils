@@ -3,6 +3,8 @@
 
 using database::dbHandler;
 
+//TODO: 24/10/2020 Include descrition of arguments in methods docstrings
+
 /******************************Constructor (test)***************************
    Constructor for testing, it does not have any further use as it directly
    connects to the database test.db
@@ -29,8 +31,8 @@ database::dbHandler::dbHandler() {
 				                          "ORDER BY name;";
 				 */
 
-				std::string exec_string = query::cmd_select + "name " + \
-				                          query::cl_from + "sqlite_master " + \
+				std::string exec_string = query::cmd_select + "name" + \
+				                          query::cl_from + "sqlite_master" + \
 				                          query::cl_where + query::opt_type(query::db_table) + \
 				                          query::cl_order_by + "name" + query::end_query;
 
@@ -80,20 +82,21 @@ database::dbHandler::dbHandler() {
    tries to load all the table and field names that may be in it for
    future use in the methods.
  ***************************************************************************/
-database::dbHandler::dbHandler(std::string db_name) {
+database::dbHandler::dbHandler(std::string db_path) {
 
-		const char *name = db_name.c_str();
+		const char *path = db_path.c_str();
 		std::string exec_string;
 		std::vector<std::string> tables_names, fields;
 
-		rc = sqlite3_open(name, &db);
+		rc = sqlite3_open(path, &db);
 
 		if (rc) {
 				fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
 				/* If the db cannot be opened -> delete the object */
 				delete this;
 		} else {
-				fprintf(stderr, "Opened %s database successfully\n", name);
+				fprintf(stderr, "Opened %s database successfully\n", path);
+				this->db_name = path;
 
 				/* If db already exists, try to get the names of the tables in it
 				   std::string exec_string = "SELECT name " \
@@ -102,8 +105,8 @@ database::dbHandler::dbHandler(std::string db_name) {
 				                          "ORDER BY name;";
 				 */
 
-				exec_string = query::cmd_select + "name " + \
-				              query::cl_from + "sqlite_master " + \
+				exec_string = query::cmd_select + "name" + \
+				              query::cl_from + "sqlite_master" + \
 				              query::cl_where + query::opt_type(query::db_table) + \
 				              query::cl_order_by + "name" + query::end_query;
 
@@ -143,7 +146,7 @@ database::dbHandler::dbHandler(std::string db_name) {
 						}
 				}
 				else {
-						fprintf(stderr, "Error loading tables from %s\n", name);
+						fprintf(stderr, "Error loading tables from %s\n", path);
 				}
 		}
 }
@@ -236,22 +239,6 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
 
-		/* Debug check */
-		// for (auto elm:this->tables) {
-		// 		std::cout << "key =" << elm.first << '\n';
-		//
-		// 		if (elm.first == key ) {
-		// 				std::cout << "found the tables" << '\n';
-		// 				std::cout << "size of fields = "<< elm.second.size() << '\n';
-		// 		} else {
-		// 				std::cout << "not found" << '\n';
-		// 		}
-		//
-		// 		for(auto x : elm.second) {
-		// 				std::cout << "in vector = "<< x << '\n';
-		// 		}
-		// }
-
 		/* Check if number of values is equal to the number of fields, if not-> insert error */
 
 		if (values.size() != this->tables[key].size()) {
@@ -277,8 +264,8 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 								}
 						}
 
-						/* Once the last one was written, get rid of the trailing comma */
-						fields.pop_back();
+						/* Once the last one was written, get rid of the trailing comma and add a space*/
+						fields.replace(fields.end()-1, fields.end(), " ");
 				}
 
 				/* Now we get all the values to be inserted in the row */
@@ -289,8 +276,7 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 						}
 				}
 				/* The last element does not have a comma after it */
-				values_to_insert.pop_back();
-
+				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), " ");
 
 				/* Create SQL query depending of the use case */
 				if (!fields.empty()) {
@@ -325,15 +311,16 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 /******************************deleteRecord***********************************
    Delete records from table table_name that fit a certain condition given.
    If this condition is "all", every record in the table will be deleted.
+   The condition will be added after a WHERE clause in the query
  ****************************************************************************/
 bool database::dbHandler::deleteRecords(std::string table_name, std::string condition){
 		std::string exec_string;
 
 		if(condition == "all") {
-				exec_string = query::cmd_delete + query::cl_from+table_name + \
+				exec_string = query::cmd_delete + query::cl_from + table_name + \
 				              query::end_query;
 		} else{
-				exec_string = query::cmd_delete + query::cl_from+table_name + \
+				exec_string = query::cmd_delete + query::cl_from + table_name + \
 				              query::cl_where + condition + \
 				              query::end_query;
 		}
@@ -383,6 +370,80 @@ bool database::dbHandler::dropTable(std::string table_name){
 				/* Then exit with succes flag*/
 				return EXIT_SUCCESS;
 		}
+}
+
+
+/******************************selectRecords*********************************
+   Selects the records from table table_name that fit the conditions given.
+   Only the table name is necessary for this to execute, but fields are
+   recommended as well. Any other argument has a default value that causes
+   the condition to not be included in the query.
+ ***************************************************************************/
+bool database::dbHandler::selectRecords(std::string table_name, std::vector<std::string> fields, \
+                                        bool select_distinct, std::string where_cond, \
+                                        std::vector<std::string> group_by, \
+                                        std::string having_cond, \
+                                        std::vector<std::string> order_by, \
+                                        std::string order_type, int limit, int offset){
+
+		std::string exec_string, fields_list, group_list, order_list, condition = "";
+
+		/* If it is not the wildcard */
+		if (fields[0] != "*" && fields[0] != "") {
+
+				/* Compose the fields we want to select */
+				for(auto field : fields) {
+						fields_list += field+",";
+				}
+
+				/* Then remove the last comma and add a space */
+				fields_list.replace(fields_list.end()-1, fields_list.end(), " ");
+		}
+		else {
+				fields_list = fields[0];
+		}
+
+		/* If we want to group the results */
+		if (group_by[0] != "") {
+
+				/* Compose the fields we want to select */
+				for(auto column : order_by) {
+						group_list += column+",";
+				}
+
+				/* Then remove the last comma and add a space */
+				group_list.replace(group_list.end()-1, group_list.end(), " ");
+		}
+
+		/* If we want to order the results */
+		if (order_by[0] != "") {
+
+				/* Compose the fields we want to select */
+				for(auto column : order_by) {
+						order_list += column+",";
+				}
+
+				/* Then remove the last comma and add a space */
+				order_list.replace(order_list.end()-1, order_list.end(), " ");
+		}
+
+
+
+
+
+		exec_string = query::cmd_select + ((select_distinct) ? query::cl_distinct : "") \
+		              + fields_list + query::cl_from + table_name+ \
+		              ((where_cond != "") ? query::cl_where + where_cond : "")+ \
+		              ((group_by[0] != "") ? query::cl_group_by + group_list : "")+ \
+		              ((having_cond != "") ? query::cl_having + having_cond : "")+ \
+		              ((order_by[0] != "") ? query::cl_order_by + order_list + order_type : "")+ \
+		              ((limit != 0) ? query::cl_limit(limit) : "") + \
+		              ((offset != 0) ? query::cl_offset(offset) : "") + \
+		              query::end_query;
+
+
+		return EXIT_SUCCESS;
+
 }
 
 /******************************executeQuery*************************************
