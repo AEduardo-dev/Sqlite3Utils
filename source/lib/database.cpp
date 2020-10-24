@@ -282,15 +282,10 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
 				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), " ");
 
 				/* Create SQL query depending of the use case */
-				if (!fields.empty()) {
-						exec_string = query::cmd_insert_into + table_name + " (" + fields + " )"+ \
-						              query::cl_values + "(" + values_to_insert + ")"+ \
-						              query::end_query;
-				} else {
-						exec_string = query::cmd_insert_into + table_name + \
-						              query::cl_values + "(" + values_to_insert + ")"+ \
-						              query::end_query;
-				}
+				exec_string = query::cmd_insert_into + table_name + \
+				              ((!fields.empty()) ? " (" + fields + " )" : "" )+ \
+				              query::cl_values + "(" + values_to_insert + ")"+ \
+				              query::end_query;
 
 				sql = exec_string.c_str();
 
@@ -317,16 +312,12 @@ bool database::dbHandler::insertRecord(std::string table_name, std::vector<std::
    The condition will be added after a WHERE clause in the query
  ****************************************************************************/
 bool database::dbHandler::deleteRecords(std::string table_name, std::string condition){
+
 		std::string exec_string;
 
-		if(condition == "all") {
-				exec_string = query::cmd_delete + query::cl_from + table_name + \
-				              query::end_query;
-		} else{
-				exec_string = query::cmd_delete + query::cl_from + table_name + \
-				              query::cl_where + condition + \
-				              query::end_query;
-		}
+		exec_string = query::cmd_delete + query::cl_from + table_name + \
+		              ((condition == "all") ? query::cl_where + condition : "") + \
+		              query::end_query;
 
 		/* Execute SQL exec_string using the callback since no information
 		   needs to be extracted */
