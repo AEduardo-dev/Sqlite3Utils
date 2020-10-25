@@ -7,12 +7,18 @@
 /******************************************************************************
    Definition file used for easier sql query composition
 ******************************************************************************/
-
+/*! \brief namespace containing the macros for queries definitons
+ *
+ *
+ */
 namespace query {
 
 /*********************************************************************
                               CLAUSES
 *********************************************************************/
+/*! \brief namespace containing the query clauses
+ *
+ */
 namespace cl{
     const std::string and_              = " AND ";
     const std::string as                = " AS ";
@@ -24,19 +30,61 @@ namespace cl{
     const std::string for_              = " FOR ";
     const std::string for_each          = " FOR EACH ";
     const std::string from              = " FROM ";
+
+    /*!
+     * [glob description]
+     * @param  pattern [description]
+     * @return         [description]
+     */
     const std::string glob(const std::string pattern);
     const std::string group_by          = " GROUP BY ";
     const std::string having            = " HAVING ";
     const std::string in                = " IN ";
+
+    /*!
+     * [like description]
+     * @param  pattern [description]
+     * @return         [description]
+     */
     const std::string like(const std::string pattern);
+
+    /*!
+     * [limit description]
+     * @param  limit_value [description]
+     * @return             [description]
+     */
     const std::string limit(int limit_value);
+
+    /*!
+     * [not_ description]
+     * @param  clause [description]
+     * @return        [description]
+     */
     const std::string not_(const std::string clause);
+
+    /*!
+     * [offset description]
+     * @param  offset_value [description]
+     * @return              [description]
+     */
     const std::string offset(int offset_value);
     const std::string on                = " ON ";
     const std::string or_               = " OR ";
     const std::string order_by          = " ORDER BY ";
     const std::string sum               = " SUM ";
+
+    /*!
+     * [table_info description]
+     * @param  table_name [description]
+     * @return            [description]
+     */
     const std::string table_info(const std::string table_name);
+
+    /*!
+     * [type description]
+     * @param  type [description]
+     * @return      [description]
+     */
     const std::string type(const std::string type);
     const std::string values            = " VALUES ";
     const std::string where             = " WHERE ";
@@ -46,6 +94,10 @@ namespace cl{
 /*********************************************************************
                         DB-QUERY STATEMENTS
 *********************************************************************/
+/*! \brief namespace containing the query commands
+ *
+ *
+ */
 namespace cmd{
     const std::string add_column        = " ADD COLUMN ";
     const std::string alter_table       = " ALTER TABLE ";
@@ -87,8 +139,17 @@ namespace cmd{
 /*********************************************************************
                         DATATYPES AND DB TYPES
 *********************************************************************/
+/*! \brief namespace containing the query data types and options
+ *
+ *
+ */
 namespace data{
     const std::string char_              = " CHAR ";
+    /*!
+     * [len description]
+     * @param  int [description]
+     * @return     [description]
+     */
     const std::string len(int);
     const std::string int_               = " INT ";
     const std::string not_null           = " NOT NULL ";
@@ -96,7 +157,21 @@ namespace data{
     const std::string primary_key        = " PRIMARY KEY ";
     const std::string row                = " ROW ";
     const std::string table              = " TABLE ";
+
+    /*!
+     * [trigger description]
+     * @param  db_name      [description]
+     * @param  trigger_name [description]
+     * @return              [description]
+     */
     const std::string trigger(const std::string db_name, const std::string trigger_name);
+
+    /*!
+     * [view description]
+     * @param  db_name   [description]
+     * @param  view_name [description]
+     * @return           [description]
+     */
     const std::string view(const std::string db_name, const std::string view_name);
 } /* data */
 const std::string end_query             =";";

@@ -3,10 +3,7 @@
 
 using handler::Sqlite3Db;
 
-/******************************Constructor (test)***************************
-   Constructor for testing, it does not have any further use as it directly
-   connects to the database test._db
-***************************************************************************/
+/******************************Constructor (test)***************************/
 
 handler::Sqlite3Db::Sqlite3Db() {
 		std::string _db_name = "./db/test.db";
@@ -29,10 +26,10 @@ handler::Sqlite3Db::Sqlite3Db() {
 				                          "ORDER BY name;";
 				 */
 
-				std::string exec_string = query::cmd_select + "name" + \
-				                          query::cl_from + "sqlite_master" + \
-				                          query::cl_where + query::opt_type(query::db_table) + \
-				                          query::cl_order_by + "name" + query::end_query;
+				std::string exec_string = query::cmd::select + "name" + \
+				                          query::cl::from + "sqlite_master" + \
+				                          query::cl::where + query::cl::type(query::data::table) + \
+				                          query::cl::order_by + "name" + query::end_query;
 
 				_sql = exec_string.c_str();
 
@@ -53,7 +50,7 @@ handler::Sqlite3Db::Sqlite3Db() {
 										/* Convert tables names for use in sql */
 										std::string name = table.first;
 										/* Get table info query */
-										exec_string = query::cmd_pragma+ query::opt_table_info(name) \
+										exec_string = query::cmd::pragma+ query::cl::table_info(name) \
 										              +query::end_query;
 
 										_sql = exec_string.c_str();
@@ -75,11 +72,7 @@ handler::Sqlite3Db::Sqlite3Db() {
 		}
 }
 
-/******************************CONSTRUCTOR*********************************
-   Constructor for the _db handler. It connects to the database "_db_name" and
-   tries to load all the table and field names that may be in it for
-   future use in the methods.
- ***************************************************************************/
+/******************************CONSTRUCTOR*********************************/
 handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
 		const char *path = _db_path.c_str();
@@ -103,10 +96,10 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 				                          "ORDER BY name;";
 				 */
 
-				exec_string = query::cmd_select + "name" + \
-				              query::cl_from + "sqlite_master" + \
-				              query::cl_where + query::opt_type(query::db_table) + \
-				              query::cl_order_by + "name" + query::end_query;
+				exec_string = query::cmd::select + "name" + \
+				              query::cl::from + "sqlite_master" + \
+				              query::cl::where + query::cl::type(query::data::table) + \
+				              query::cl::order_by + "name" + query::end_query;
 
 				_sql = exec_string.c_str();
 
@@ -127,7 +120,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 										/* Convert tables names for use in sql */
 										std::string name = table.first;
 										/* Get table info query */
-										exec_string = query::cmd_pragma+ query::opt_table_info(name) \
+										exec_string = query::cmd::pragma+ query::cl::table_info(name) \
 										              +query::end_query;
 
 										_sql = exec_string.c_str();
@@ -149,29 +142,30 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 		}
 }
 
+/******************************DESTRUCTOR*************************************/
 
+handler::Sqlite3Db::~Sqlite3Db() {
+		sqlite3_close(_db);
+		std::cout << "Sqlite3Db destroyed" << '\n';
+}
+
+/******************************closeConnection*******************************/
 void handler::Sqlite3Db::closeConnection(){
 		delete this;
 }
 
-/*********************************createTable**********************************
-   Create a table inside the database with name table_name, name of the primary key field as
-   primary_key and as many extra fields as we may desire sending them as a vector of pairs.
-
-   Each of the pairs will contain the name of the field in the .first field and the options
-   such as datatype and NULL/ NOT NULL options in the .second.
- ****************************************************************************/
+/*********************************createTable**********************************/
 bool handler::Sqlite3Db::createTable(std::string table_name, \
-                                          std::pair<std::string, std::string> primary_key, \
-                                          std::vector<std::pair<std::string, std::string> > fields) {
+                                     std::vector<FieldDescription> fields) {
 		std::string exec_string;
 		std::string extra_options;
 
 		/* Create SQL exec_string base */
-		exec_string = query::cmd_create_table + table_name + \
-		              "(" + primary_key.first + " " + primary_key.second +",";
+		exec_string = query::cmd::create_table + table_name;
 
 		/* Generate each of the fields options in the table */
+		extra_options += "(";
+
 		for (size_t i = 0; i < fields.size(); ++i) {
 				extra_options += fields[i].first + " " + fields[i].second;
 
@@ -212,9 +206,6 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 				this->_tables[key]=v;
 				std::cout << "tables size= " << this->_tables.size() << '\n';
 
-				/* Load the primary key info */
-				this->_tables[key].push_back(primary_key.first);
-
 				/* Load the fields info */
 				for (size_t i = 0; i < fields.size(); i++) {
 						this->_tables[key].push_back(fields[i].first);
@@ -227,16 +218,7 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 }
 
 
-/**********************************insertRecord*******************************
-   Insert a row into the table "table_name" which field values correspond to
-   the ones stored in the "values" vector. It can execute in two ways:
-
-   - If the user wants to give a value to each of the fields of the table,
-   then the query will not contain the names of them.
-
-   -If, otherwise, the user wants to set only certain values, the ones passed
-   in the values vector as the empty string "" will not be added to the query
- ****************************************************************************/
+/**********************************insertRecord*******************************/
 bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::string> values){
 
 		std::string exec_string, fields, values_to_insert;
@@ -282,9 +264,9 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), " ");
 
 				/* Create SQL query depending of the use case */
-				exec_string = query::cmd_insert_into + table_name + \
+				exec_string = query::cmd::insert_into + table_name + \
 				              ((!fields.empty()) ? " (" + fields + " )" : "" )+ \
-				              query::cl_values + "(" + values_to_insert + ")"+ \
+				              query::cl::values + "(" + values_to_insert + ")"+ \
 				              query::end_query;
 
 				_sql = exec_string.c_str();
@@ -306,17 +288,13 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		}
 }
 
-/******************************deleteRecord***********************************
-   Delete records from table table_name that fit a certain condition given.
-   If this condition is "all", every record in the table will be deleted.
-   The condition will be added after a WHERE clause in the query
- ****************************************************************************/
+/******************************deleteRecord***********************************/
 bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condition){
 
 		std::string exec_string;
 
-		exec_string = query::cmd_delete + query::cl_from + table_name + \
-		              ((condition == "all") ? query::cl_where + condition : "") + \
+		exec_string = query::cmd::delete_ + query::cl::from + table_name + \
+		              ((condition == "all") ? query::cl::where + condition : "") + \
 		              query::end_query;
 
 		/* Execute SQL exec_string using the callback since no information
@@ -337,13 +315,11 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 
 
 
-/******************************dropTable*************************************
-   Drops the table table_name from the database linked to this handler
- ***************************************************************************/
+/******************************dropTable*************************************/
 bool handler::Sqlite3Db::dropTable(std::string table_name){
 		std::string exec_string;
 
-		exec_string = query::cmd_drop_table + table_name \
+		exec_string = query::cmd::drop_table + table_name \
 		              + query::end_query;
 
 		_sql = exec_string.c_str();
@@ -367,18 +343,13 @@ bool handler::Sqlite3Db::dropTable(std::string table_name){
 }
 
 
-/******************************selectRecords*********************************
-   Selects the records from table table_name that fit the conditions given.
-   Only the table name is necessary for this to execute, but fields are
-   recommended as well. Any other argument has a default value that causes
-   the condition to not be included in the query.
- ***************************************************************************/
+/******************************selectRecords*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, std::vector<std::string> fields, \
-                                                                 bool select_distinct, std::string where_cond, \
-                                                                 std::vector<std::string> group_by, \
-                                                                 std::string having_cond, \
-                                                                 std::vector<std::string> order_by, \
-                                                                 std::string order_type, int limit, int offset){
+                                                            bool select_distinct, std::string where_cond, \
+                                                            std::vector<std::string> group_by, \
+                                                            std::string having_cond, \
+                                                            std::vector<std::string> order_by, \
+                                                            std::string order_type, int limit, int offset){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
@@ -431,14 +402,14 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 				order_list.replace(order_list.end()-1, order_list.end(), " ");
 		}
 
-		exec_string = query::cmd_select + ((select_distinct) ? query::cl_distinct : "") \
-		              + fields_list + query::cl_from + table_name+ \
-		              ((where_cond != "") ? query::cl_where + where_cond : "")+ \
-		              ((group_by[0] != "") ? query::cl_group_by + group_list : "")+ \
-		              ((having_cond != "") ? query::cl_having + having_cond : "")+ \
-		              ((order_by[0] != "") ? query::cl_order_by + order_list + order_type : "")+ \
-		              ((limit != 0) ? query::cl_limit(limit) : "") + \
-		              ((offset != 0) ? query::cl_offset(offset) : "") + \
+		exec_string = query::cmd::select + ((select_distinct) ? query::cl::distinct : "") \
+		              + fields_list + query::cl::from + table_name+ \
+		              ((where_cond != "") ? query::cl::where + where_cond : "")+ \
+		              ((group_by[0] != "") ? query::cl::group_by + group_list : "")+ \
+		              ((having_cond != "") ? query::cl::having + having_cond : "")+ \
+		              ((order_by[0] != "") ? query::cl::order_by + order_list + order_type : "")+ \
+		              ((limit != 0) ? query::cl::limit(limit) : "") + \
+		              ((offset != 0) ? query::cl::offset(offset) : "") + \
 		              query::end_query;
 
 		_sql = exec_string.c_str();
@@ -455,16 +426,11 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 }
 
-/******************************executeQuery*************************************
-   Function used both for internal execution of predefined queries or for the
-   custom use the user may find fit. It receives the query and the data it needs
-   to retrieve from the output as arguments, and returns the data in the vector
-   passed as reference and a success flag.
- ***************************************************************************/
+/******************************executeQuery***********************************/
 bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
-                                           std::vector<int> indexes__stmt, \
-                                           std::vector<std::string> &data, \
-                                           bool verbose){
+                                      std::vector<int> indexes__stmt, \
+                                      std::vector<std::string> &data, \
+                                      bool verbose){
 
 		/* First make sure we are working with an empty vector */
 		data.clear();
@@ -514,14 +480,11 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 }
 
-/******************************callback*************************************
-   Function used when sqlite3_exec() is called. It shows the information of
-   the operation done on the database. It is used when we do not need to extract
-   data from the query, otherwise the sqlite3_step() is used.
-***************************************************************************/
+
+/******************************callback*************************************/
 
 int handler::Sqlite3Db::callback(void *NotUsed, int argc, \
-                                      char **argv, char **azFilName) {
+                                 char **argv, char **azFilName) {
 		int i;
 		for (i = 0; i < argc; i++) {
 				printf("%s = %s\n", azFilName[i], argv[i] ? argv[i] : "NULL");
@@ -530,12 +493,11 @@ int handler::Sqlite3Db::callback(void *NotUsed, int argc, \
 		return 0;
 }
 
-/******************************DESTRUCTOR*************************************
-   Whenever the object is destroyed we close the _db connection and we print
-   a message.
- ***************************************************************************/
+std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
+		std::vector<std::string> fields;
 
-handler::Sqlite3Db::~Sqlite3Db() {
-		sqlite3_close(_db);
-		std::cout << "Sqlite3Db destroyed" << '\n';
-}
+		for(auto field : this->_tables[table_name.c_str()]) {
+				fields.push_back(field);
+		}
+		return fields;
+};
