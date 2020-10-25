@@ -3,54 +3,67 @@ name: C/C++ CI
 on:
   push:
     branches: [ main ]
+    
   pull_request:
     branches: [ main ]
+    
   schedule:
     - cron: "0 2 * * 1-5"
+      
   workflow_dispatch:
+ 
 
 jobs:
-  build_ubuntu:
+  
+  set_environment:
+    
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+    steps:
+      - name: Setup C++ environment
+        # You may pin to the exact commit or the version.
+        # uses: kurocha/setup-cpp@ef637353b9bec350da9c1088b73d2217d2441696
+        uses: kurocha/setup-cpp@v1
 
+
+  build_ubuntu:
+    needs: [set_environment]
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
-    
-  build_windows:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Installing handler
+        run: |
+          git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
+          cd dbHandler-sqlite3
+            
+      - name: Install Dependencies
+        run: |
+          sudo apt-get install sqlite3
+          
+      - name: Build Solution
+        run: |
+          cd source
+          make
       
   style:
-    
+    needs: [set_environment, build_ubuntu]
     runs-on: ubuntu-latest
     steps:
     - name: C++ Style Check
     # You may pin to the exact commit or the version.
     # uses: coleaeason/actions-uncrustify@70f17f40b57ff933121e3cccafde98ea3eb0dee9
       uses: coleaeason/actions-uncrustify@v1
+      with:
+        # Alternate configuration file to use
+        configPath: "style/uncrustify.cfg"
+      
       
   cppcheck:
-    
+    needs: [set_environment, build_ubuntu]
     runs-on: ubuntu-latest
     
     steps:
