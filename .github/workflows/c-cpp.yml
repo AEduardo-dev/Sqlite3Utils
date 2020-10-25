@@ -33,14 +33,10 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Installing handler
-        with:
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
-            cd dbHandler-sqlite3
-        
+        run: |
+          git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
+          cd dbHandler-sqlite3
+            
       - name: Install Dependencies
         run: |
           sudo apt-get install sqlite3
