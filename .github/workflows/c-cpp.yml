@@ -26,9 +26,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: make
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Installing handler
+        run: |
+          cd ..
+          git clone https://github.com/AEduardo-png/dbHandler-sqlite3.git
+          cd dbHandler-sqlite3
+        
+      - name: Install Dependencies
+        run: |
+          sudo apt-get install sqlite3
+          
+      - name: Build Solution
+        run: |
+          cd ${{ github.workspace }}
+          cd source
+          make
       
   style:
     
@@ -41,6 +56,7 @@ jobs:
       with:
         # Alternate configuration file to use
         configPath: "style/uncrustify.cfg"
+      
       
   cppcheck:
     
