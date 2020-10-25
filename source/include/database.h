@@ -10,43 +10,37 @@
 #include <vector>
 #include <map>
 
-//TODO: 24/10/2020 DOCSTRING for dbHandler class
+//TODO: 24/10/2020 DOCSTRING for DbHandlerLite3 class
 
 
 //TODO: 24/10/2020 Include descrition of arguments in methods docstrings
 
-/******************************dbHandler Class******************************
-   DOCSTRING
-***************************************************************************/
+/*! \brief namespace containing the DbHandlerLite3 class
+ *         It is used as a container for the handlers available.
+ *
+ *  Detailed description starts here.
+ */
 
-namespace database {
+namespace handler {
 
-class dbHandler {
+/*! \brief Brief description.
+ *         Brief description continued.
+ *
+ *  Detailed description starts here.
+ */
+
+class DbHandlerLite3 {
 public:
-		/*********************************************************************
-		                       CONSTRUCTORS AND DESTRUCTOR
-		*********************************************************************/
-		dbHandler();
-		dbHandler(std::string db_name);
+
+		DbHandlerLite3();
+		DbHandlerLite3(std::string db_name);
 		void closeConnection();
-		~dbHandler();
-		/*********************************************************************
-		                        CREATION AND ADDITION
-		*********************************************************************/
+		~DbHandlerLite3();
 		bool createTable(std::string table_name, std::pair<std::string, std::string> primary_key, \
 		                 std::vector<std::pair<std::string, std::string> > columns);
-
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
-
-		/*********************************************************************
-		                        DELETION AND REMOVING
-		*********************************************************************/
 		bool deleteRecords(std::string table_name, std::string condition);
 		bool dropTable(std::string table_name);
-
-		/*********************************************************************
-		                          DATA OPERATIONS
-		*********************************************************************/
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
 		                                        bool select_distinct = false, \
@@ -54,26 +48,19 @@ public:
 		                                        std::string having_cond = "", std::vector<std::string> order_by = {""}, \
 		                                        std::string order_type = "ASC", \
 		                                        int limit = 0, int offset = 0);
-
-		/*********************************************************************
-		                  CALLBACKS AND CUSTOM EXECUTION
-		*********************************************************************/
 		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
 		                  std::vector<std::string> &data, bool verbose = false);
-
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
-		/*********************************************************************
-		                            OVERLOADS
-		*********************************************************************/
-		friend std::ostream &operator<< (std::ostream &output, const dbHandler &database){
+
+		friend std::ostream &operator<< (std::ostream &output, const DbHandlerLite3 &dbHandler){
 				std::string table_name;
 
-				output << "Handler for database "<< database.db_name << '\n';
+				output << "Handler for database "<< dbHandler._db_name << '\n';
 				output << '\n' << "The following information is managed: "<< '\n';
-				output << database.tables.size() << " number of tables...";
+				output << dbHandler._tables.size() << " number of tables...";
 
-				for (auto table : database.tables) {
+				for (auto table : dbHandler._tables) {
 
 						table_name = table.first;
 						output << "Table: " <<table_name << '\n';
@@ -89,13 +76,10 @@ public:
 				return output;
 		};
 
-		/*********************************************************************
-		                       GETTERS (AND SETTERS)
-		*********************************************************************/
 		std::vector<std::string> getFields(std::string table_name){
 				std::vector<std::string> fields;
 
-				for(auto field : this->tables[table_name.c_str()]) {
+				for(auto field : this->_tables[table_name.c_str()]) {
 						fields.push_back(field);
 				}
 				return fields;
@@ -103,19 +87,19 @@ public:
 
 private:
 		/* Indicator of succes or failure */
-		int rc;
+		int _rc;
 		/* Path to database file */
-		const char *db_name;
+		const char *_db_name;
 		/* Pointer to database */
-		sqlite3 *db;
+		sqlite3 *_db;
 		/* Command to be executed in the sql */
-		const char *sql;
+		const char *_sql;
 		/* Pointer to the sql command output */
-		sqlite3_stmt *stmt;
+		sqlite3_stmt *_stmt;
 		/* Error Messages are stored in this variable to print them */
-		char *zErrMsg = 0;
+		char *_zErrMsg = 0;
 		/* Here the name of all tables and columns of each table are stored for fast sql statement composition*/
-		std::map<const std::string, std::vector<std::string> > tables;
+		std::map<const std::string, std::vector<std::string> > _tables;
 };
 
 } // namespace database
