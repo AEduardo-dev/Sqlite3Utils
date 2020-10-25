@@ -34,9 +34,6 @@ jobs:
         
       - name: Installing handler
         run: |
-          cd ..
-          rm -rf dbHandler-sqlite3 
-          git clone https://github.com/AEduardo-png/dbHandler-sqlite3.git
           cd dbHandler-sqlite3
         
       - name: Install Dependencies
