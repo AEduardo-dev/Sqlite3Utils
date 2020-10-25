@@ -1,14 +1,14 @@
-#include "../include/database.h"
+#include "../include/sqlite3handler.h"
 #include "../include/dbquery.h"
 
-using handler::DbHandlerLite3;
+using handler::Sqlite3Db;
 
 /******************************Constructor (test)***************************
    Constructor for testing, it does not have any further use as it directly
    connects to the database test._db
 ***************************************************************************/
 
-handler::DbHandlerLite3::DbHandlerLite3() {
+handler::Sqlite3Db::Sqlite3Db() {
 		std::string _db_name = "./db/test.db";
 		const char *name = _db_name.c_str();
 		std::vector<std::string> tables_names, fields;
@@ -80,7 +80,7 @@ handler::DbHandlerLite3::DbHandlerLite3() {
    tries to load all the table and field names that may be in it for
    future use in the methods.
  ***************************************************************************/
-handler::DbHandlerLite3::DbHandlerLite3(std::string _db_path) {
+handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
 		const char *path = _db_path.c_str();
 		std::string exec_string;
@@ -150,7 +150,7 @@ handler::DbHandlerLite3::DbHandlerLite3(std::string _db_path) {
 }
 
 
-void handler::DbHandlerLite3::closeConnection(){
+void handler::Sqlite3Db::closeConnection(){
 		delete this;
 }
 
@@ -161,7 +161,7 @@ void handler::DbHandlerLite3::closeConnection(){
    Each of the pairs will contain the name of the field in the .first field and the options
    such as datatype and NULL/ NOT NULL options in the .second.
  ****************************************************************************/
-bool handler::DbHandlerLite3::createTable(std::string table_name, \
+bool handler::Sqlite3Db::createTable(std::string table_name, \
                                           std::pair<std::string, std::string> primary_key, \
                                           std::vector<std::pair<std::string, std::string> > fields) {
 		std::string exec_string;
@@ -237,7 +237,7 @@ bool handler::DbHandlerLite3::createTable(std::string table_name, \
    -If, otherwise, the user wants to set only certain values, the ones passed
    in the values vector as the empty string "" will not be added to the query
  ****************************************************************************/
-bool handler::DbHandlerLite3::insertRecord(std::string table_name, std::vector<std::string> values){
+bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::string> values){
 
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
@@ -254,13 +254,13 @@ bool handler::DbHandlerLite3::insertRecord(std::string table_name, std::vector<s
 				if (std::binary_search(values.begin(), values.end(), "")) {
 
 						/* Prepare the name of the fields needed to define the format of the data to insert */
-						for (size_t i = 0; i < this->tables[key].size(); i++) {
+						for (size_t i = 0; i < this->_tables[key].size(); i++) {
 
 								/* If the value is not empty we add it to the fields list */
 								if (values[i] != "") {
 
 										/* Get the name of the field*/
-										std::string field_name(this->tables[key][i]);
+										std::string field_name(this->_tables[key][i]);
 
 										/* For all of them add a comma at the end*/
 										fields += field_name + ",";
@@ -287,11 +287,11 @@ bool handler::DbHandlerLite3::insertRecord(std::string table_name, std::vector<s
 				              query::cl_values + "(" + values_to_insert + ")"+ \
 				              query::end_query;
 
-				sql = exec_string.c_str();
+				_sql = exec_string.c_str();
 
 				/* Execute SQL exec_string using the callback to see the insertion,
 				   no other information is extracted here*/
-				_rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+				_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
 				if( _rc != SQLITE_OK ) {
 						fprintf(stderr, "SQL error: %s\n", _zErrMsg);
@@ -311,7 +311,7 @@ bool handler::DbHandlerLite3::insertRecord(std::string table_name, std::vector<s
    If this condition is "all", every record in the table will be deleted.
    The condition will be added after a WHERE clause in the query
  ****************************************************************************/
-bool handler::DbHandlerLite3::deleteRecords(std::string table_name, std::string condition){
+bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condition){
 
 		std::string exec_string;
 
@@ -321,7 +321,7 @@ bool handler::DbHandlerLite3::deleteRecords(std::string table_name, std::string 
 
 		/* Execute SQL exec_string using the callback since no information
 		   needs to be extracted */
-		_rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+		_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
 		if( _rc != SQLITE_OK ) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
@@ -340,16 +340,16 @@ bool handler::DbHandlerLite3::deleteRecords(std::string table_name, std::string 
 /******************************dropTable*************************************
    Drops the table table_name from the database linked to this handler
  ***************************************************************************/
-bool handler::DbHandlerLite3::dropTable(std::string table_name){
+bool handler::Sqlite3Db::dropTable(std::string table_name){
 		std::string exec_string;
 
 		exec_string = query::cmd_drop_table + table_name \
 		              + query::end_query;
 
-		sql = exec_string.c_str();
+		_sql = exec_string.c_str();
 
 		/* Execute SQL exec_string using the callback */
-		_rc = sqlite3_exec(_db, sql, callback, 0, &_zErrMsg);
+		_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
 		if( _rc != SQLITE_OK ) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
@@ -359,7 +359,7 @@ bool handler::DbHandlerLite3::dropTable(std::string table_name){
 				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
 
 				/* After dropping it we need to delete it from the tables map as well */
-				this->tables.erase(table_name.c_str());
+				this->_tables.erase(table_name.c_str());
 
 				/* Then exit with succes flag*/
 				return EXIT_SUCCESS;
@@ -373,7 +373,7 @@ bool handler::DbHandlerLite3::dropTable(std::string table_name){
    recommended as well. Any other argument has a default value that causes
    the condition to not be included in the query.
  ***************************************************************************/
-std::vector<std::string>  handler::DbHandlerLite3::selectRecords(std::string table_name, std::vector<std::string> fields, \
+std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, std::vector<std::string> fields, \
                                                                  bool select_distinct, std::string where_cond, \
                                                                  std::vector<std::string> group_by, \
                                                                  std::string having_cond, \
@@ -401,7 +401,7 @@ std::vector<std::string>  handler::DbHandlerLite3::selectRecords(std::string tab
 		else {
 				fields_list = fields[0];
 
-				for (unsigned int i = 0; i < tables[table_name.c_str()].size(); ++i) {
+				for (unsigned int i = 0; i < _tables[table_name.c_str()].size(); ++i) {
 						data_indexes.push_back(i);
 				}
 
@@ -441,9 +441,9 @@ std::vector<std::string>  handler::DbHandlerLite3::selectRecords(std::string tab
 		              ((offset != 0) ? query::cl_offset(offset) : "") + \
 		              query::end_query;
 
-		sql = exec_string.c_str();
+		_sql = exec_string.c_str();
 
-		if(executeQuery(sql, data_indexes, select_data) == EXIT_SUCCESS) {
+		if(executeQuery(_sql, data_indexes, select_data) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
 				fprintf(stdout, "Select operation failed, no data loaded\n");
@@ -461,7 +461,7 @@ std::vector<std::string>  handler::DbHandlerLite3::selectRecords(std::string tab
    to retrieve from the output as arguments, and returns the data in the vector
    passed as reference and a success flag.
  ***************************************************************************/
-bool handler::DbHandlerLite3::executeQuery(const char *sql_query, \
+bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
                                            std::vector<int> indexes__stmt, \
                                            std::vector<std::string> &data, \
                                            bool verbose){
@@ -520,7 +520,7 @@ bool handler::DbHandlerLite3::executeQuery(const char *sql_query, \
    data from the query, otherwise the sqlite3_step() is used.
 ***************************************************************************/
 
-int handler::DbHandlerLite3::callback(void *NotUsed, int argc, \
+int handler::Sqlite3Db::callback(void *NotUsed, int argc, \
                                       char **argv, char **azFilName) {
 		int i;
 		for (i = 0; i < argc; i++) {
@@ -535,7 +535,7 @@ int handler::DbHandlerLite3::callback(void *NotUsed, int argc, \
    a message.
  ***************************************************************************/
 
-handler::DbHandlerLite3::~DbHandlerLite3() {
+handler::Sqlite3Db::~Sqlite3Db() {
 		sqlite3_close(_db);
-		std::cout << "DbHandlerLite3 destroyed" << '\n';
+		std::cout << "Sqlite3Db destroyed" << '\n';
 }

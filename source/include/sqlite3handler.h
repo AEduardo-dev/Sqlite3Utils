@@ -10,32 +10,47 @@
 #include <vector>
 #include <map>
 
-//TODO: 24/10/2020 DOCSTRING for DbHandlerLite3 class
+//TODO: 24/10/2020 DOCSTRING for Sqlite3Db class
 
 
-//TODO: 24/10/2020 Include descrition of arguments in methods docstrings
+//TODO: 24/10/2020 Include description of arguments in methods docstrings
 
-/*! \brief namespace containing the DbHandlerLite3 class
- *         It is used as a container for the handlers available.
+/*! \brief namespace containing the Sqlite3Db class
  *
- *  Detailed description starts here.
+ *
  */
 
 namespace handler {
 
-/*! \brief Brief description.
+/*! \brief Class for handling connection and operations in a sqlite3 database.
  *         Brief description continued.
  *
- *  Detailed description starts here.
+ *  This class contains all of the basic operations available in the sqlite3
+ *	syntax, including a custom executeQuery() so that the user can pass their
+ *	own SQL querys and obtain the data from them if preferred over the provided
+ *	functionality.
  */
 
-class DbHandlerLite3 {
+class Sqlite3Db {
 public:
-
-		DbHandlerLite3();
-		DbHandlerLite3(std::string db_name);
+		/*!
+		 * \brief Constructor for handler using test.db
+		 */
+		Sqlite3Db();
+		/*!
+		 * \brief Constructor for user defines database name.
+		 * @param db_name name of the database no be connected to.
+		 */
+		Sqlite3Db(std::string db_name);
+		/*!
+		 * \brief destructor of the class Sqlite3Db.
+		 *
+		 * This desctructor will close the connection to the database and
+		 * then destroy the object.
+		 */
+		~Sqlite3Db();
 		void closeConnection();
-		~DbHandlerLite3();
+
 		bool createTable(std::string table_name, std::pair<std::string, std::string> primary_key, \
 		                 std::vector<std::pair<std::string, std::string> > columns);
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
@@ -52,8 +67,14 @@ public:
 		                  std::vector<std::string> &data, bool verbose = false);
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
-
-		friend std::ostream &operator<< (std::ostream &output, const DbHandlerLite3 &dbHandler){
+		/*! \brief Shows all the information available from the handler
+		 *
+		 *  Prints all the useful information contained in the handler fields
+		 *	such as the names of tables and their fields, and the number of them.
+		 *
+		 *
+		 */
+		friend std::ostream &operator<< (std::ostream &output, const Sqlite3Db &dbHandler){
 				std::string table_name;
 
 				output << "Handler for database "<< dbHandler._db_name << '\n';
@@ -86,20 +107,14 @@ public:
 		};
 
 private:
-		/* Indicator of succes or failure */
-		int _rc;
-		/* Path to database file */
-		const char *_db_name;
-		/* Pointer to database */
-		sqlite3 *_db;
-		/* Command to be executed in the sql */
-		const char *_sql;
-		/* Pointer to the sql command output */
-		sqlite3_stmt *_stmt;
-		/* Error Messages are stored in this variable to print them */
-		char *_zErrMsg = 0;
-		/* Here the name of all tables and columns of each table are stored for fast sql statement composition*/
-		std::map<const std::string, std::vector<std::string> > _tables;
+		int _rc;            	//!< Flag that contains the status of the latest action executed
+		const char *_db_name; //!< Path to database for file operations
+		sqlite3 *_db;					//!< Pointer to the database provided in the constructor
+		const char *_sql; 		//!< Pointer to the latest sql query in use
+		sqlite3_stmt *_stmt; 	//!< Pointer to the sql query output data
+		char *_zErrMsg = 0; 	//!< Pointer to sql error message generated during the query execution
+		std::map<const std::string, std::vector<std::string> > _tables; //!< Map containing the names of tables in database and their fields
+
 };
 
 } // namespace database
