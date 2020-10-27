@@ -17,6 +17,8 @@
 
 /*! \brief namespace containing the Sqlite3Db class
  *
+ * Namespace used to contain the Sqlite3Db class and all of it's members.
+ * It also uses some type definitions to make the software cleaner.
  *
  */
 
@@ -50,7 +52,7 @@ public:
 		Sqlite3Db();
 
 		/*!
-		 * \brief Constructor for user defines database name.
+		 * \brief Constructor for user defined database name.
 		 *
 		 * @param db_name name of the database to be connected to.
 		 *
@@ -87,6 +89,7 @@ public:
 		 *
 		 * An example of usage could be as follows:
 		 *
+		 *
 		 * \include createTable.cpp
 		 *
 		 */
@@ -104,6 +107,7 @@ public:
 		 * @return EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
 		 *
 		 * An example of usage could be as follows:
+		 *
 		 *
 		 * \include insertRecord.cpp
 		 *
@@ -123,6 +127,7 @@ public:
 		 *
 		 * An example of usage could be as follows:
 		 *
+		 *
 		 * \include deleteRecords.cpp
 		 */
 		bool deleteRecords(std::string table_name, std::string condition);
@@ -139,23 +144,36 @@ public:
 		 *
 		 * An example of usage could be as follows:
 		 *
+		 *
 		 * \include insertRecord.cpp
 		 */
 		bool dropTable(std::string table_name);
 
 		/*!
-		 * [selectRecords description]
-		 * @param table_name      [description]
-		 * @param fields          [description]
-		 * @param select_distinct [description]
-		 * @param where_cond      [description]
-		 * @param group_by        [description]
-		 * @param having_cond     [description]
-		 * @param order_by        [description]
-		 * @param order_type      [description]
-		 * @param limit           [description]
-		 * @param offset          [description]
-		 * @return
+		 * \brief Selects and extracts the records that meet certain conditions.
+		 *
+		 * Extracts all the data that fits the descriptions and conditions passed as arguments.
+		 * Most of them are optional, so only the table name is necessary if no other specific
+		 * parameters are needed.
+		 *
+		 * @param table_name      Name of the table from where the data will be selected.
+		 * @param fields          Container of the names of the fields of the table that will be retrieved from the results in string format. Default value is "*" to take all the fields.
+		 * @param select_distinct Boolean flag to set whether or not only unique results should
+		 * be selected. Default value is false.
+		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause in the select query composition. It is empty by default.
+		 * @param group_by        If set, it contains the condition that will be used to group the results of the select query. It is empty by default.
+		 * @param having_cond     If set, it contains the condition applied to the query after a HAVING clause. It is empty by default.
+		 * @param order_by        If set, it contains the condition that will be used to order the results of the select query. It is empty by default.
+		 * @param order_type      Only applied if the order_by argument is set. Defines the type
+		 * of ordering to be applied. The types are "ASC" or "DES". Default value is "ASC"
+		 * @param limit           If set, it defines the number of results that will be extracted
+		 * from the select query data. Default value is 0 for no limit.
+		 * @param offset          If set, it defines the number of results that will be skipped
+		 * from the select query data before extracting them. Default value is 0 for none.
+		 *
+		 * @return A vector containing all the values retrieved in order. This means that, if three
+		 * fuelds were given as argument, each group of three elements of this vector will
+		 * correspond to a row of data.
 		 */
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
@@ -166,29 +184,44 @@ public:
 		                                        int limit = 0, int offset = 0);
 
 		/*!
-		 * [executeQuery description]
-		 * @param  sql_query    [description]
-		 * @param  indexes_stmt [description]
-		 * @param  data         [description]
-		 * @param  verbose      [description]
-		 * @return              [description]
+		 * \brief Execute an SQLite query and receive the output selected.
+		 *
+		 *
+		 * @param  sql_query    The query to be executed.
+		 * @param  indexes_stmt The indexes of the output (each index is a field of the database)
+		 * that will be extracted from the result of the query.
+		 * @param  data         Container to store the data retrieved from the indexes_stmt.
+		 * @param  verbose      If set to true, the result of the query will also be printed
+		 * through the console. Default value is false.
+		 *
+		 * @return              EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
+		 * The data vector is passed by reference, so the content of it is changed during the
+		 * query execution.
 		 */
 		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
 		                  std::vector<std::string> &data, bool verbose = false);
 
 		/*!
-		 * [callback description]
-		 * @param  NotUsed   [description]
-		 * @param  argc      [description]
-		 * @param  argv      [description]
-		 * @param  azColName [description]
-		 * @return           [description]
+		 * \brief Callback to show the output of sqlite3_exec()
+		 *
+		 * When not using the executeQuery() method, it may be interesting to use the
+		 *  sqlite3_exec() instead, and so, a callback to see the output of the operation is
+		 *  higly recommended.
+		 *
+		 * @param  NotUsed   Not used.
+		 * @param  argc      Number of arguments.
+		 * @param  argv      Values of the arguments.
+		 * @param  azColName Name of the column in the database.
+		 *
 		 */
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 		/*!
-		 * [getFields description]
-		 * @param table_name [description]
+		 * \brief Get field's names from a table in the database.
+		 *
+		 * @param table_name The name of the table which field's names are needed.
+		 *
+		 * @return A vector containing the names of the fields of the table.
 		 */
 		std::vector<std::string> getFields(std::string table_name);
 
@@ -217,13 +250,13 @@ public:
 
 
 private:
-		int _rc;                           /*!< Flag that contains the status of the latest action executed.*/
-		const char *_db_name;              /*!< Path to database for file operations.*/
-		sqlite3 *_db;                      /*!<Pointer to the database provided in the constructor.*/
-		const char *_sql;                  /*!<Pointer to the latest sql query in use.*/
-		sqlite3_stmt *_stmt;               /*!<Pointer to the sql query output data.*/
-		char *_zErrMsg = 0;                /*!<Pointer to sql error message generated during the query execution.*/
-		DbTables _tables;                  /*!<Map containing the names of tables in database and their fields.*/
+		int _rc;/*!< Flag that contains the status of the latest action executed.*/
+		const char *_db_name;/*!< Path to database for file operations.*/
+		sqlite3 *_db;/*!< Pointer to the database provided in the constructor.*/
+		const char *_sql;/*!< Pointer to the latest sql query in use.*/
+		sqlite3_stmt *_stmt;/*!< Pointer to the sql query output data.*/
+		char *_zErrMsg = 0;/*!<P ointer to sql error message generated during the query execution.*/
+		DbTables _tables;/*!< Map containing the names of tables in database and their fields.*/
 
 };
 
