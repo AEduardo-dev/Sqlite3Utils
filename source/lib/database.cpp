@@ -6,7 +6,7 @@ using handler::Sqlite3Db;
 /******************************Constructor (test)***************************/
 
 handler::Sqlite3Db::Sqlite3Db() {
-		std::string _db_name = "./db/test.db";
+		std::string _db_name = "test.db";
 		const char *name = _db_name.c_str();
 		std::vector<std::string> tables_names, fields;
 

@@ -192,7 +192,28 @@ public:
 		 */
 		std::vector<std::string> getFields(std::string table_name);
 
-		friend std::ostream& operator<< (std::ostream &output, const Sqlite3Db &sqlite3Db);
+		friend std::ostream& operator<< (std::ostream &output, const Sqlite3Db &sqlite3Db){
+				std::string table_name;
+
+				output << "Handler for database "<< sqlite3Db._db_name << '\n';
+				output << '\n' << "The following information is managed: "<< '\n';
+				output << sqlite3Db._tables.size() << " number of tables...";
+
+				for (auto table : sqlite3Db._tables) {
+
+						table_name = table.first;
+						output << "Table: " <<table_name << '\n';
+						output << "With "<< table.second.size() << \
+						    " number of fields, which are:"<< '\n';
+
+						for (auto field : table.second) {
+								output << field << "  ";
+						}
+						output << '\n'<< '\n';
+				}
+
+				return output;
+		};
 
 
 private:
@@ -205,30 +226,6 @@ private:
 		DbTables _tables;                  /*!<Map containing the names of tables in database and their fields.*/
 
 };
-
-
-std::ostream& operator<< (std::ostream &output, const Sqlite3Db &sqlite3Db){
-		std::string table_name;
-
-		output << "Handler for database "<< sqlite3Db._db_name << '\n';
-		output << '\n' << "The following information is managed: "<< '\n';
-		output << sqlite3Db._tables.size() << " number of tables...";
-
-		for (auto table : sqlite3Db._tables) {
-
-				table_name = table.first;
-				output << "Table: " <<table_name << '\n';
-				output << "With "<< table.second.size() << \
-				    " number of fields, which are:"<< '\n';
-
-				for (auto field : table.second) {
-						output << field << "  ";
-				}
-				output << '\n'<< '\n';
-		}
-
-		return output;
-}
 
 
 } // namespace database
