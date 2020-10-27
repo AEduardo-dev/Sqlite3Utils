@@ -59,7 +59,7 @@ jobs:
       uses: coleaeason/actions-uncrustify@v1
       with:
         # Alternate configuration file to use
-        configPath: "style/uncrustify.cfg"
+        configPath: "${{ github.repository }}/style/uncrustify.cfg"
       
       
   cppcheck:
