@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('classhandler_1_1Sqlite3Db.html',''); i
 <p>Class for handling connection and operations in a sqlite3 database. Brief description continued.  
  <a href="classhandler_1_1Sqlite3Db.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="sqlite3handler_8h_source.html">sqlite3handler.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="source_2include_2sqlite3handler_8hpp_source.html">sqlite3handler.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -132,15 +132,69 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#aed0f2adcae3e7ea4b9c4e7433f90ccb2">getFields</a> (std::string table_name)</td></tr>
 <tr class="memdesc:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get field's names from a table in the database.  <a href="classhandler_1_1Sqlite3Db.html#aed0f2adcae3e7ea4b9c4e7433f90ccb2">More...</a><br /></td></tr>
 <tr class="separator:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">getTablesSize</a> ()</td></tr>
+<tr class="memdesc:a384fcbe8835d1aa5dede836fe87c21e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of tables in the database.  <a href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">More...</a><br /></td></tr>
+<tr class="separator:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e75b3fa032a566cecfc96f938418755"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a3e75b3fa032a566cecfc96f938418755">getTables</a> ()</td></tr>
+<tr class="memdesc:a3e75b3fa032a566cecfc96f938418755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get table's names from the database.  <a href="classhandler_1_1Sqlite3Db.html#a3e75b3fa032a566cecfc96f938418755">More...</a><br /></td></tr>
+<tr class="separator:a3e75b3fa032a566cecfc96f938418755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a7cdb3a597859dc9782539bbdf9c22e3c">getDbPath</a> ()</td></tr>
+<tr class="memdesc:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets db relative path from the database.  <a href="classhandler_1_1Sqlite3Db.html#a7cdb3a597859dc9782539bbdf9c22e3c">More...</a><br /></td></tr>
+<tr class="separator:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72d4091292b0837fd0d5729f8a4719fd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a72d4091292b0837fd0d5729f8a4719fd">Sqlite3Db</a> ()</td></tr>
+<tr class="memdesc:a72d4091292b0837fd0d5729f8a4719fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for handler using test.db.  <a href="classhandler_1_1Sqlite3Db.html#a72d4091292b0837fd0d5729f8a4719fd">More...</a><br /></td></tr>
+<tr class="separator:a72d4091292b0837fd0d5729f8a4719fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0db150b05c447850efe24c493527a937"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a0db150b05c447850efe24c493527a937">Sqlite3Db</a> (std::string db_name)</td></tr>
+<tr class="memdesc:a0db150b05c447850efe24c493527a937"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for user defined database name.  <a href="classhandler_1_1Sqlite3Db.html#a0db150b05c447850efe24c493527a937">More...</a><br /></td></tr>
+<tr class="separator:a0db150b05c447850efe24c493527a937"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a071aa2c29636b503d59a6dc8b850d4d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a071aa2c29636b503d59a6dc8b850d4d8">~Sqlite3Db</a> ()</td></tr>
+<tr class="memdesc:a071aa2c29636b503d59a6dc8b850d4d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor of the class <a class="el" href="classhandler_1_1Sqlite3Db.html" title="Class for handling connection and operations in a sqlite3 database. Brief description continued.">Sqlite3Db</a>.  <a href="classhandler_1_1Sqlite3Db.html#a071aa2c29636b503d59a6dc8b850d4d8">More...</a><br /></td></tr>
+<tr class="separator:a071aa2c29636b503d59a6dc8b850d4d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac46006a96d41b06479659658139ea1a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#ac46006a96d41b06479659658139ea1a2">closeConnection</a> ()</td></tr>
+<tr class="memdesc:ac46006a96d41b06479659658139ea1a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close connection to the current database.  <a href="classhandler_1_1Sqlite3Db.html#ac46006a96d41b06479659658139ea1a2">More...</a><br /></td></tr>
+<tr class="separator:ac46006a96d41b06479659658139ea1a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00479a98523cece08f5163f1fa444925"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">createTable</a> (std::string table_name, std::vector&lt; FieldDescription &gt; fields)</td></tr>
+<tr class="memdesc:a00479a98523cece08f5163f1fa444925"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a table in the database with the specified parameters.  <a href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">More...</a><br /></td></tr>
+<tr class="separator:a00479a98523cece08f5163f1fa444925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07224a51607ccca1c6a213c2434da072"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a> (std::string table_name, std::vector&lt; std::string &gt; values)</td></tr>
+<tr class="memdesc:a07224a51607ccca1c6a213c2434da072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert record data inside of a table.  <a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">More...</a><br /></td></tr>
+<tr class="separator:a07224a51607ccca1c6a213c2434da072"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8460f486ed952c60cbb57b2764b836a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a> (std::string table_name, std::string condition)</td></tr>
+<tr class="memdesc:a8460f486ed952c60cbb57b2764b836a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete the records from a table that meet the provided condition/s.  <a href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">More...</a><br /></td></tr>
+<tr class="separator:a8460f486ed952c60cbb57b2764b836a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a771eb8f43b4924763ca9cc5c0d3a656a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a771eb8f43b4924763ca9cc5c0d3a656a">dropTable</a> (std::string table_name)</td></tr>
+<tr class="memdesc:a771eb8f43b4924763ca9cc5c0d3a656a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drop the table specified.  <a href="classhandler_1_1Sqlite3Db.html#a771eb8f43b4924763ca9cc5c0d3a656a">More...</a><br /></td></tr>
+<tr class="separator:a771eb8f43b4924763ca9cc5c0d3a656a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb387cd1636ccd2e79f123bbf5cfdec9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#acb387cd1636ccd2e79f123bbf5cfdec9">selectRecords</a> (std::string table_name, std::vector&lt; std::string &gt; fields={&quot;*&quot;}, bool select_distinct=false, std::string where_cond=&quot;&quot;, std::vector&lt; std::string &gt; group_by={&quot;&quot;}, std::string having_cond=&quot;&quot;, std::vector&lt; std::string &gt; order_by={&quot;&quot;}, std::string order_type=&quot;ASC&quot;, int limit=0, int offset=0)</td></tr>
+<tr class="memdesc:acb387cd1636ccd2e79f123bbf5cfdec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects and extracts the records that meet certain conditions.  <a href="classhandler_1_1Sqlite3Db.html#acb387cd1636ccd2e79f123bbf5cfdec9">More...</a><br /></td></tr>
+<tr class="separator:acb387cd1636ccd2e79f123bbf5cfdec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a24e52860b435171871b4ffb036e8f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a6a24e52860b435171871b4ffb036e8f3">executeQuery</a> (const char *sql_query, std::vector&lt; int &gt; indexes_stmt, std::vector&lt; std::string &gt; &amp;data, bool verbose=false)</td></tr>
+<tr class="memdesc:a6a24e52860b435171871b4ffb036e8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute an SQLite query and receive the output selected.  <a href="classhandler_1_1Sqlite3Db.html#a6a24e52860b435171871b4ffb036e8f3">More...</a><br /></td></tr>
+<tr class="separator:a6a24e52860b435171871b4ffb036e8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d87ba1901fd690423b9e026e82d38f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a4d87ba1901fd690423b9e026e82d38f7">getFields</a> (std::string table_name)</td></tr>
+<tr class="memdesc:a4d87ba1901fd690423b9e026e82d38f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get field's names from a table in the database.  <a href="classhandler_1_1Sqlite3Db.html#a4d87ba1901fd690423b9e026e82d38f7">More...</a><br /></td></tr>
+<tr class="separator:a4d87ba1901fd690423b9e026e82d38f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">getTablesSize</a> ()</td></tr>
+<tr class="memdesc:a384fcbe8835d1aa5dede836fe87c21e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of tables in the database.  <a href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">More...</a><br /></td></tr>
+<tr class="separator:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a885d463e27f85e947234aae7ba814ed7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a885d463e27f85e947234aae7ba814ed7">getTables</a> ()</td></tr>
+<tr class="memdesc:a885d463e27f85e947234aae7ba814ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get table's names from the database.  <a href="classhandler_1_1Sqlite3Db.html#a885d463e27f85e947234aae7ba814ed7">More...</a><br /></td></tr>
+<tr class="separator:a885d463e27f85e947234aae7ba814ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af6366ea2a9f1057d6cf276667626c724"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#af6366ea2a9f1057d6cf276667626c724">callback</a> (void *NotUsed, int argc, char **argv, char **azColName)</td></tr>
 <tr class="memdesc:af6366ea2a9f1057d6cf276667626c724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to show the output of sqlite3_exec()  <a href="classhandler_1_1Sqlite3Db.html#af6366ea2a9f1057d6cf276667626c724">More...</a><br /></td></tr>
 <tr class="separator:af6366ea2a9f1057d6cf276667626c724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac47063b57b06fadd5d27cf7d25184203"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#ac47063b57b06fadd5d27cf7d25184203">callback</a> (void *NotUsed, int argc, char **argv, char **azColName)</td></tr>
+<tr class="memdesc:ac47063b57b06fadd5d27cf7d25184203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to show the output of sqlite3_exec()  <a href="classhandler_1_1Sqlite3Db.html#ac47063b57b06fadd5d27cf7d25184203">More...</a><br /></td></tr>
+<tr class="separator:ac47063b57b06fadd5d27cf7d25184203"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:afd77a2d59979232d3cdb86a588c46e20"><td class="memItemLeft" align="right" valign="top"><a id="afd77a2d59979232d3cdb86a588c46e20"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;output, const <a class="el" href="classhandler_1_1Sqlite3Db.html">Sqlite3Db</a> &amp;sqlite3Db)</td></tr>
+<tr class="separator:afd77a2d59979232d3cdb86a588c46e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd77a2d59979232d3cdb86a588c46e20"><td class="memItemLeft" align="right" valign="top"><a id="afd77a2d59979232d3cdb86a588c46e20"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;output, const <a class="el" href="classhandler_1_1Sqlite3Db.html">Sqlite3Db</a> &amp;sqlite3Db)</td></tr>
 <tr class="separator:afd77a2d59979232d3cdb86a588c46e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +204,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>This class contains all of the basic operations available in the sqlite3 syntax, including a custom <a class="el" href="classhandler_1_1Sqlite3Db.html#a6a24e52860b435171871b4ffb036e8f3" title="Execute an SQLite query and receive the output selected.">executeQuery()</a>, so that the user can pass their own querys and obtain the data from them, if preferred over the provided functionality. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a72d4091292b0837fd0d5729f8a4719fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72d4091292b0837fd0d5729f8a4719fd">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a72d4091292b0837fd0d5729f8a4719fd">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,7 +225,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a0db150b05c447850efe24c493527a937"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0db150b05c447850efe24c493527a937">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0db150b05c447850efe24c493527a937">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +252,75 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a071aa2c29636b503d59a6dc8b850d4d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a071aa2c29636b503d59a6dc8b850d4d8">&#9670;&nbsp;</a></span>~Sqlite3Db()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a071aa2c29636b503d59a6dc8b850d4d8">&#9670;&nbsp;</a></span>~Sqlite3Db() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">handler::Sqlite3Db::~Sqlite3Db </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor of the class <a class="el" href="classhandler_1_1Sqlite3Db.html" title="Class for handling connection and operations in a sqlite3 database. Brief description continued.">Sqlite3Db</a>. </p>
+<p>This desctructor will close the connection to the database and then destroy the object. </p>
+
+</div>
+</div>
+<a id="a72d4091292b0837fd0d5729f8a4719fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72d4091292b0837fd0d5729f8a4719fd">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">handler::Sqlite3Db::Sqlite3Db </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for handler using test.db. </p>
+<p>When creating a new object, the connection to the database is attempted. If no database exists with the name provided, it is created.</p>
+<p>Assuming the database already exists and contains some information, this constructor will load all the names of the tables present in the database as map keys. Assigned to each of the keys there will be a vector loaded with the names of the fields in each table. </p>
+
+</div>
+</div>
+<a id="a0db150b05c447850efe24c493527a937"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0db150b05c447850efe24c493527a937">&#9670;&nbsp;</a></span>Sqlite3Db() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">handler::Sqlite3Db::Sqlite3Db </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>db_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for user defined database name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">db_name</td><td>name of the database to be connected to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+
+</div>
+</div>
+<a id="a071aa2c29636b503d59a6dc8b850d4d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a071aa2c29636b503d59a6dc8b850d4d8">&#9670;&nbsp;</a></span>~Sqlite3Db() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,7 +341,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="af6366ea2a9f1057d6cf276667626c724"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af6366ea2a9f1057d6cf276667626c724">&#9670;&nbsp;</a></span>callback()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af6366ea2a9f1057d6cf276667626c724">&#9670;&nbsp;</a></span>callback() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,8 +400,88 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
+<a id="ac47063b57b06fadd5d27cf7d25184203"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac47063b57b06fadd5d27cf7d25184203">&#9670;&nbsp;</a></span>callback() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int handler::Sqlite3Db::callback </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>NotUsed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>azColName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback to show the output of sqlite3_exec() </p>
+<p>When not using the <a class="el" href="classhandler_1_1Sqlite3Db.html#a6a24e52860b435171871b4ffb036e8f3" title="Execute an SQLite query and receive the output selected.">executeQuery()</a> method, it may be interesting to use the sqlite3_exec() instead, and so, a callback to see the output of the operation is higly recommended.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NotUsed</td><td>Not used. </td></tr>
+    <tr><td class="paramname">argc</td><td>Number of arguments. </td></tr>
+    <tr><td class="paramname">argv</td><td>Values of the arguments. </td></tr>
+    <tr><td class="paramname">azColName</td><td>Name of the column in the database. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac46006a96d41b06479659658139ea1a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac46006a96d41b06479659658139ea1a2">&#9670;&nbsp;</a></span>closeConnection()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac46006a96d41b06479659658139ea1a2">&#9670;&nbsp;</a></span>closeConnection() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void handler::Sqlite3Db::closeConnection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Close connection to the current database. </p>
+<p>The closing of the connection also destroys the handler, since it's main purpose is to manage the action in an open database </p>
+
+</div>
+</div>
+<a id="ac46006a96d41b06479659658139ea1a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac46006a96d41b06479659658139ea1a2">&#9670;&nbsp;</a></span>closeConnection() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,7 +501,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a00479a98523cece08f5163f1fa444925"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00479a98523cece08f5163f1fa444925">&#9670;&nbsp;</a></span>createTable()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a00479a98523cece08f5163f1fa444925">&#9670;&nbsp;</a></span>createTable() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,14 +552,72 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.h:38</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a00479a98523cece08f5163f1fa444925"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">handler::Sqlite3Db::createTable</a></div><div class="ttdeci">bool createTable(std::string table_name, std::vector&lt; FieldDescription &gt; fields)</div><div class="ttdoc">Create a table in the database with the specified parameters.</div><div class="ttdef"><b>Definition:</b> database.cpp:158</div></div>
+<div class="ttc" id="anamespacequery_1_1data_html_a33b41178f41bfdbc81a0ff4082b2f874"><div class="ttname"><a href="namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874">query::data::len</a></div><div class="ttdeci">const std::string len(int)</div><div class="ttdef"><b>Definition:</b> dbquery.cpp:26</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a00479a98523cece08f5163f1fa444925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00479a98523cece08f5163f1fa444925">&#9670;&nbsp;</a></span>createTable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::createTable </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; FieldDescription &gt;&#160;</td>
+          <td class="paramname"><em>fields</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a table in the database with the specified parameters. </p>
+<p>Creates a table in the database with the provided name and with the descripted fields. Each</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>Name for the table to be created. </td></tr>
+    <tr><td class="paramname">fields</td><td>Vector of desriptions, each of them containing name of field and data specifications of the field corresponding field.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;dbquery.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;sqlite3handler.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
+<div class="line"> </div>
+<div class="line">        std::vector&lt;handler::FieldDescription&gt; v = {{<span class="stringliteral">&quot;ID&quot;</span>,query::data::int_+query::data::primary_key+query::data::not_null}, \</div>
+<div class="line">                {<span class="stringliteral">&quot;AGE&quot;</span>, query::data::int_+query::data::not_null}, \</div>
+<div class="line">                {<span class="stringliteral">&quot;PHONE&quot;</span>, query::data::int_+query::data::not_null}, \</div>
+<div class="line">                {<span class="stringliteral">&quot;NAME&quot;</span>,query::data::char_+<a class="code" href="namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874">query::data::len</a>(50)+query::data::not_null}};</div>
+<div class="line"> </div>
+<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">createTable</a>(<span class="stringliteral">&quot;COMPANY&quot;</span>, v);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
 <div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a00479a98523cece08f5163f1fa444925"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">handler::Sqlite3Db::createTable</a></div><div class="ttdeci">bool createTable(std::string table_name, std::vector&lt; FieldDescription &gt; fields)</div><div class="ttdoc">Create a table in the database with the specified parameters.</div><div class="ttdef"><b>Definition:</b> database.cpp:158</div></div>
 <div class="ttc" id="anamespacequery_1_1data_html_a33b41178f41bfdbc81a0ff4082b2f874"><div class="ttname"><a href="namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874">query::data::len</a></div><div class="ttdeci">const std::string len(int)</div><div class="ttdef"><b>Definition:</b> dbquery.cpp:26</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 <a id="a8460f486ed952c60cbb57b2764b836a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8460f486ed952c60cbb57b2764b836a0">&#9670;&nbsp;</a></span>deleteRecords()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8460f486ed952c60cbb57b2764b836a0">&#9670;&nbsp;</a></span>deleteRecords() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -411,13 +671,73 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.h:38</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a8460f486ed952c60cbb57b2764b836a0"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">handler::Sqlite3Db::deleteRecords</a></div><div class="ttdeci">bool deleteRecords(std::string table_name, std::string condition)</div><div class="ttdoc">Delete the records from a table that meet the provided condition/s.</div><div class="ttdef"><b>Definition:</b> database.cpp:292</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a8460f486ed952c60cbb57b2764b836a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8460f486ed952c60cbb57b2764b836a0">&#9670;&nbsp;</a></span>deleteRecords() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::deleteRecords </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>condition</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete the records from a table that meet the provided condition/s. </p>
+<p>Locates and deletes the records from the table which meet a condition given. If the condition is "all", all records are deleted.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>Name of the table where the records will be deleted. </td></tr>
+    <tr><td class="paramname">condition</td><td>Condition to match for the deletion.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">//In table company created previously</span></div>
+<div class="line">        std::string table_name = <span class="stringliteral">&quot;COMPANY&quot;</span>;</div>
+<div class="line">        std::string condition = <span class="stringliteral">&quot;ID == 1&quot;</span>;</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">//Delete record that meets condition</span></div>
+<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">//Delete all records in the table &quot;table_name&quot;</span></div>
+<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition=<span class="stringliteral">&quot;all&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
 <div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a8460f486ed952c60cbb57b2764b836a0"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">handler::Sqlite3Db::deleteRecords</a></div><div class="ttdeci">bool deleteRecords(std::string table_name, std::string condition)</div><div class="ttdoc">Delete the records from a table that meet the provided condition/s.</div><div class="ttdef"><b>Definition:</b> database.cpp:292</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 <a id="a771eb8f43b4924763ca9cc5c0d3a656a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a771eb8f43b4924763ca9cc5c0d3a656a">&#9670;&nbsp;</a></span>dropTable()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a771eb8f43b4924763ca9cc5c0d3a656a">&#9670;&nbsp;</a></span>dropTable() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -462,13 +782,64 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.h:38</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> database.cpp:222</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a771eb8f43b4924763ca9cc5c0d3a656a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a771eb8f43b4924763ca9cc5c0d3a656a">&#9670;&nbsp;</a></span>dropTable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::dropTable </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Drop the table specified. </p>
+<p>Drops the specified table and deletes it's content from the DbInfo contained in the Handler.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>Name of the table to be dropped.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">//In table company created previously</span></div>
+<div class="line">        std::string table_name = <span class="stringliteral">&quot;COMPANY&quot;</span>;</div>
+<div class="line">                                          <span class="comment">//ID  AGE    PHONE      NAME</span></div>
+<div class="line">        std::vector&lt;std::string&gt; values = {<span class="stringliteral">&quot;1&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;5521664&quot;</span>, <span class="stringliteral">&quot;James&quot;</span>};</div>
+<div class="line">    <span class="comment">//Insert record with all fields defined</span></div>
+<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values);</div>
+<div class="line"> </div>
+<div class="line">                                                      <span class="comment">//ID  AGE PHONE  NAME</span></div>
+<div class="line">        std::vector&lt;std::string&gt; values_incomplete = {<span class="stringliteral">&quot;2&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Thomas&quot;</span>};</div>
+<div class="line">    <span class="comment">//Insert record with one or more fields not specified</span></div>
+<div class="line">    myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values_incomplete);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
 <div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> database.cpp:222</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 <a id="a6a24e52860b435171871b4ffb036e8f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a24e52860b435171871b4ffb036e8f3">&#9670;&nbsp;</a></span>executeQuery()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a24e52860b435171871b4ffb036e8f3">&#9670;&nbsp;</a></span>executeQuery() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -519,8 +890,86 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
+<a id="a6a24e52860b435171871b4ffb036e8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a24e52860b435171871b4ffb036e8f3">&#9670;&nbsp;</a></span>executeQuery() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::executeQuery </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sql_query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>indexes_stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>verbose</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute an SQLite query and receive the output selected. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sql_query</td><td>The query to be executed. </td></tr>
+    <tr><td class="paramname">indexes_stmt</td><td>The indexes of the output (each index is a field of the database) that will be extracted from the result of the query. </td></tr>
+    <tr><td class="paramname">data</td><td>Container to store the data retrieved from the indexes_stmt. </td></tr>
+    <tr><td class="paramname">verbose</td><td>If set to true, the result of the query will also be printed through the console. Default value is false.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned. The data vector is passed by reference, so the content of it is changed during the query execution. </dd></dl>
+
+</div>
+</div>
+<a id="a7cdb3a597859dc9782539bbdf9c22e3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cdb3a597859dc9782539bbdf9c22e3c">&#9670;&nbsp;</a></span>getDbPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string handler::Sqlite3Db::getDbPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets db relative path from the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
+
+</div>
+</div>
 <a id="aed0f2adcae3e7ea4b9c4e7433f90ccb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed0f2adcae3e7ea4b9c4e7433f90ccb2">&#9670;&nbsp;</a></span>getFields()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0f2adcae3e7ea4b9c4e7433f90ccb2">&#9670;&nbsp;</a></span>getFields() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -546,8 +995,127 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
+<a id="a4d87ba1901fd690423b9e026e82d38f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d87ba1901fd690423b9e026e82d38f7">&#9670;&nbsp;</a></span>getFields() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; handler::Sqlite3Db::getFields </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get field's names from a table in the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the fields of the table. </dd></dl>
+
+</div>
+</div>
+<a id="a3e75b3fa032a566cecfc96f938418755"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e75b3fa032a566cecfc96f938418755">&#9670;&nbsp;</a></span>getTables() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; handler::Sqlite3Db::getTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get table's names from the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
+
+</div>
+</div>
+<a id="a885d463e27f85e947234aae7ba814ed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a885d463e27f85e947234aae7ba814ed7">&#9670;&nbsp;</a></span>getTables() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; handler::Sqlite3Db::getTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get table's names from the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
+
+</div>
+</div>
+<a id="a384fcbe8835d1aa5dede836fe87c21e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a384fcbe8835d1aa5dede836fe87c21e9">&#9670;&nbsp;</a></span>getTablesSize() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int handler::Sqlite3Db::getTablesSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get number of tables in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of tables. </dd></dl>
+
+</div>
+</div>
+<a id="a384fcbe8835d1aa5dede836fe87c21e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a384fcbe8835d1aa5dede836fe87c21e9">&#9670;&nbsp;</a></span>getTablesSize() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int handler::Sqlite3Db::getTablesSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get number of tables in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of tables. </dd></dl>
+
+</div>
+</div>
 <a id="a07224a51607ccca1c6a213c2434da072"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07224a51607ccca1c6a213c2434da072">&#9670;&nbsp;</a></span>insertRecord()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a07224a51607ccca1c6a213c2434da072">&#9670;&nbsp;</a></span>insertRecord() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -603,13 +1171,75 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.h:38</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> database.cpp:222</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a07224a51607ccca1c6a213c2434da072"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07224a51607ccca1c6a213c2434da072">&#9670;&nbsp;</a></span>insertRecord() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::insertRecord </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Insert record data inside of a table. </p>
+<p>Given the data to insert, the method will put it inside of the specified table if the fields match.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>Name of the table where the record will be added. </td></tr>
+    <tr><td class="paramname">values</td><td>Container of the values of the fields to insert. The not defined values should contain an empty string ("").</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">//In table company created previously</span></div>
+<div class="line">        std::string table_name = <span class="stringliteral">&quot;COMPANY&quot;</span>;</div>
+<div class="line">                                          <span class="comment">//ID  AGE    PHONE      NAME</span></div>
+<div class="line">        std::vector&lt;std::string&gt; values = {<span class="stringliteral">&quot;1&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;5521664&quot;</span>, <span class="stringliteral">&quot;James&quot;</span>};</div>
+<div class="line">    <span class="comment">//Insert record with all fields defined</span></div>
+<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values);</div>
+<div class="line"> </div>
+<div class="line">                                                      <span class="comment">//ID  AGE PHONE  NAME</span></div>
+<div class="line">        std::vector&lt;std::string&gt; values_incomplete = {<span class="stringliteral">&quot;2&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Thomas&quot;</span>};</div>
+<div class="line">    <span class="comment">//Insert record with one or more fields not specified</span></div>
+<div class="line">    myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values_incomplete);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database. Brief description continued.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:34</div></div>
 <div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> database.cpp:222</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 <a id="a49d32218c6cb8d21d65e072ffe8c195d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49d32218c6cb8d21d65e072ffe8c195d">&#9670;&nbsp;</a></span>selectRecords()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a49d32218c6cb8d21d65e072ffe8c195d">&#9670;&nbsp;</a></span>selectRecords() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -703,8 +1333,103 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
+<a id="acb387cd1636ccd2e79f123bbf5cfdec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb387cd1636ccd2e79f123bbf5cfdec9">&#9670;&nbsp;</a></span>selectRecords() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; handler::Sqlite3Db::selectRecords </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>table_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>fields</em> = <code>{&quot;*&quot;}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>select_distinct</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>where_cond</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>group_by</em> = <code>{&quot;&quot;}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>having_cond</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>order_by</em> = <code>{&quot;&quot;}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>order_type</em> = <code>&quot;ASC&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>limit</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Selects and extracts the records that meet certain conditions. </p>
+<p>Extracts all the data that fits the descriptions and conditions passed as arguments. Most of them are optional, so only the table name is necessary if no other specific parameters are needed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table_name</td><td>Name of the table from where the data will be selected. </td></tr>
+    <tr><td class="paramname">fields</td><td>Container of the names of the fields of the table that will be retrieved from the results in string format. Default value is "*" to take all the fields. </td></tr>
+    <tr><td class="paramname">select_distinct</td><td>Boolean flag to set whether or not only unique results should be selected. Default value is false. </td></tr>
+    <tr><td class="paramname">where_cond</td><td>If set, it contains the condition to apply with a WHERE clause in the select query composition. It is empty by default. </td></tr>
+    <tr><td class="paramname">group_by</td><td>If set, it contains the condition that will be used to group the results of the select query. It is empty by default. </td></tr>
+    <tr><td class="paramname">having_cond</td><td>If set, it contains the condition applied to the query after a HAVING clause. It is empty by default. </td></tr>
+    <tr><td class="paramname">order_by</td><td>If set, it contains the condition that will be used to order the results of the select query. It is empty by default. </td></tr>
+    <tr><td class="paramname">order_type</td><td>Only applied if the order_by argument is set. Defines the type of ordering to be applied. The types are "ASC" or "DES". Default value is "ASC" </td></tr>
+    <tr><td class="paramname">limit</td><td>If set, it defines the number of results that will be extracted from the select query data. Default value is 0 for no limit. </td></tr>
+    <tr><td class="paramname">offset</td><td>If set, it defines the number of results that will be skipped from the select query data before extracting them. Default value is 0 for none.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing all the values retrieved in order. This means that, if three fuelds were given as argument, each group of three elements of this vector will correspond to a row of data. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>source/include/<a class="el" href="sqlite3handler_8h_source.html">sqlite3handler.h</a></li>
+<li>source/include/<a class="el" href="source_2include_2sqlite3handler_8hpp_source.html">sqlite3handler.hpp</a></li>
 <li>source/lib/database.cpp</li>
 </ul>
 </div><!-- contents -->

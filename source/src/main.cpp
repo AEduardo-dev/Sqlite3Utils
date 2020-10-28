@@ -1,5 +1,5 @@
-#include "../include/sqlite3handler.h"
-#include "../include/dbquery.h"
+#include "../include/sqlite3handler.hpp"
+#include "../include/dbquery.hpp"
 
 using namespace query;
 

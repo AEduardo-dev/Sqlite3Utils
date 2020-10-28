@@ -9,11 +9,8 @@
 #include <sys/types.h>
 #include <vector>
 #include <map>
+#include "handlerexceptions.hpp"
 
-//TODO: 24/10/2020 DOCSTRING for Sqlite3Db class
-
-
-//TODO: 24/10/2020 Include description of arguments in methods docstrings
 
 /*! \brief namespace containing the Sqlite3Db class
  *
@@ -26,6 +23,7 @@ namespace handler {
 
 typedef std::map<const std::string, std::vector<std::string> > DbTables;
 typedef std::pair<std::string, std::string> FieldDescription;
+static vector<std::string> empty_vec;
 /*! \brief Class for handling connection and operations in a sqlite3 database.
  *         Brief description continued.
  *
@@ -58,7 +56,7 @@ public:
 		 *
 		 * @overload
 		 */
-		Sqlite3Db(std::string db_name);
+		Sqlite3Db(std::string db_path);
 
 		/*!
 		 * \brief Destructor of the class Sqlite3Db.
@@ -198,8 +196,8 @@ public:
 		 * The data vector is passed by reference, so the content of it is changed during the
 		 * query execution.
 		 */
-		bool executeQuery(const char *sql_query, std::vector<int> indexes_stmt, \
-		                  std::vector<std::string> &data, bool verbose = false);
+		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
+		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
 
 		/*!
 		 * \brief Callback to show the output of sqlite3_exec()
@@ -225,10 +223,38 @@ public:
 		 */
 		std::vector<std::string> getFields(std::string table_name);
 
+		/*!
+		 * \brief Get number of tables in the database.
+		 *
+		 *
+		 * @return The number of tables.
+		 */
+		int getTablesSize();
+
+		/*!
+		 * \brief Get table's names from the database.
+		 *
+		 * @param table_name The name of the table which field's names are needed.
+		 *
+		 * @return A vector containing the names of the tables.
+		 */
+		std::vector<std::string> getTables();
+
+		/*!
+		 * \brief Gets db relative path from the database.
+		 *
+		 * @param table_name The name of the table which field's names are needed.
+		 *
+		 * @return A vector containing the names of the tables.
+		 */
+		std::string getDbPath();
+
+
+
 		friend std::ostream& operator<< (std::ostream &output, const Sqlite3Db &sqlite3Db){
 				std::string table_name;
 
-				output << "Handler for database "<< sqlite3Db._db_name << '\n';
+				output << "Handler for database "<< sqlite3Db._db_path << '\n';
 				output << '\n' << "The following information is managed: "<< '\n';
 				output << sqlite3Db._tables.size() << " number of tables...";
 
@@ -248,15 +274,25 @@ public:
 				return output;
 		};
 
+		static inline bool is_not_alpha(char c)
+		{
+				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
+		};
+
+		bool is_num_val(const std::string &str)
+		{
+				return find_if(str.begin(), str.end(), is_not_alpha) == str.end();
+		};
+
 
 private:
-		int _rc;/*!< Flag that contains the status of the latest action executed.*/
-		const char *_db_name;/*!< Path to database for file operations.*/
-		sqlite3 *_db;/*!< Pointer to the database provided in the constructor.*/
-		const char *_sql;/*!< Pointer to the latest sql query in use.*/
-		sqlite3_stmt *_stmt;/*!< Pointer to the sql query output data.*/
-		char *_zErrMsg = 0;/*!<P ointer to sql error message generated during the query execution.*/
-		DbTables _tables;/*!< Map containing the names of tables in database and their fields.*/
+		int _rc;            /*!< Flag that contains the status of the latest action executed.*/
+		const char *_db_path;            /*!< Realtive path to database for file operations.*/
+		sqlite3 *_db;            /*!< Pointer to the database provided in the constructor.*/
+		const char *_sql;            /*!< Pointer to the latest sql query in use.*/
+		sqlite3_stmt *_stmt;            /*!< Pointer to the sql query output data.*/
+		char *_zErrMsg = 0;            /*!<P ointer to sql error message generated during the query execution.*/
+		DbTables _tables;            /*!< Map containing the names of tables in database and their fields.*/
 
 };
 

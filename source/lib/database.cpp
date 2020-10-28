@@ -1,5 +1,5 @@
-#include "../include/sqlite3handler.h"
-#include "../include/dbquery.h"
+#include "../include/sqlite3handler.hpp"
+#include "../include/dbquery.hpp"
 
 using handler::Sqlite3Db;
 
@@ -36,7 +36,7 @@ handler::Sqlite3Db::Sqlite3Db() {
 				/* SQL Command is executed */
 				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
 
-				if (executeQuery(_sql, {0}, tables_names) == EXIT_SUCCESS) {
+				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
 						/* Load the names to the handler variable */
 						for (auto key : tables_names) {
 								this->_tables[key] = fields;
@@ -56,7 +56,7 @@ handler::Sqlite3Db::Sqlite3Db() {
 										_sql = exec_string.c_str();
 
 										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-										if (executeQuery(_sql, {1}, fields) == EXIT_SUCCESS) {
+										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 												/* Insert them to the tables storage */
 												_tables[table.first] = fields;
 										}
@@ -87,7 +87,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 				delete this;
 		} else {
 				fprintf(stderr, "Opened %s database successfully\n", path);
-				this->_db_name = path;
+				this->_db_path = path;
 
 				/* If _db already exists, try to get the names of the tables in it
 				   std::string exec_string = "SELECT name " \
@@ -106,7 +106,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 				/* SQL Command is executed */
 				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
 
-				if (executeQuery(_sql, {0}, tables_names) == EXIT_SUCCESS) {
+				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
 						/* Load the names to the handler variable */
 						for (auto key : tables_names) {
 								this->_tables[key] = fields;
@@ -126,7 +126,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 										_sql = exec_string.c_str();
 
 										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-										if (executeQuery(_sql, {1}, fields) == EXIT_SUCCESS) {
+										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 												/* Insert them to the tables storage */
 												_tables[table.first] = fields;
 										}
@@ -151,7 +151,7 @@ handler::Sqlite3Db::~Sqlite3Db() {
 
 /******************************closeConnection*******************************/
 void handler::Sqlite3Db::closeConnection(){
-		delete this;
+		sqlite3_close(_db);
 }
 
 /*********************************createTable**********************************/
@@ -233,31 +233,33 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		} else {
 
 				/* Check if we need to get the names of the fields to fill with data */
-				if (std::binary_search(values.begin(), values.end(), "")) {
 
+				if (std::find(values.begin(), values.end(), "") != values.end()) {
 						/* Prepare the name of the fields needed to define the format of the data to insert */
-						for (size_t i = 0; i < this->_tables[key].size(); i++) {
-
-								/* If the value is not empty we add it to the fields list */
+						fields += "(";
+						for (size_t i = 0; i < this->getFields(table_name).size(); i++ ) {
+								/* Get the name of the field*/
+								/* For all of them add a comma at the end*/
 								if (values[i] != "") {
-
-										/* Get the name of the field*/
-										std::string field_name(this->_tables[key][i]);
-
-										/* For all of them add a comma at the end*/
-										fields += field_name + ",";
+										fields += this->getFields(table_name)[i] + ",";
 								}
 						}
 
+
 						/* Once the last one was written, get rid of the trailing comma and add a space*/
-						fields.replace(fields.end()-1, fields.end(), " ");
+						fields.replace(fields.end()-1, fields.end(), ")");
+
 				}
 
 				/* Now we get all the values to be inserted in the row */
-				for (size_t j = 0; j < values.size(); j++) {
+				for (auto value : values) {
 
-						if (values[j] != "") {
-								values_to_insert += values[j] + ",";
+						if (value != "") {
+								if(is_num_val(value))
+										values_to_insert += value + ", ";
+								else
+										values_to_insert += "\'" + value +"\',";
+
 						}
 				}
 				/* The last element does not have a comma after it */
@@ -265,17 +267,19 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 				/* Create SQL query depending of the use case */
 				exec_string = query::cmd::insert_into + table_name + \
-				              ((!fields.empty()) ? " (" + fields + " )" : "" )+ \
+				              ((!fields.empty()) ? fields : "" )+ \
 				              query::cl::values + "(" + values_to_insert + ")"+ \
 				              query::end_query;
 
 				_sql = exec_string.c_str();
 
-				/* Execute SQL exec_string using the callback to see the insertion,
-				   no other information is extracted here*/
-				_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
+				std::cout << _sql << '\n';
 
-				if( _rc != SQLITE_OK ) {
+				/* Execute SQL exec_string */
+
+				// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
+
+				if(executeQuery(_sql)) {
 						fprintf(stderr, "SQL error: %s\n", _zErrMsg);
 						sqlite3_free(_zErrMsg);
 						return EXIT_FAILURE;
@@ -414,7 +418,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 		_sql = exec_string.c_str();
 
-		if(executeQuery(_sql, data_indexes, select_data) == EXIT_SUCCESS) {
+		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
 				fprintf(stdout, "Select operation failed, no data loaded\n");
@@ -428,8 +432,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 /******************************executeQuery***********************************/
 bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
-                                      std::vector<int> indexes__stmt, \
                                       std::vector<std::string> &data, \
+                                      std::vector<int> indexes_stmt, \
                                       bool verbose){
 
 		/* First make sure we are working with an empty vector */
@@ -440,6 +444,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 		if (_rc != SQLITE_OK) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+				throw (Exception(_zErrMsg));
 				return EXIT_FAILURE;
 
 		} else {
@@ -447,17 +452,18 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 				while ((_rc = sqlite3_step(_stmt)) == SQLITE_ROW) {
 
 						/* Get the data in the positions we want from the output */
-						for (int x : indexes__stmt) {
+						if(!indexes_stmt.empty())
+								for (int x : indexes_stmt) {
 
-								/* Check if the index we try to retrieve has something in it */
-								if(sqlite3_column_text(_stmt, x) != NULL) {
-										/* Extract the data in text format and then put it in the vector */
-										data.push_back(reinterpret_cast< char const* > \
-										               (sqlite3_column_text(_stmt, x)));
-										(verbose) ? std::cout << sqlite3_column_text(_stmt, x) << "  " : \
-										    std::cout <<"";
+										/* Check if the index we try to retrieve has something in it */
+										if(sqlite3_column_text(_stmt, x) != NULL) {
+												/* Extract the data in text format and then put it in the vector */
+												data.push_back(reinterpret_cast< char const* > \
+												               (sqlite3_column_text(_stmt, x)));
+												(verbose) ? std::cout << sqlite3_column_text(_stmt, x) << "  " : \
+												    std::cout <<"";
+										}
 								}
-						}
 						(verbose) ? std::cout << '\n' : \
 						    std::cout <<"";
 				}
@@ -468,6 +474,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 		 */
 		if (_rc != SQLITE_DONE) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+				throw (Exception(_zErrMsg));
 				return EXIT_FAILURE;
 		}
 		else {
@@ -500,4 +507,22 @@ std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
 				fields.push_back(field);
 		}
 		return fields;
+};
+
+std::vector<std::string> handler::Sqlite3Db::getTables(){
+		std::vector<std::string> names;
+
+		for(auto table : this->_tables) {
+				names.push_back(table.first);
+		}
+		return names;
+};
+
+std::string handler::Sqlite3Db::getDbPath(){
+		return this->_db_path;
+};
+
+
+int handler::Sqlite3Db::getTablesSize(){
+		return this->_tables.size();
 };

@@ -27,9 +27,11 @@
 *.lib
 
 # Executables
+bin/
 *.exe
 *.out
 *.app
 
 # Doxygen docs
-docs/latex*
+**/docs/
+!docs/latex/*.pdf

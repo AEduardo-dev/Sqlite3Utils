@@ -1,4 +1,4 @@
-#include "../include/dbquery.h"
+#include "../include/dbquery.hpp"
 
 const std::string query::cl::glob(const std::string pattern){
 		const std::string single_quote = "'";
