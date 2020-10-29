@@ -444,7 +444,6 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 		if (_rc != SQLITE_OK) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				throw (Exception(_zErrMsg));
 				return EXIT_FAILURE;
 
 		} else {
@@ -474,7 +473,6 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 		 */
 		if (_rc != SQLITE_DONE) {
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				throw (Exception(_zErrMsg));
 				return EXIT_FAILURE;
 		}
 		else {
