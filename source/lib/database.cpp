@@ -187,33 +187,31 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 		_sql = exec_string.c_str();
 
 		/* Execute SQL exec_string with callback*/
-		_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
+		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
 		/*Return failure if the command did not Execute properly.
 		   Else, return success */
-		if (_rc != SQLITE_OK) {
-				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				sqlite3_free(_zErrMsg);
-				return EXIT_FAILURE;
+		if (executeQuery(_sql) == EXIT_SUCCESS) {
 
-		} else {
-				fprintf(stdout, "Table created successfully\n");
+				// fprintf(stdout, "Table created successfully\n");
 				/* Now we load the whole new table in the handler */
-
 
 				std::vector<std::string> v;
 				const std::string key = table_name;
 				this->_tables[key]=v;
-				std::cout << "tables size= " << this->_tables.size() << '\n';
+				// std::cout << "tables size= " << this->_tables.size() << '\n';
 
 				/* Load the fields info */
 				for (size_t i = 0; i < fields.size(); i++) {
 						this->_tables[key].push_back(fields[i].first);
-						std::cout << this->_tables[key].back() << '\n';
+						// std::cout << this->_tables[key].back() << '\n';
 				}
 
-				std::cout << "tam of fields = "<< this->_tables[key].size() << '\n';
+				// std::cout << "tam of fields = "<< this->_tables[key].size() << '\n';
 				return EXIT_SUCCESS;
+
+		} else {
+				return EXIT_FAILURE;
 		}
 }
 
@@ -252,6 +250,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				}
 
 				/* Now we get all the values to be inserted in the row */
+				values_to_insert += "(";
 				for (auto value : values) {
 
 						if (value != "") {
@@ -263,31 +262,27 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 						}
 				}
 				/* The last element does not have a comma after it */
-				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), " ");
+				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), ")");
 
 				/* Create SQL query depending of the use case */
 				exec_string = query::cmd::insert_into + table_name + \
 				              ((!fields.empty()) ? fields : "" )+ \
-				              query::cl::values + "(" + values_to_insert + ")"+ \
+				              query::cl::values + values_to_insert + \
 				              query::end_query;
 
 				_sql = exec_string.c_str();
-
-				std::cout << _sql << '\n';
 
 				/* Execute SQL exec_string */
 
 				// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
-				if(executeQuery(_sql)) {
-						fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-						sqlite3_free(_zErrMsg);
-						return EXIT_FAILURE;
-
-				} else {
+				if(executeQuery(_sql, empty_vec, {}, true) == EXIT_SUCCESS) {
 						fprintf(stdout, "Records created successfully.\n");
 						/* Then exit with success value */
 						return EXIT_SUCCESS;
+
+				} else {
+						return EXIT_FAILURE;
 				}
 		}
 }
@@ -303,17 +298,15 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 
 		/* Execute SQL exec_string using the callback since no information
 		   needs to be extracted */
-		_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
+		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
-		if( _rc != SQLITE_OK ) {
-				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				sqlite3_free(_zErrMsg);
-				return EXIT_FAILURE;
-
-		} else {
+		if(executeQuery(_sql) == EXIT_SUCCESS) {
 				fprintf(stdout, "Records deleted successfully.\n");
 				/* Then exit with success value */
 				return EXIT_SUCCESS;
+
+		} else {
+				return EXIT_FAILURE;
 		}
 }
 
@@ -329,20 +322,19 @@ bool handler::Sqlite3Db::dropTable(std::string table_name){
 		_sql = exec_string.c_str();
 
 		/* Execute SQL exec_string using the callback */
-		_rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
+		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
-		if( _rc != SQLITE_OK ) {
-				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				sqlite3_free(_zErrMsg);
-				return EXIT_FAILURE;
-		} else {
+		if(executeQuery(_sql) == EXIT_SUCCESS) {
 				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
 
 				/* After dropping it we need to delete it from the tables map as well */
 				this->_tables.erase(table_name.c_str());
 
-				/* Then exit with succes flag*/
+				/* Then exit with success flag*/
 				return EXIT_SUCCESS;
+
+		} else {
+				return EXIT_FAILURE;
 		}
 }
 
@@ -443,6 +435,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 		_rc = sqlite3_prepare_v2(_db, sql_query, -1, &_stmt, NULL);
 
 		if (_rc != SQLITE_OK) {
+				_zErrMsg = sqlite3_errmsg(_db);
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
 				return EXIT_FAILURE;
 
@@ -472,14 +465,13 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 		   Else-> all was executed and  the data extracted
 		 */
 		if (_rc != SQLITE_DONE) {
+				_zErrMsg = sqlite3_errmsg(_db);
 				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
 				return EXIT_FAILURE;
 		}
 		else {
-				fprintf(stdout, "Query executed successfully.\n");
 				return EXIT_SUCCESS;
 		}
-
 		/* The command is ended */
 		sqlite3_finalize(_stmt);
 

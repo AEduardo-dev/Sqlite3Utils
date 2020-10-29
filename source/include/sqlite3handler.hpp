@@ -291,7 +291,7 @@ private:
 		sqlite3 *_db;            /*!< Pointer to the database provided in the constructor.*/
 		const char *_sql;            /*!< Pointer to the latest sql query in use.*/
 		sqlite3_stmt *_stmt;            /*!< Pointer to the sql query output data.*/
-		char *_zErrMsg = 0;            /*!<P ointer to sql error message generated during the query execution.*/
+		const char *_zErrMsg = 0;            /*!<Pointer to sql error message generated during the query execution.*/
 		DbTables _tables;            /*!< Map containing the names of tables in database and their fields.*/
 
 };

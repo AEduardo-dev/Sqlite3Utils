@@ -1,7 +1,7 @@
 # project name (generate executable with this name)
-TARGET=main
+TARGET=tests
 
-EXEC=main*
+EXEC=tests*
 # (The wildcard is used so that this file can be used both in linux and windows systems extension for executable files)
 
 # Compiler
