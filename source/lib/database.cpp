@@ -28,7 +28,7 @@ handler::Sqlite3Db::Sqlite3Db() {
 
 				std::string exec_string = query::cmd::select + "name" + \
 				                          query::cl::from + "sqlite_master" + \
-				                          query::cl::where + query::cl::type(query::data::table) + \
+				                          query::cl::where + query::cl::type("table") + \
 				                          query::cl::order_by + "name" + query::end_query;
 
 				_sql = exec_string.c_str();
@@ -98,19 +98,19 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
 				exec_string = query::cmd::select + "name" + \
 				              query::cl::from + "sqlite_master" + \
-				              query::cl::where + query::cl::type(query::data::table) + \
+				              query::cl::where + query::cl::type("table") + \
 				              query::cl::order_by + "name" + query::end_query;
 
 				_sql = exec_string.c_str();
 
 				/* SQL Command is executed */
 				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-
+				// std::cout << _sql << '\n';
 				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
 						/* Load the names to the handler variable */
 						for (auto key : tables_names) {
 								this->_tables[key] = fields;
-								std::cout << key << '\n';
+								// std::cout << key << '\n';
 						}
 
 						/* If some tables exist, load their fields as well */
@@ -124,7 +124,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 										              +query::end_query;
 
 										_sql = exec_string.c_str();
-
+										// std::cout << _sql << '\n';
 										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
 										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 												/* Insert them to the tables storage */
@@ -193,7 +193,7 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 		   Else, return success */
 		if (executeQuery(_sql) == EXIT_SUCCESS) {
 
-				// fprintf(stdout, "Table created successfully\n");
+				fprintf(stdout, "Table created successfully\n");
 				/* Now we load the whole new table in the handler */
 
 				std::vector<std::string> v;
@@ -207,7 +207,7 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 						// std::cout << this->_tables[key].back() << '\n';
 				}
 
-				// std::cout << "tam of fields = "<< this->_tables[key].size() << '\n';
+				std::cout << "tam of fields = "<< this->_tables[key].size() << '\n';
 				return EXIT_SUCCESS;
 
 		} else {
@@ -221,14 +221,25 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
+		std::vector<std::string> field_types;
 
 		/* Check if number of values is equal to the number of fields, if not-> insert error */
-
 		if (values.size() != this->_tables[key].size()) {
 				fprintf(stderr, "SQL error: Number of variables differs from number of fields. Insert operation not possible\n");
 				return EXIT_FAILURE;
 
 		} else {
+
+				exec_string = query::cmd::pragma+ query::cl::table_info(table_name) \
+				              +query::end_query;
+
+				_sql = exec_string.c_str();
+
+				/* Get type of data to be inserted in the field */
+				if (executeQuery(_sql, field_types, {2}, true) == EXIT_FAILURE) {
+						fprintf(stderr, "Error loading field types from %s\n", table_name.c_str());
+						return EXIT_FAILURE;
+				}
 
 				/* Check if we need to get the names of the fields to fill with data */
 
@@ -241,6 +252,9 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 								if (values[i] != "") {
 										fields += this->getFields(table_name)[i] + ",";
 								}
+								else{
+										field_types.erase(field_types.begin()+i);
+								}
 						}
 
 
@@ -249,10 +263,10 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 				}
 
+				//TODO: 29/10/2020 Fix error of inserting any data type into a field. Do the check with a switch probably.
 				/* Now we get all the values to be inserted in the row */
 				values_to_insert += "(";
 				for (auto value : values) {
-
 						if (value != "") {
 								if(is_num_val(value))
 										values_to_insert += value + ", ";
