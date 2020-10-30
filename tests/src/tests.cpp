@@ -31,77 +31,84 @@ std::vector<handler::FieldDescription> table_definition = \
 
 std::vector<std::string> names_to_check = {"ID", "AGE", "PHONE", "NAME"};
 
-TEST(SqlitehandlerTest, CreateDatabase){
+/********************CONSTRUCTOR AND DESTRUCTOR TESTS************************/
+TEST(SqliteHandlerConstructor, CreateDatabase){
 		EXPECT_FALSE(exists("test.db"));
 		handler::Sqlite3Db testHandler;
 		ASSERT_TRUE(exists("test.db"));
 }
 
-TEST(SqlitehandlerTest, MultiConnectDB){
+TEST(SqliteHandlerConstructor, MultiConnectDB){
 		EXPECT_TRUE(exists("test.db"));
 		handler::Sqlite3Db firstConnection;
 		handler::Sqlite3Db secondConnection;
 		ASSERT_NO_FATAL_FAILURE(handler::Sqlite3Db thirdConnection);
 }
 
-TEST(SqlitehandlerTest, DisconnectDB){
-		handler::Sqlite3Db MyHandler("MyDB.db");
-		ASSERT_NO_THROW(MyHandler.closeConnection());
-}
-
-TEST(SqlitehandlerTest, LoadEmptyDatabase){
+TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
 		ASSERT_NO_THROW(handler::Sqlite3Db UserHandler("MyDB.db"));
 		ASSERT_EQ(UserHandler.getTablesSize(), 0);
 }
 
-TEST(SqlitehandlerTest, CreateTable){
+/*******************DISCONNECTION AND CONNECTIONS**************************/
+TEST(SqliteConnection, DisconnectDB){
+		handler::Sqlite3Db MyHandler("MyDB.db");
+		ASSERT_NO_THROW(MyHandler.closeConnection());
+}
+
+
+/*******************CREATE TABLE FUNCTION*********************************/
+TEST(SqliteCreateTable, CreateTable){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition), EXIT_SUCCESS);
 		ASSERT_EQ(UserHandler.getTablesSize(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
 
-TEST(SqlitehandlerTest, InsertCompleteCorrect){
+
+/*******************INSERT RECORDS FUNCTION******************************/
+TEST(SqliteInsertion, InsertCompleteCorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"1", "32", "2865631", "ANTHON33"};
 
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
-TEST(SqlitehandlerTest, InsertCompleteIncorrect){
+TEST(SqliteInsertion, InsertCompleteIncorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"2", "", "435", "Albert"};
 
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
-TEST(SqlitehandlerTest, InsertTypeIncorrect){
+TEST(SqliteInsertion, InsertIncorrectType){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
 
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
-TEST(SqlitehandlerTest, InsertIncompleteCorrect){
+TEST(SqliteInsertion, InsertIncompleteCorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"3", "43", "", "Julia"};
 
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
-TEST(SqlitehandlerTest, InsertIncompleteIncorrect){
+TEST(SqliteInsertion, InsertIncompleteIncorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"4", "", "", "Robert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
-TEST(SqlitehandlerTest, LoadTablesDatabase){
+/*********************OPERATIONS ON LOADED DB***************************/
+TEST(SqliteLoadedDb, LoadDatabase){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 		ASSERT_GT(LoaderHandler.getTablesSize(), 0);
 		ASSERT_EQ(LoaderHandler.getTables()[0], table_name);
 }
 
-TEST(SqlitehandlerTest, InsertAfterLoad){
+TEST(SqliteLoadedDb, InsertAfterLoad){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
