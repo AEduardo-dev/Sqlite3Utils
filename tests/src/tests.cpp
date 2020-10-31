@@ -116,6 +116,9 @@ TEST(SqliteLoadedDb, InsertAfterLoad){
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
+/*********************OPERATIONS ON LOADED DB***************************/
+
+
 int main(int argc, char *argv[]) {
 		testing::InitGoogleTest(&argc, argv);
 		return RUN_ALL_TESTS();

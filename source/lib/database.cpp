@@ -222,6 +222,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
 		std::vector<std::string> field_types;
+		bool type_error = false;
 
 		/* Check if number of values is equal to the number of fields, if not-> insert error */
 		if (values.size() != this->_tables[key].size()) {
@@ -263,17 +264,38 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 				}
 
-				//TODO: 29/10/2020 Fix error of inserting any data type into a field. Do the check with a switch probably.
 				/* Now we get all the values to be inserted in the row */
 				values_to_insert += "(";
-				for (auto value : values) {
-						if (value != "") {
-								if(is_num_val(value))
-										values_to_insert += value + ", ";
-								else
-										values_to_insert += "\'" + value +"\',";
+				for (size_t i = 0; i < values.size(); ++i) {
+						if (values[i] != "") {
+								if (field_types[i] == "NULL") {
+										if(values[i] == "NULL")
+												values_to_insert += values[i] + ", ";
+										else{
+												fprintf(stderr, "Type error in field %d. Expected NULL type.\n", static_cast<int>(i));
+												type_error = true;
+										}
+//TODO 31/10/2020 Angel Fix datatypes issues not recognised by sqlite3 control
 
+								}else if (field_types[i] == "TEXT" || field_types[i] == "BLOB") {
+										values_to_insert += "\'" + values[i] +"\',";
+								}else{
+										if(IsValidInt(values[i]) && field_types[i] == "INT") {
+												values_to_insert += values[i] + ", ";
+										}
+
+										else if (IsValidReal(values[i]) && field_types[i] == "REAL") {
+												values_to_insert += values[i] + ", ";
+										}
+
+										else{
+												fprintf(stderr, "Type error in field %d. Expected INT or REAL type\n", static_cast<int>(i));
+												type_error = true;
+										}
+								}
 						}
+						if(type_error)
+								return EXIT_FAILURE;
 				}
 				/* The last element does not have a comma after it */
 				values_to_insert.replace(values_to_insert.end()-1, values_to_insert.end(), ")");

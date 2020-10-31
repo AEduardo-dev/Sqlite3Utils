@@ -274,14 +274,24 @@ public:
 				return output;
 		};
 
-		static inline bool is_not_alpha(char c)
+		static inline bool IsNotAplhaReal(char c)
 		{
 				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
 		};
 
-		bool is_num_val(const std::string &str)
+		static inline bool IsNotAplhaInt(char c)
 		{
-				return find_if(str.begin(), str.end(), is_not_alpha) == str.end();
+				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
+		};
+
+		bool IsValidInt(const std::string &str)
+		{
+				return find_if(str.begin(), str.end(), IsNotAplhaInt) == str.end();
+		};
+
+		bool IsValidReal(const std::string &str)
+		{
+				return find_if(str.begin(), str.end(), IsNotAplhaReal) == str.end();
 		};
 
 
