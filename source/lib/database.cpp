@@ -241,6 +241,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 						fprintf(stderr, "Error loading field types from %s\n", table_name.c_str());
 						return EXIT_FAILURE;
 				}
+				std::cout << field_types.size() << '\n';
 
 				/* Check if we need to get the names of the fields to fill with data */
 
@@ -255,6 +256,10 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 								}
 								else{
 										field_types.erase(field_types.begin()+i);
+										for (auto x : field_types){
+											std::cout << x << '\n';
+										}
+										std::cout << field_types.size() << '\n';
 								}
 						}
 
@@ -275,9 +280,9 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 												fprintf(stderr, "Type error in field %d. Expected NULL type.\n", static_cast<int>(i));
 												type_error = true;
 										}
-//TODO 31/10/2020 Angel Fix datatypes issues not recognised by sqlite3 control
+//TODO 31/10/2020 Fix datatypes issues not recognised by sqlite3 control. Function in query declarations to create a affinity token from the type, then the token will be compared here.
 
-								}else if (field_types[i] == "TEXT" || field_types[i] == "BLOB") {
+								}else if (field_types[i] == "TEXT" || field_types[i] == "BLOB" || field_types[i] == "CHAR  (50)") {
 										values_to_insert += "\'" + values[i] +"\',";
 								}else{
 										if(IsValidInt(values[i]) && field_types[i] == "INT") {

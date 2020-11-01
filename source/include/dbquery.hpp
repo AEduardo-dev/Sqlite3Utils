@@ -2,6 +2,7 @@
 #define DBQUERY_H
 
 #include <string>
+#include <vector>
 //TODO: 24/10/2020 DOCSTRING for dbquery class
 
 /******************************************************************************
@@ -12,6 +13,10 @@
  *
  */
 namespace query {
+
+namespace affinity{
+    const std::string getFieldAffinity(const std::string field_datatype);
+}
 
 /*********************************************************************
                               CLAUSES

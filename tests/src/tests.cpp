@@ -68,7 +68,7 @@ TEST(SqliteCreateTable, CreateTable){
 /*******************INSERT RECORDS FUNCTION******************************/
 TEST(SqliteInsertion, InsertCompleteCorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
-		std::vector<std::string> values_to_insert = {"1", "32", "2865631", "ANTHON33"};
+		std::vector<std::string> values_to_insert = {"1", "32", "665", "ANTHON33"};
 
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
