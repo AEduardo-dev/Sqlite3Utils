@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <vector>
 #include <map>
-#include "handlerexceptions.hpp"
 
 
 /*! \brief namespace containing the Sqlite3Db class
@@ -23,7 +22,7 @@ namespace handler {
 
 typedef std::map<const std::string, std::vector<std::string> > DbTables;
 typedef std::pair<std::string, std::string> FieldDescription;
-static vector<std::string> empty_vec;
+static  std::vector<std::string> empty_vec;
 /*! \brief Class for handling connection and operations in a sqlite3 database.
  *         Brief description continued.
  *
@@ -94,25 +93,6 @@ public:
 		bool createTable(std::string table_name, std::vector<FieldDescription> fields);
 
 		/*!
-		 * \brief Insert record data inside of a table.
-		 *
-		 * Given the data to insert, the method will put it inside of the specified table if
-		 * the fields match.
-		 *
-		 * @param  table_name Name of the table where the record will be added.
-		 * @param  values     Container of the values of the fields to insert. The not defined values should contain an empty string ("").
-		 *
-		 * @return EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
-		 *
-		 * An example of usage could be as follows:
-		 *
-		 *
-		 * \include insertRecord.cpp
-		 *
-		 */
-		bool insertRecord(std::string table_name, std::vector<std::string> values);
-
-		/*!
 		 * \brief Delete the records from a table that meet the provided condition/s.
 		 *
 		 * Locates and deletes the records from the table which meet a
@@ -146,6 +126,43 @@ public:
 		 * \include insertRecord.cpp
 		 */
 		bool dropTable(std::string table_name);
+
+		/*!
+		 * \brief Execute an SQLite query and receive the output selected.
+		 *
+		 *
+		 * @param  sql_query    The query to be executed.
+		 * @param  indexes_stmt The indexes of the output (each index is a field of the database)
+		 * that will be extracted from the result of the query.
+		 * @param  data         Container to store the data retrieved from the indexes_stmt.
+		 * @param  verbose      If set to true, the result of the query will also be printed
+		 * through the console. Default value is false.
+		 *
+		 * @return              EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
+		 * The data vector is passed by reference, so the content of it is changed during the
+		 * query execution.
+		 */
+		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
+		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
+
+		/*!
+		 * \brief Insert record data inside of a table.
+		 *
+		 * Given the data to insert, the method will put it inside of the specified table if
+		 * the fields match.
+		 *
+		 * @param  table_name Name of the table where the record will be added.
+		 * @param  values     Container of the values of the fields to insert. The not defined values should contain an empty string ("").
+		 *
+		 * @return EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
+		 *
+		 * An example of usage could be as follows:
+		 *
+		 *
+		 * \include insertRecord.cpp
+		 *
+		 */
+		bool insertRecord(std::string table_name, std::vector<std::string> values);
 
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
@@ -182,37 +199,13 @@ public:
 		                                        int limit = 0, int offset = 0);
 
 		/*!
-		 * \brief Execute an SQLite query and receive the output selected.
-		 *
-		 *
-		 * @param  sql_query    The query to be executed.
-		 * @param  indexes_stmt The indexes of the output (each index is a field of the database)
-		 * that will be extracted from the result of the query.
-		 * @param  data         Container to store the data retrieved from the indexes_stmt.
-		 * @param  verbose      If set to true, the result of the query will also be printed
-		 * through the console. Default value is false.
-		 *
-		 * @return              EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
-		 * The data vector is passed by reference, so the content of it is changed during the
-		 * query execution.
-		 */
-		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
-		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
+     * [getAffinity description]
+     * @param  field_datatype [description]
+     * @param  value_to_check [description]
+     * @return                [description]
+     */
+    const std::string getAffinity(const std::string field_datatype);
 
-		/*!
-		 * \brief Callback to show the output of sqlite3_exec()
-		 *
-		 * When not using the executeQuery() method, it may be interesting to use the
-		 *  sqlite3_exec() instead, and so, a callback to see the output of the operation is
-		 *  higly recommended.
-		 *
-		 * @param  NotUsed   Not used.
-		 * @param  argc      Number of arguments.
-		 * @param  argv      Values of the arguments.
-		 * @param  azColName Name of the column in the database.
-		 *
-		 */
-		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 		/*!
 		 * \brief Get field's names from a table in the database.
@@ -250,7 +243,6 @@ public:
 		std::string getDbPath();
 
 
-
 		friend std::ostream& operator<< (std::ostream &output, const Sqlite3Db &sqlite3Db){
 				std::string table_name;
 
@@ -274,26 +266,68 @@ public:
 				return output;
 		};
 
-		static inline bool IsNotAplhaReal(char c)
+		/*!
+		 * \brief Callback to show the output of sqlite3_exec()
+		 *
+		 * When not using the executeQuery() method, it may be interesting to use the
+		 *  sqlite3_exec() instead, and so, a callback to see the output of the operation is
+		 *  higly recommended.
+		 *
+		 * @param  NotUsed   Not used.
+		 * @param  argc      Number of arguments.
+		 * @param  argv      Values of the arguments.
+		 * @param  azColName Name of the column in the database.
+		 *
+		 */
+		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
+
+		/*!
+     * [checkFieldAffinity description]
+     * @param  field_datatype [description]
+     * @param  value_to_check [description]
+     * @return                [description]
+     */
+    bool isAffined(const std::string affinity, const std::string value_to_check);
+
+		/*!
+		 * [IsNotAplhaReal description]
+		 * @param  c [description]
+		 * @return   [description]
+		 */
+		static inline bool isNotAplhaReal(char c)
 		{
 				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
 		};
 
-		static inline bool IsNotAplhaInt(char c)
+		/*!
+		 * [IsNotAplhaInt description]
+		 * @param  c [description]
+		 * @return   [description]
+		 */
+		static inline bool isNotAplhaInt(char c)
 		{
 				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
 		};
 
-		bool IsValidInt(const std::string &str)
+		/*!
+		 * [IsValidInt description]
+		 * @param  str [description]
+		 * @return     [description]
+		 */
+		bool isValidInt(const std::string &str)
 		{
-				return find_if(str.begin(), str.end(), IsNotAplhaInt) == str.end();
+				return find_if(str.begin(), str.end(), isNotAplhaInt) == str.end();
 		};
 
-		bool IsValidReal(const std::string &str)
+		/*!
+		 * [IsValidReal description]
+		 * @param  str [description]
+		 * @return     [description]
+		 */
+		bool isValidReal(const std::string &str)
 		{
-				return find_if(str.begin(), str.end(), IsNotAplhaReal) == str.end();
+				return find_if(str.begin(), str.end(), isNotAplhaReal) == str.end();
 		};
-
 
 private:
 		int _rc;            /*!< Flag that contains the status of the latest action executed.*/

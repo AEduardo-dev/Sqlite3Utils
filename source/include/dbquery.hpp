@@ -13,18 +13,31 @@
  *
  */
 namespace query {
+  /*! \brief namespace containing the data affinity definitions and calculation
+   *
+   *
+   */
+  namespace affinity {
+    const std::string integer           = "INTEGER";
+    const std::string int_affinity      = "INT";
+    const std::string text              = "TEXT";
+    const std::vector<std::string> text_affinity = {"CHAR", "CLOB", "TEXT"};
+    const std::string blob              = "BLOB";
+    const std::string blob_affinity     = "BLOB";
+    const std::string real              = "REAL";
+    const std::vector<std::string> real_affinity = {"REAL", "FLOA", "DOUB"};
+    const std::string numeric           = "NUMERIC";
 
-namespace affinity{
-    const std::string getFieldAffinity(const std::string field_datatype);
-}
+  }
 
 /*********************************************************************
                               CLAUSES
 *********************************************************************/
-/*! \brief namespace containing the query clauses
- *
- */
-namespace cl{
+  /*! \brief namespace containing the query clauses
+   *
+   */
+ namespace cl {
+
     const std::string and_              = " AND ";
     const std::string as                = " AS ";
     const std::string before            = " BEFORE ";
@@ -93,17 +106,18 @@ namespace cl{
     const std::string type(const std::string type);
     const std::string values            = " VALUES ";
     const std::string where             = " WHERE ";
-} /* cl */
+  } /* cl */
 
 
 /*********************************************************************
                         DB-QUERY STATEMENTS
 *********************************************************************/
-/*! \brief namespace containing the query commands
- *
- *
- */
-namespace cmd{
+  /*! \brief namespace containing the query commands
+   *
+   *
+   */
+  namespace cmd {
+
     const std::string add_column        = " ADD COLUMN ";
     const std::string alter_table       = " ALTER TABLE ";
     const std::string analyze           = " ANALYZE ";
@@ -138,17 +152,18 @@ namespace cmd{
     const std::string update            = " UPDATE ";
     const std::string using_            = " USING ";
     const std::string vacuum            = " VACUUM";
-} /* cmd */
+  } /* cmd */
 
 
 /*********************************************************************
                         DATATYPES AND DB TYPES
 *********************************************************************/
-/*! \brief namespace containing the query data types and options
- *
- *
- */
-namespace data{
+  /*! \brief namespace containing the query data types and options
+   *
+   *
+   */
+  namespace data {
+
     const std::string char_              = " CHAR ";
     /*!
      * [len description]
@@ -178,8 +193,8 @@ namespace data{
      * @return           [description]
      */
     const std::string view(const std::string db_name, const std::string view_name);
-} /* data */
-const std::string end_query             =";";
+  } /* data */
+  const std::string end_query             =";";
 
 } /* query */
 

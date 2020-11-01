@@ -237,64 +237,47 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				_sql = exec_string.c_str();
 
 				/* Get type of data to be inserted in the field */
-				if (executeQuery(_sql, field_types, {2}, true) == EXIT_FAILURE) {
+				if (executeQuery(_sql, field_types, {2}) == EXIT_FAILURE) {
 						fprintf(stderr, "Error loading field types from %s\n", table_name.c_str());
 						return EXIT_FAILURE;
 				}
-				std::cout << field_types.size() << '\n';
+
+				/* Get the affinity corresponding to each type */
+				for (size_t i = 0; i < field_types.size(); ++i) {
+						field_types[i] = getAffinity(field_types[i]);
+				}
 
 				/* Check if we need to get the names of the fields to fill with data */
 
 				if (std::find(values.begin(), values.end(), "") != values.end()) {
 						/* Prepare the name of the fields needed to define the format of the data to insert */
 						fields += "(";
-						for (size_t i = 0; i < this->getFields(table_name).size(); i++ ) {
+						for (size_t j = 0; j < this->getFields(table_name).size(); ++j) {
 								/* Get the name of the field*/
 								/* For all of them add a comma at the end*/
-								if (values[i] != "") {
-										fields += this->getFields(table_name)[i] + ",";
-								}
-								else{
-										field_types.erase(field_types.begin()+i);
-										for (auto x : field_types){
-											std::cout << x << '\n';
-										}
-										std::cout << field_types.size() << '\n';
+								if (values[j] != "") {
+										fields += this->getFields(table_name)[j] + ",";
 								}
 						}
-
-
 						/* Once the last one was written, get rid of the trailing comma and add a space*/
 						fields.replace(fields.end()-1, fields.end(), ")");
-
 				}
 
 				/* Now we get all the values to be inserted in the row */
 				values_to_insert += "(";
-				for (size_t i = 0; i < values.size(); ++i) {
-						if (values[i] != "") {
-								if (field_types[i] == "NULL") {
-										if(values[i] == "NULL")
-												values_to_insert += values[i] + ", ";
-										else{
-												fprintf(stderr, "Type error in field %d. Expected NULL type.\n", static_cast<int>(i));
-												type_error = true;
-										}
-//TODO 31/10/2020 Fix datatypes issues not recognised by sqlite3 control. Function in query declarations to create a affinity token from the type, then the token will be compared here.
+				for (size_t k = 0; k < values.size(); ++k) {
+						if (values[k] != "") {
+								if (field_types[k] == query::affinity::text || \
+								    field_types[k] == query::affinity::blob) {
+										values_to_insert += "\'" + values[k] +"\',";
 
-								}else if (field_types[i] == "TEXT" || field_types[i] == "BLOB" || field_types[i] == "CHAR  (50)") {
-										values_to_insert += "\'" + values[i] +"\',";
 								}else{
-										if(IsValidInt(values[i]) && field_types[i] == "INT") {
-												values_to_insert += values[i] + ", ";
-										}
+										std::cout << "type= " << field_types[k]<< " value = " << values[k] << '\n';
+										if(isAffined(field_types[k], values[k])) {
+												values_to_insert += values[k]+ ",";
 
-										else if (IsValidReal(values[i]) && field_types[i] == "REAL") {
-												values_to_insert += values[i] + ", ";
-										}
-
-										else{
-												fprintf(stderr, "Type error in field %d. Expected INT or REAL type\n", static_cast<int>(i));
+										}else{
+												fprintf(stderr, "Type error in value %d. Expected %s affinity\n", static_cast<int>(k), field_types[k].c_str());
 												type_error = true;
 										}
 								}
@@ -317,7 +300,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 				// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
-				if(executeQuery(_sql, empty_vec, {}, true) == EXIT_SUCCESS) {
+				if(executeQuery(_sql, handler::empty_vec, {}, true) == EXIT_SUCCESS) {
 						fprintf(stdout, "Records created successfully.\n");
 						/* Then exit with success value */
 						return EXIT_SUCCESS;
@@ -518,6 +501,57 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 }
 
+/******************************getAffinity*******************************************/
+const std::string handler::Sqlite3Db::getAffinity(const std::string field_datatype){
+
+		std::string affinity = "";
+
+		if (field_datatype.find(query::affinity::int_affinity) != std::string::npos) {
+				affinity = query::affinity::integer;
+
+		}else if(field_datatype.find(query::affinity::blob_affinity) != std::string::npos|| \
+		         field_datatype == "") {
+				affinity = query::affinity::blob;
+
+		}else{
+				for(size_t i = 0; i < query::affinity::text_affinity.size(); ++i) {
+						if (field_datatype.find(query::affinity::text_affinity[i]) != std::string::npos) {
+								affinity = query::affinity::text;
+								break;
+
+						}
+						else if (field_datatype.find(query::affinity::real_affinity[i]) != std::string::npos) {
+								affinity = query::affinity::real;
+								break;
+
+						}
+				}
+				if (affinity == "")
+						affinity = query::affinity::numeric;
+		}
+
+		return affinity;
+}
+
+bool handler::Sqlite3Db::isAffined(const std::string affinity, const std::string value_to_check){
+		bool is_affined = false;
+
+		if (affinity == query::affinity::integer) {
+				if(isValidInt(value_to_check))
+						is_affined = true;
+
+		}else if (affinity == query::affinity::real) {
+				if(isValidReal(value_to_check))
+						is_affined = true;
+
+		}else if (affinity == query::affinity::numeric) {
+				if(isValidInt(value_to_check) || isValidReal(value_to_check))
+						is_affined = true;
+		}
+
+		return is_affined;
+}
+
 
 /******************************callback*************************************/
 
@@ -530,6 +564,8 @@ int handler::Sqlite3Db::callback(void *NotUsed, int argc, \
 		printf("\n");
 		return 0;
 }
+
+/*************************getters and setters******************************/
 
 std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
 		std::vector<std::string> fields;
