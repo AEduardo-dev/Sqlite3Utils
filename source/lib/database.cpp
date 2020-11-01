@@ -272,8 +272,10 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 										values_to_insert += "\'" + values[k] +"\',";
 
 								}else{
-										std::cout << "type= " << field_types[k]<< " value = " << values[k] << '\n';
-										if(isAffined(field_types[k], values[k])) {
+										if (field_types[k] == "NULL" && values[k] == "NULL"){
+												values_to_insert += values[k]+ ",";
+												
+										}else if(isAffined(field_types[k], values[k])) {
 												values_to_insert += values[k]+ ",";
 
 										}else{
@@ -506,7 +508,10 @@ const std::string handler::Sqlite3Db::getAffinity(const std::string field_dataty
 
 		std::string affinity = "";
 
-		if (field_datatype.find(query::affinity::int_affinity) != std::string::npos) {
+		if (field_datatype.find("NULL") != std::string::npos) {
+				affinity = "NULL";
+
+		}else if (field_datatype.find(query::affinity::int_affinity) != std::string::npos) {
 				affinity = query::affinity::integer;
 
 		}else if(field_datatype.find(query::affinity::blob_affinity) != std::string::npos|| \
