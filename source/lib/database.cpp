@@ -274,7 +274,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 								}else{
 										if (field_types[k] == "NULL" && values[k] == "NULL"){
 												values_to_insert += values[k]+ ",";
-												
+
 										}else if(isAffined(field_types[k], values[k])) {
 												values_to_insert += values[k]+ ",";
 
@@ -319,9 +319,11 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 		std::string exec_string;
 
 		exec_string = query::cmd::delete_ + query::cl::from + table_name + \
-		              ((condition == "all") ? query::cl::where + condition : "") + \
+		              ((condition == "all") ? "" : query::cl::where + condition) + \
 		              query::end_query;
 
+		_sql = exec_string.c_str();
+		std::cout << _sql << '\n';
 		/* Execute SQL exec_string using the callback since no information
 		   needs to be extracted */
 		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);

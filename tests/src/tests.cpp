@@ -73,13 +73,6 @@ TEST(SqliteInsertion, InsertCompleteCorrect){
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
-TEST(SqliteInsertion, InsertCompleteIncorrect){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
-		std::vector<std::string> values_to_insert = {"2", "", "435", "Albert"};
-
-		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
-}
-
 TEST(SqliteInsertion, InsertIncorrectType){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
@@ -116,7 +109,31 @@ TEST(SqliteLoadedDb, InsertAfterLoad){
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
-/*********************OPERATIONS ON LOADED DB***************************/
+/**************************DELETE AND DROP OPERATIONS***********************/
+TEST(SqliteDelete, DeleteRecord){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
+}
+
+TEST(SqliteDelete, DeleteAllRecords){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
+}
+
+TEST(SqliteDelete, DeleteWrongTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
+}
+
+
+TEST(SqliteDelete, DeleteWrongCondition){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "UD == 4"), EXIT_FAILURE);
+}
 
 
 int main(int argc, char *argv[]) {
