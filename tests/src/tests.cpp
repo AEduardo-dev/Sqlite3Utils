@@ -93,6 +93,12 @@ TEST(SqliteInsertion, InsertIncompleteIncorrect){
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
+TEST(SqliteInsertion, InsertNoTable){
+		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		std::vector<std::string> values_to_insert = {"8", "32", "665", "BRUNO"};
+		ASSERT_EQ(UserHandler.insertRecord("CONECTIONS", values_to_insert), EXIT_FAILURE);
+}
+
 /*********************OPERATIONS ON LOADED DB***************************/
 TEST(SqliteLoadedDb, LoadDatabase){
 		EXPECT_TRUE(exists("MyDB.db"));
@@ -104,9 +110,9 @@ TEST(SqliteLoadedDb, LoadDatabase){
 TEST(SqliteLoadedDb, InsertAfterLoad){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_GT(LoaderHandler.getTablesSize(), 0);
 		std::vector<std::string> values_to_insert = {"7", "23", "", "Edu"};
-		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
+		ASSERT_EQ(LoaderHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
 
 /**************************DELETE AND DROP OPERATIONS***********************/
@@ -115,24 +121,31 @@ TEST(SqliteDelete, DeleteRecord){
 		EXPECT_GT(UserHandler.getTablesSize(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
 }
-
 TEST(SqliteDelete, DeleteAllRecords){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getTablesSize(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
 }
-
 TEST(SqliteDelete, DeleteWrongTable){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getTablesSize(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
 }
-
-
 TEST(SqliteDelete, DeleteWrongCondition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "UD == 4"), EXIT_FAILURE);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
+}
+
+TEST(SqliteDropTable, DropNonexistentTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
+}
+TEST(SqliteDropTable, DropTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
 }
 
 

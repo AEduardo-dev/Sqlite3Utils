@@ -224,6 +224,12 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		std::vector<std::string> field_types;
 		bool type_error = false;
 
+		/* Check if table exists in the database */
+		if (this->_tables.find(key) == this->_tables.end()) {
+				fprintf(stderr, "SQL error: No such table: %s\n", key.c_str());
+				return EXIT_FAILURE;
+		}
+
 		/* Check if number of values is equal to the number of fields, if not-> insert error */
 		if (values.size() != this->_tables[key].size()) {
 				fprintf(stderr, "SQL error: Number of variables differs from number of fields. Insert operation not possible\n");
@@ -272,7 +278,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 										values_to_insert += "\'" + values[k] +"\',";
 
 								}else{
-										if (field_types[k] == "NULL" && values[k] == "NULL"){
+										if (field_types[k] == "NULL" && values[k] == "NULL") {
 												values_to_insert += values[k]+ ",";
 
 										}else if(isAffined(field_types[k], values[k])) {
@@ -318,19 +324,17 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 
 		std::string exec_string;
 
+		/* Generate parametrized query */
 		exec_string = query::cmd::delete_ + query::cl::from + table_name + \
 		              ((condition == "all") ? "" : query::cl::where + condition) + \
 		              query::end_query;
 
+		/* Convert to constant for use inside of Sqlite3 */
 		_sql = exec_string.c_str();
-		std::cout << _sql << '\n';
-		/* Execute SQL exec_string using the callback since no information
-		   needs to be extracted */
-		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
 
+		/* Execute the query and return the succes or failure of it */
 		if(executeQuery(_sql) == EXIT_SUCCESS) {
 				fprintf(stdout, "Records deleted successfully.\n");
-				/* Then exit with success value */
 				return EXIT_SUCCESS;
 
 		} else {
@@ -344,18 +348,18 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 bool handler::Sqlite3Db::dropTable(std::string table_name){
 		std::string exec_string;
 
+		/* Generate parametrized query */
 		exec_string = query::cmd::drop_table + table_name \
 		              + query::end_query;
 
+		/* Convert to constant for use inside of Sqlite3 */
 		_sql = exec_string.c_str();
 
-		/* Execute SQL exec_string using the callback */
-		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
-
+		/* Execute the query */
 		if(executeQuery(_sql) == EXIT_SUCCESS) {
 				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
 
-				/* After dropping it we need to delete it from the tables map as well */
+				/* After dropping the table, we need to delete it from the tables map as well */
 				this->_tables.erase(table_name.c_str());
 
 				/* Then exit with success flag*/
@@ -368,12 +372,15 @@ bool handler::Sqlite3Db::dropTable(std::string table_name){
 
 
 /******************************selectRecords*********************************/
-std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, std::vector<std::string> fields, \
-                                                            bool select_distinct, std::string where_cond, \
+std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, \
+                                                            std::vector<std::string> fields, \
+                                                            bool select_distinct, \
+                                                            std::string where_cond, \
                                                             std::vector<std::string> group_by, \
                                                             std::string having_cond, \
                                                             std::vector<std::string> order_by, \
-                                                            std::string order_type, int limit, int offset){
+                                                            std::string order_type, int limit, \
+                                                            int offset){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
