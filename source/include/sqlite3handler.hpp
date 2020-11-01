@@ -296,7 +296,7 @@ public:
 		 */
 		static inline bool isNotAplhaReal(char c)
 		{
-				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
+				return (isalpha(c) || (c == ' '));
 		};
 
 		/*!
@@ -316,7 +316,7 @@ public:
 		 */
 		bool isValidInt(const std::string &str)
 		{
-				return find_if(str.begin(), str.end(), isNotAplhaInt) == str.end();
+				return (find_if(str.begin(), str.end(), isNotAplhaInt) == str.end());
 		};
 
 		/*!
@@ -326,7 +326,8 @@ public:
 		 */
 		bool isValidReal(const std::string &str)
 		{
-				return find_if(str.begin(), str.end(), isNotAplhaReal) == str.end();
+				return (find_if(str.begin(), str.end(), isNotAplhaReal) == str.end() ||\
+								find_if(str.begin(), str.end(), isNotAplhaInt) == str.end());
 		};
 
 private:

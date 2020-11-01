@@ -29,6 +29,12 @@ std::vector<handler::FieldDescription> table_definition = \
 		{"PHONE", query::data::int_+query::data::null}, \
 		{"NAME",query::data::char_+query::data::len(50)+query::data::not_null}};
 
+std::vector<handler::FieldDescription> table_definition_wrong = \
+{{"ID",query::data::int_+query::data::primary_key+query::data::not_null}, \
+		{"AGE", query::data::int_+query::data::not_null+"dafs"}, \
+		{"PHONE", query::data::int_+query::data::null}, \
+		{"NAME",query::data::char_+query::data::len(50)+query::data::not_null}};
+
 std::vector<std::string> names_to_check = {"ID", "AGE", "PHONE", "NAME"};
 
 /********************CONSTRUCTOR AND DESTRUCTOR TESTS************************/
@@ -56,47 +62,83 @@ TEST(SqliteConnection, DisconnectDB){
 		ASSERT_NO_THROW(MyHandler.closeConnection());
 }
 
-
 /*******************CREATE TABLE FUNCTION*********************************/
 TEST(SqliteCreateTable, CreateTable){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition), EXIT_SUCCESS);
 		ASSERT_EQ(UserHandler.getTablesSize(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
+TEST(SqliteCreateTable, CreateTableWrongDefinition){
+		ASSERT_EQ(UserHandler.createTable(table_name, table_definition_wrong), EXIT_FAILURE);
+		ASSERT_EQ(UserHandler.getTablesSize(), 1);
+		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
+}
 
+/**********************AFFINITY OPERATIONS*****************************/
+TEST(SqliteAffinity, CheckIntAffinity){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
+}
+TEST(SqliteAffinity, CheckIntWrongAffinity){
+		ASSERT_NE(UserHandler.getAffinity("REAL"), "INTEGER");
+}
+TEST(SqliteAffinity, CheckIntAffinityWrongValue){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33,86"));
+}
+TEST(SqliteAffinity, CheckRealAffinityComma){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");
+		ASSERT_TRUE(UserHandler.isAffined("REAL", "33,86"));
+}
+TEST(SqliteAffinity, CheckRealAffinityDot){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");
+		ASSERT_TRUE(UserHandler.isAffined("REAL", "33.86"));
+}
+TEST(SqliteAffinity, CheckRealWrongAffinity){
+		ASSERT_NE(UserHandler.getAffinity("LONG INT"), "REAL");
+}
+TEST(SqliteAffinity, CheckRealAffinityWrongValue){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");
+		ASSERT_FALSE(UserHandler.isAffined("REAL", "33a86"));
+}
+TEST(SqliteAffinity, CheckTextAffinity){
+		ASSERT_EQ(UserHandler.getAffinity("CHAR (90)"), "TEXT");
+}
+TEST(SqliteAffinity, CheckTextWrongAffinity){
+		ASSERT_NE(UserHandler.getAffinity("REAL"), "TEXT");
+}
+TEST(SqliteAffinity, CheckBlobAffinity){
+		ASSERT_EQ(UserHandler.getAffinity(""), "BLOB");
+}
+TEST(SqliteAffinity, CheckBlobWrongAffinity){
+		ASSERT_NE(UserHandler.getAffinity("REAL"), "BLOB");
+}
 
 /*******************INSERT RECORDS FUNCTION******************************/
 TEST(SqliteInsertion, InsertCompleteCorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"1", "32", "665", "ANTHON33"};
-
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
-
-TEST(SqliteInsertion, InsertIncorrectType){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
-		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
-
-		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
-}
-
 TEST(SqliteInsertion, InsertIncompleteCorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"3", "43", "", "Julia"};
-
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
 }
-
 TEST(SqliteInsertion, InsertIncompleteIncorrect){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"4", "", "", "Robert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
-
 TEST(SqliteInsertion, InsertNoTable){
 		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
 		std::vector<std::string> values_to_insert = {"8", "32", "665", "BRUNO"};
 		ASSERT_EQ(UserHandler.insertRecord("CONECTIONS", values_to_insert), EXIT_FAILURE);
+}
+TEST(SqliteInsertion, InsertIncorrectType){
+		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
+		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
 /*********************OPERATIONS ON LOADED DB***************************/
@@ -106,7 +148,6 @@ TEST(SqliteLoadedDb, LoadDatabase){
 		ASSERT_GT(LoaderHandler.getTablesSize(), 0);
 		ASSERT_EQ(LoaderHandler.getTables()[0], table_name);
 }
-
 TEST(SqliteLoadedDb, InsertAfterLoad){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
