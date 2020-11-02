@@ -176,11 +176,11 @@ public:
 		 * @param select_distinct Boolean flag to set whether or not only unique results should
 		 * be selected. Default value is false.
 		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause in the select query composition. It is empty by default.
-		 * @param group_by        If set, it contains the condition that will be used to group the results of the select query. It is empty by default.
+		 * @param group_by        If set, it contains the condition that will be used to group the results of the select query. It is empty  by default.
 		 * @param having_cond     If set, it contains the condition applied to the query after a HAVING clause. It is empty by default.
 		 * @param order_by        If set, it contains the condition that will be used to order the results of the select query. It is empty by default.
 		 * @param order_type      Only applied if the order_by argument is set. Defines the type
-		 * of ordering to be applied. The types are "ASC" or "DES". Default value is "ASC"
+		 * of ordering to be applied. The types are "ASC" or "DESC". Default value is "ASC"
 		 * @param limit           If set, it defines the number of results that will be extracted
 		 * from the select query data. Default value is 0 for no limit.
 		 * @param offset          If set, it defines the number of results that will be skipped
@@ -193,8 +193,8 @@ public:
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
 		                                        bool select_distinct = false, \
-		                                        std::string where_cond = "", std::vector<std::string> group_by = {""}, \
-		                                        std::string having_cond = "", std::vector<std::string> order_by = {""}, \
+		                                        std::string where_cond = "", std::vector<std::string> group_by = {}, \
+		                                        std::string having_cond = "", std::vector<std::string> order_by = {}, \
 		                                        std::string order_type = "ASC", \
 		                                        int limit = 0, int offset = 0);
 

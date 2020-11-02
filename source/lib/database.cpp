@@ -105,12 +105,10 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
 				/* SQL Command is executed */
 				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-				// std::cout << _sql << '\n';
 				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
 						/* Load the names to the handler variable */
 						for (auto key : tables_names) {
 								this->_tables[key] = fields;
-								// std::cout << key << '\n';
 						}
 
 						/* If some tables exist, load their fields as well */
@@ -124,7 +122,7 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 										              +query::end_query;
 
 										_sql = exec_string.c_str();
-										// std::cout << _sql << '\n';
+
 										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
 										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 												/* Insert them to the tables storage */
@@ -186,9 +184,6 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 		/* Convert to const char* for use in sqlite3_exec() */
 		_sql = exec_string.c_str();
 
-		/* Execute SQL exec_string with callback*/
-		// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
-
 		/*Return failure if the command did not Execute properly.
 		   Else, return success */
 		if (executeQuery(_sql) == EXIT_SUCCESS) {
@@ -199,15 +194,11 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 				std::vector<std::string> v;
 				const std::string key = table_name;
 				this->_tables[key]=v;
-				// std::cout << "tables size= " << this->_tables.size() << '\n';
 
 				/* Load the fields info */
 				for (size_t i = 0; i < fields.size(); i++) {
 						this->_tables[key].push_back(fields[i].first);
-						// std::cout << this->_tables[key].back() << '\n';
 				}
-
-				std::cout << "tam of fields = "<< this->_tables[key].size() << '\n';
 				return EXIT_SUCCESS;
 
 		} else {
@@ -410,10 +401,10 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		}
 
 		/* If we want to group the results */
-		if (group_by[0] != "") {
+		if (!group_by.empty()) {
 
 				/* Compose the fields we want to select */
-				for(auto column : order_by) {
+				for(auto column : group_by) {
 						group_list += column+",";
 				}
 
@@ -422,7 +413,12 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		}
 
 		/* If we want to order the results */
-		if (order_by[0] != "") {
+		if (!order_by.empty()) {
+
+				if(order_type != "ASC" && order_type != "DESC"){
+						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", order_type.c_str());
+						return empty_vec;
+				}
 
 				/* Compose the fields we want to select */
 				for(auto column : order_by) {
@@ -436,9 +432,9 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		exec_string = query::cmd::select + ((select_distinct) ? query::cl::distinct : "") \
 		              + fields_list + query::cl::from + table_name+ \
 		              ((where_cond != "") ? query::cl::where + where_cond : "")+ \
-		              ((group_by[0] != "") ? query::cl::group_by + group_list : "")+ \
+		              ((!group_by.empty()) ? query::cl::group_by + group_list : "")+ \
 		              ((having_cond != "") ? query::cl::having + having_cond : "")+ \
-		              ((order_by[0] != "") ? query::cl::order_by + order_list + order_type : "")+ \
+		              ((!order_by.empty()) ? query::cl::order_by + order_list + order_type : "")+ \
 		              ((limit != 0) ? query::cl::limit(limit) : "") + \
 		              ((offset != 0) ? query::cl::offset(offset) : "") + \
 		              query::end_query;
@@ -450,7 +446,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
-				fprintf(stdout, "Select operation failed, no data loaded\n");
+				fprintf(stderr, "Select operation failed, no data loaded\n");
 				select_data.clear();
 				return select_data;
 		}
