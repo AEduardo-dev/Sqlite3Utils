@@ -14,10 +14,6 @@ const std::string query::cl::limit(int limit_value){
 		return (" LIMIT "+std::to_string(limit_value)+" ");
 }
 
-const std::string query::cl::not_(const std::string clause){
-		return (" NOT "+clause+" ");
-}
-
 const std::string query::cl::offset(int offset_value){
 		return (" OFFSET "+std::to_string(offset_value)+" ");
 }

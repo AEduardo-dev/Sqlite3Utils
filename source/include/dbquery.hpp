@@ -8,14 +8,12 @@
 /******************************************************************************
    Definition file used for easier sql query composition
 ******************************************************************************/
-/*! \brief namespace containing the macros for queries definitons
- *
- *
+/*!
+ * \brief namespace containing the macros for queries definitons
  */
 namespace query {
-  /*! \brief namespace containing the data affinity definitions and calculation
-   *
-   *
+  /*!
+   * \brief namespace containing the data affinity definitions and calculation
    */
   namespace affinity {
     const std::string integer           = "INTEGER";
@@ -33,8 +31,8 @@ namespace query {
 /*********************************************************************
                               CLAUSES
 *********************************************************************/
-  /*! \brief namespace containing the query clauses
-   *
+  /*!
+   * \brief namespace containing the query clauses
    */
  namespace cl {
 
@@ -50,9 +48,12 @@ namespace query {
     const std::string from              = " FROM ";
 
     /*!
-     * [glob description]
-     * @param  pattern [description]
-     * @return         [description]
+     * \brief generates a GLOB sqlite3 clause with the pattern given.
+     *
+     * @param  pattern The pattern to be included. GLOB patterns use UNIX type wildcards
+     * (* and ?). Some examples of patterns could be 'XXXX*', '*XXXX*', '?XXXX?', '????'...
+     *
+     * @return         The composed GLOB clause. "GLOB '[pattern]'"
      */
     const std::string glob(const std::string pattern);
     const std::string group_by          = " GROUP BY ";
@@ -60,30 +61,32 @@ namespace query {
     const std::string in                = " IN ";
 
     /*!
-     * [like description]
-     * @param  pattern [description]
-     * @return         [description]
+     * \brief generates a LIKE sqlite3 clause with the pattern given.
+     *
+     * @param  pattern The pattern to be included. It's wildcards consist of '%' and '_'.
+     * Some examples of patterns could be 'XXXX%', '%XXXX%', '_XXXX_', '____'...
+     *
+     * @return         The composed LIKE clause. "LIKE '[pattern]'"
      */
     const std::string like(const std::string pattern);
 
     /*!
-     * [limit description]
-     * @param  limit_value [description]
-     * @return             [description]
+     * \brief generates a LIMIT sqlite3 clause with the value given.
+     *
+     * @param  limit_value Integer number defining the limit.
+     *
+     * @return         The composed LIMIT clause. "LIMIT [limit_value]"
      */
     const std::string limit(int limit_value);
+    const std::string not_               = " NOT ";
 
     /*!
-     * [not_ description]
-     * @param  clause [description]
-     * @return        [description]
-     */
-    const std::string not_(const std::string clause);
-
-    /*!
-     * [offset description]
-     * @param  offset_value [description]
-     * @return              [description]
+     * \brief generates an OFFSET sqlite3 clause with the value given.
+     *
+     * @param  offset_value Integer number defining the offset from where a limit clause
+     * could be applied.
+     *
+     * @return         The composed OFFSET clause. "OFFSET [offset_value]"
      */
     const std::string offset(int offset_value);
     const std::string on                = " ON ";
