@@ -455,6 +455,91 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 }
 
+std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param select_options){
+
+		std::string exec_string, fields_list, group_list, order_list, condition = "";
+		std::vector<int> data_indexes;
+		std::vector<std::string> select_data;
+
+		/* If it is not the wildcard */
+		if (select_options.fields[0] != "*") {
+
+				data_indexes.push_back(0);
+				/* Compose the fields we want to select and the indexes of the data that
+				   will be extracted from the execution of the query*/
+				for(auto field : select_options.fields) {
+						fields_list += field+",";
+						data_indexes.push_back(data_indexes.back()+1);
+				}
+
+				/* Then remove the last comma and add a space */
+				fields_list.replace(fields_list.end()-1, fields_list.end(), " ");
+		}
+		else {
+				fields_list = select_options.fields[0];
+
+				for (unsigned int i = 0; i < _tables[select_options.table_name.c_str()].size(); ++i) {
+						data_indexes.push_back(i);
+				}
+
+		}
+
+		/* If we want to group the results */
+		if (!select_options.group_by.empty()) {
+
+				/* Compose the fields we want to select */
+				for(auto column : select_options.group_by) {
+						group_list += column+",";
+				}
+
+				/* Then remove the last comma and add a space */
+				group_list.replace(group_list.end()-1, group_list.end(), " ");
+		}
+
+		/* If we want to order the results */
+		if (!select_options.order_by.empty()) {
+
+				if(select_options.order_type != "ASC" && select_options.order_type != "DESC"){
+						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", select_options.order_type.c_str());
+						return empty_vec;
+				}
+
+				/* Compose the fields we want to select */
+				for(auto column : select_options.order_by) {
+						order_list += column+",";
+				}
+
+				/* Then remove the last comma and add a space */
+				order_list.replace(order_list.end()-1, order_list.end(), " ");
+		}
+
+		exec_string = query::cmd::select + ((select_options.select_distinct) ? query::cl::distinct : "") \
+		              + fields_list + query::cl::from + select_options.table_name+ \
+		              ((select_options.where_cond != "") ? query::cl::where + select_options.where_cond : "")+ \
+		              ((!select_options.group_by.empty()) ? query::cl::group_by + group_list : "")+ \
+		              ((select_options.having_cond != "") ? query::cl::having + select_options.having_cond : "")+ \
+		              ((!select_options.order_by.empty()) ? query::cl::order_by + order_list + select_options.order_type : "")+ \
+		              ((select_options.limit != 0) ? query::cl::limit(select_options.limit) : "") + \
+		              ((select_options.offset != 0) ? query::cl::offset(select_options.offset) : "") + \
+		              query::end_query;
+
+		_sql = exec_string.c_str();
+
+		std::cout << _sql << '\n';
+
+		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
+				return select_data;
+		} else{
+				fprintf(stderr, "Select operation failed, no data loaded\n");
+				select_data.clear();
+				return select_data;
+		}
+
+
+
+}
+
+
 /******************************executeQuery***********************************/
 bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
                                       std::vector<std::string> &data, \
