@@ -420,7 +420,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByWrongOrderType){
 		ASSERT_TRUE(data.empty());
 }
 
-/* Select all records from table grouping by a field and ordering by a wrong field*/
+/* Select all records from table grouping and ordering using having for filter*/
 TEST(SqliteSelectRecords, SelectSpecificHaving){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getTablesSize(), 0);
@@ -437,45 +437,149 @@ TEST(SqliteSelectRecords, SelectSpecificHaving){
 		ASSERT_EQ(data, data_to_get);
 }
 
+/* Select all records from table grouping and ordering using having to filter getting no results*/
+TEST(SqliteSelectRecords, SelectSpecificHavingNone){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 1";
+		std::string order_type = "DESC";
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type);
+		ASSERT_TRUE(data.empty());
+}
+
+/* Select all records from table grouping and ordering using a wrong having condition */
+TEST(SqliteSelectRecords, SelectSpecificHavingWrong){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(namee) < 2";
+		std::string order_type = "DESC";
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type);
+		ASSERT_TRUE(data.empty());
+}
+
+/* Select all records from table grouping and ordering using having and showing only 1 result */
+TEST(SqliteSelectRecords, SelectSpecificLimit){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = 1;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
+		ASSERT_FALSE(data.empty());
+		ASSERT_EQ(data, data_to_get);
+}
+
+/* Select all records from table grouping and ordering using having and limiting to one with offset to show from second */
+TEST(SqliteSelectRecords, SelectSpecificLimitOffset){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = 1;
+		int offset = 1;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit, offset);
+
+		std::vector<std::string> data_to_get = {"3", "23", "Edu"};
+		ASSERT_FALSE(data.empty());
+		ASSERT_EQ(data, data_to_get);
+}
+
+/* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
+TEST(SqliteSelectRecords, SelectSpecificBiggerLimit){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = 10;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33", "3", "23", "Edu"};
+		ASSERT_FALSE(data.empty());
+		ASSERT_EQ(data, data_to_get);
+}
+
+/* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
+TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = 10;
+		int offset = 10;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit, offset);
+
+		ASSERT_TRUE(data.empty());
+}
 
 
 /**************************DELETE AND DROP OPERATIONS***********************/
-// TEST(SqliteDelete, DeleteRecord){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
-// }
-//
-// TEST(SqliteDelete, DeleteAllRecords){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
-// }
-//
-// TEST(SqliteDelete, DeleteWrongTable){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
-// }
-//
-// TEST(SqliteDelete, DeleteWrongCondition){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
-// }
-//
-// TEST(SqliteDropTable, DropNonexistentTable){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
-// }
-//
-// TEST(SqliteDropTable, DropTable){
-// 		EXPECT_TRUE(exists("MyDB.db"));
-// 		EXPECT_GT(UserHandler.getTablesSize(), 0);
-// 		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
-// }
+/* Delete specific records of a table using condition */
+TEST(SqliteDelete, DeleteRecord){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
+}
 
+/* Delete all records in a table */
+TEST(SqliteDelete, DeleteAllRecords){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
+}
+
+/* Try to delete records of non existent table */
+TEST(SqliteDelete, DeleteWrongTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
+}
+
+/* Try to delete records with non possible condition */
+TEST(SqliteDelete, DeleteWrongCondition){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
+}
+
+/* Drop a table from the db */
+TEST(SqliteDropTable, DropTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
+}
+
+/* Try to drop a table from the db that does not exist */
+TEST(SqliteDropTable, DropNonexistentTable){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
+}
 
 
 int main(int argc, char *argv[]) {
