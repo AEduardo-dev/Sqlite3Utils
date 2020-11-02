@@ -21,9 +21,9 @@
 namespace handler {
 
 
-typedef std::map<const std::string, std::vector<std::string> > DbTables;
-typedef std::pair<std::string, std::string> FieldDescription;
-static std::vector<std::string> empty_vec;
+typedef std::map<const std::string, std::vector<std::string> > DbTables;/*!< Type that stores the information of the tables inside of the db.*/
+typedef std::pair<std::string, std::string> FieldDescription;/*!< For use when defining a field in the create table statement*/
+static std::vector<std::string> empty_vec;/*!< Empty vector used as default value for executeQuery, when no data is extracted, where a vector for the data is needed.*/
 
 struct select_query_param {
 		std::string table_name;
@@ -36,7 +36,7 @@ struct select_query_param {
 		std::string order_type = "ASC";
 		int limit = 0;
 		int offset = 0;
-};
+};/*!< Structure used for storing all options that may be used during a select query.*/
 
 /*! \brief Class for handling connection and operations in a sqlite3 database.
  *         Brief description continued.
@@ -180,6 +180,13 @@ public:
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
 
 		/*!
+		 * [reconnectDb  description]
+		 * @param  db_name [description]
+		 * @return         [description]
+		 */
+		bool reconnectDb ();
+
+		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
 		 *
 		 * Extracts all the data that fits the descriptions and conditions passed as arguments.
@@ -215,12 +222,19 @@ public:
 
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
+		 *
 		 * @param select_options structure containing all the necessary options to be used during
 		 * the select statement.
 		 *
 		 * @overload
 		 */
 		std::vector<std::string>  selectRecords(select_query_param select_options);
+
+		/*!
+		 * [updateHandler description]
+		 * @return [description]
+		 */
+		bool updateHandler();
 
 		/*!
 		 * [getAffinity description]
@@ -355,13 +369,13 @@ public:
 		};
 
 private:
-		int _rc;                                    /*!< Flag that contains the status of the latest action executed.*/
-		const char *_db_path;                                    /*!< Realtive path to database for file operations.*/
-		sqlite3 *_db;                                    /*!< Pointer to the database provided in the constructor.*/
-		const char *_sql;                                    /*!< Pointer to the latest sql query in use.*/
-		sqlite3_stmt *_stmt;                                    /*!< Pointer to the sql query output data.*/
-		const char *_zErrMsg = 0;                                    /*!<Pointer to sql error message generated during the query execution.*/
-		DbTables _tables;                                    /*!< Map containing the names of tables in database and their fields.*/
+		int _rc; /*!< Flag that contains the status of the latest action executed.*/
+		const char *_db_path; /*!< Realtive path to database for file operations.*/
+		sqlite3 *_db; /*!< Pointer to the database provided in the constructor.*/
+		const char *_sql; /*!< Pointer to the latest sql query in use.*/
+		sqlite3_stmt *_stmt; /*!< Pointer to the sql query output data.*/
+		const char *_zErrMsg = 0; /*!<Pointer to sql error message generated during the query execution.*/
+		DbTables _tables; /*!< Map containing the names of tables in database and their fields.*/
 
 };
 

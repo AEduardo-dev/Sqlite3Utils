@@ -18,126 +18,32 @@ handler::Sqlite3Db::Sqlite3Db() {
 				delete this;
 		} else {
 				fprintf(stderr, "Opened %s database successfully\n", name);
-
-				/* If _db already exists, try to get the names of the tables in it
-				   std::string exec_string = "SELECT name " \
-				                          "FROM sqlite_master " \
-				                          "WHERE type='table' " \
-				                          "ORDER BY name;";
-				 */
-
-				std::string exec_string = query::cmd::select + "name" + \
-				                          query::cl::from + "sqlite_master" + \
-				                          query::cl::where + query::cl::type("table") + \
-				                          query::cl::order_by + "name" + query::end_query;
-
-				_sql = exec_string.c_str();
-
-				/* SQL Command is executed */
-				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-
-				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
-						/* Load the names to the handler variable */
-						for (auto key : tables_names) {
-								this->_tables[key] = fields;
-								std::cout << key << '\n';
-						}
-
-						/* If some tables exist, load their fields as well */
-						if (!this->_tables.empty()) {
-
-								for (auto table : this->_tables) {
-										/* Convert tables names for use in sql */
-										std::string name = table.first;
-										/* Get table info query */
-										exec_string = query::cmd::pragma+ query::cl::table_info(name) \
-										              +query::end_query;
-
-										_sql = exec_string.c_str();
-
-										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
-												/* Insert them to the tables storage */
-												_tables[table.first] = fields;
-										}
-										else{
-												fprintf(stderr, "Error loading field names from %s\n", table.first.c_str());
-										}
-								}
-						}
-				}
-				else {
-						fprintf(stderr, "Error loading tables from %s\n", name);
-				}
+				this->_db_path = name;
+				if (updateHandler() == EXIT_FAILURE)
+						/* If the _db cannot be opened -> delete the object */
+						delete this;
 		}
 }
 
 /******************************CONSTRUCTOR*********************************/
 handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
-		const char *path = _db_path.c_str();
-		std::string exec_string;
-		std::vector<std::string> tables_names, fields;
+	const char *name = _db_path.c_str();
+	std::vector<std::string> tables_names, fields;
 
-		_rc = sqlite3_open(path, &_db);
+	_rc = sqlite3_open(name, &_db);
 
-		if (_rc) {
-				fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
-				/* If the _db cannot be opened -> delete the object */
-				delete this;
-		} else {
-				fprintf(stderr, "Opened %s database successfully\n", path);
-				this->_db_path = path;
-
-				/* If _db already exists, try to get the names of the tables in it
-				   std::string exec_string = "SELECT name " \
-				                          "FROM sqlite_master " \
-				                          "WHERE type='table' " \
-				                          "ORDER BY name;";
-				 */
-
-				exec_string = query::cmd::select + "name" + \
-				              query::cl::from + "sqlite_master" + \
-				              query::cl::where + query::cl::type("table") + \
-				              query::cl::order_by + "name" + query::end_query;
-
-				_sql = exec_string.c_str();
-
-				/* SQL Command is executed */
-				/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-				if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
-						/* Load the names to the handler variable */
-						for (auto key : tables_names) {
-								this->_tables[key] = fields;
-						}
-
-						/* If some tables exist, load their fields as well */
-						if (!this->_tables.empty()) {
-
-								for (auto table : this->_tables) {
-										/* Convert tables names for use in sql */
-										std::string name = table.first;
-										/* Get table info query */
-										exec_string = query::cmd::pragma+ query::cl::table_info(name) \
-										              +query::end_query;
-
-										_sql = exec_string.c_str();
-
-										/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-										if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
-												/* Insert them to the tables storage */
-												_tables[table.first] = fields;
-										}
-										else{
-												fprintf(stderr, "Error loading field names from %s\n", table.first.c_str());
-										}
-								}
-						}
-				}
-				else {
-						fprintf(stderr, "Error loading tables from %s\n", path);
-				}
-		}
+	if (_rc) {
+			fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+			/* If the _db cannot be opened -> delete the object */
+			delete this;
+	} else {
+			fprintf(stderr, "Opened %s database successfully\n", name);
+			this->_db_path = name;
+			if (updateHandler() == EXIT_FAILURE)
+					/* If the _db cannot be opened -> delete the object */
+					delete this;
+	}
 }
 
 /******************************DESTRUCTOR*************************************/
@@ -206,6 +112,107 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 		}
 }
 
+/******************************deleteRecord***********************************/
+bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condition){
+
+		std::string exec_string;
+
+		/* Generate parametrized query */
+		exec_string = query::cmd::delete_ + query::cl::from + table_name + \
+		              ((condition == "all") ? "" : query::cl::where + condition) + \
+		              query::end_query;
+
+		/* Convert to constant for use inside of Sqlite3 */
+		_sql = exec_string.c_str();
+
+		/* Execute the query and return the succes or failure of it */
+		if(executeQuery(_sql) == EXIT_SUCCESS) {
+				fprintf(stdout, "Records deleted successfully.\n");
+				return EXIT_SUCCESS;
+
+		} else {
+				return EXIT_FAILURE;
+		}
+}
+
+
+
+/******************************dropTable*************************************/
+bool handler::Sqlite3Db::dropTable(std::string table_name){
+		std::string exec_string;
+
+		/* Generate parametrized query */
+		exec_string = query::cmd::drop_table + table_name \
+		              + query::end_query;
+
+		/* Convert to constant for use inside of Sqlite3 */
+		_sql = exec_string.c_str();
+
+		/* Execute the query */
+		if(executeQuery(_sql) == EXIT_SUCCESS) {
+				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
+
+				/* After dropping the table, we need to delete it from the tables map as well */
+				this->_tables.erase(table_name.c_str());
+
+				/* Then exit with success flag*/
+				return EXIT_SUCCESS;
+
+		} else {
+				return EXIT_FAILURE;
+		}
+}
+
+/******************************executeQuery***********************************/
+bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
+                                      std::vector<std::string> &data, \
+                                      std::vector<int> indexes_stmt, \
+                                      bool verbose){
+
+		/* First make sure we are working with an empty vector */
+		data.clear();
+
+		/* Then SQL Command is executed if no error occurs */
+		_rc = sqlite3_prepare_v2(_db, sql_query, -1, &_stmt, NULL);
+
+		if (_rc != SQLITE_OK) {
+				_zErrMsg = sqlite3_errmsg(_db);
+				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+				return EXIT_FAILURE;
+
+		} else {
+				/* Execute the command step by step */
+				while ((_rc = sqlite3_step(_stmt)) == SQLITE_ROW) {
+
+						/* Get the data in the positions we want from the output */
+						if(!indexes_stmt.empty())
+								for (int x : indexes_stmt) {
+
+										/* Check if the index we try to retrieve has something in it */
+										if(sqlite3_column_text(_stmt, x) != NULL) {
+												/* Extract the data in text format and then put it in the vector */
+												data.push_back(reinterpret_cast< char const* > \
+												               (sqlite3_column_text(_stmt, x)));
+												(verbose) ? std::cout << sqlite3_column_text(_stmt, x) << "  " : \
+												    std::cout <<"";
+										}
+								}
+						(verbose) ? std::cout << '\n' : \
+						    std::cout <<"";
+				}
+		}
+		if (_rc != SQLITE_DONE) {
+				_zErrMsg = sqlite3_errmsg(_db);
+				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+				return EXIT_FAILURE;
+		}
+		else {
+				return EXIT_SUCCESS;
+		}
+		/* The command is ended */
+		sqlite3_finalize(_stmt);
+
+}
 
 /**********************************insertRecord*******************************/
 bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::string> values){
@@ -296,9 +303,6 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				_sql = exec_string.c_str();
 
 				/* Execute SQL exec_string */
-
-				// _rc = sqlite3_exec(_db, _sql, callback, 0, &_zErrMsg);
-
 				if(executeQuery(_sql, handler::empty_vec, {}, true) == EXIT_SUCCESS) {
 						fprintf(stdout, "Records created successfully.\n");
 						/* Then exit with success value */
@@ -310,57 +314,20 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		}
 }
 
-/******************************deleteRecord***********************************/
-bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condition){
+/******************************reconnectDb***********************************/
+bool handler::Sqlite3Db::reconnectDb(){
 
-		std::string exec_string;
+		_rc = sqlite3_open(this->_db_path, &this->_db);
 
-		/* Generate parametrized query */
-		exec_string = query::cmd::delete_ + query::cl::from + table_name + \
-		              ((condition == "all") ? "" : query::cl::where + condition) + \
-		              query::end_query;
-
-		/* Convert to constant for use inside of Sqlite3 */
-		_sql = exec_string.c_str();
-
-		/* Execute the query and return the succes or failure of it */
-		if(executeQuery(_sql) == EXIT_SUCCESS) {
-				fprintf(stdout, "Records deleted successfully.\n");
-				return EXIT_SUCCESS;
-
-		} else {
+		if (_rc) {
+				fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+				/* If the _db cannot be opened -> delete the object */
 				return EXIT_FAILURE;
+		} else {
+				fprintf(stderr, "Opened %s database successfully\n", this->_db_path);
+				return (updateHandler());
 		}
 }
-
-
-
-/******************************dropTable*************************************/
-bool handler::Sqlite3Db::dropTable(std::string table_name){
-		std::string exec_string;
-
-		/* Generate parametrized query */
-		exec_string = query::cmd::drop_table + table_name \
-		              + query::end_query;
-
-		/* Convert to constant for use inside of Sqlite3 */
-		_sql = exec_string.c_str();
-
-		/* Execute the query */
-		if(executeQuery(_sql) == EXIT_SUCCESS) {
-				fprintf(stdout, "Table %s dropped successfully.\n", table_name.c_str());
-
-				/* After dropping the table, we need to delete it from the tables map as well */
-				this->_tables.erase(table_name.c_str());
-
-				/* Then exit with success flag*/
-				return EXIT_SUCCESS;
-
-		} else {
-				return EXIT_FAILURE;
-		}
-}
-
 
 /******************************selectRecords*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, \
@@ -415,7 +382,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		/* If we want to order the results */
 		if (!order_by.empty()) {
 
-				if(order_type != "ASC" && order_type != "DESC"){
+				if(order_type != "ASC" && order_type != "DESC") {
 						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", order_type.c_str());
 						return empty_vec;
 				}
@@ -450,9 +417,6 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 				select_data.clear();
 				return select_data;
 		}
-
-
-
 }
 
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param select_options){
@@ -499,7 +463,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 		/* If we want to order the results */
 		if (!select_options.order_by.empty()) {
 
-				if(select_options.order_type != "ASC" && select_options.order_type != "DESC"){
+				if(select_options.order_type != "ASC" && select_options.order_type != "DESC") {
 						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", select_options.order_type.c_str());
 						return empty_vec;
 				}
@@ -534,66 +498,70 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 				select_data.clear();
 				return select_data;
 		}
-
-
-
 }
 
+bool handler::Sqlite3Db::updateHandler(){
 
-/******************************executeQuery***********************************/
-bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
-                                      std::vector<std::string> &data, \
-                                      std::vector<int> indexes_stmt, \
-                                      bool verbose){
+		std::vector<std::string> tables_names, fields;
+		DbTables db_tables;
 
-		/* First make sure we are working with an empty vector */
-		data.clear();
+		/* If _db already exists, try to get the names of the tables in it
+		         std::string exec_string = "SELECT name " \
+		         "FROM sqlite_master " \
+						 "WHERE type='table' " \
+						 "ORDER BY name;";
+		*/
+		std::string exec_string = query::cmd::select + "name" + \
+		                          query::cl::from + "sqlite_master" + \
+		                          query::cl::where + query::cl::type("table") + \
+		                          query::cl::order_by + "name" + query::end_query;
 
-		/* Then SQL Command is executed if no error occurs */
-		_rc = sqlite3_prepare_v2(_db, sql_query, -1, &_stmt, NULL);
+		_sql = exec_string.c_str();
 
-		if (_rc != SQLITE_OK) {
-				_zErrMsg = sqlite3_errmsg(_db);
-				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
-				return EXIT_FAILURE;
+		/* SQL Command is executed */
+		/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
 
-		} else {
-				/* Execute the command step by step */
-				while ((_rc = sqlite3_step(_stmt)) == SQLITE_ROW) {
+		if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
+				/* Load the names to the handler variable */
+				for (auto key : tables_names) {
+						db_tables[key] = fields;
+				}
+				/* If some tables exist, load their fields as well */
+				if (!db_tables.empty()) {
 
-						/* Get the data in the positions we want from the output */
-						if(!indexes_stmt.empty())
-								for (int x : indexes_stmt) {
+						for (auto table : db_tables) {
+								/* Convert tables names for use in sql */
+								std::string name = table.first;
+								/* Get table info query */
+								exec_string = query::cmd::pragma+ query::cl::table_info(name) \
+								              +query::end_query;
 
-										/* Check if the index we try to retrieve has something in it */
-										if(sqlite3_column_text(_stmt, x) != NULL) {
-												/* Extract the data in text format and then put it in the vector */
-												data.push_back(reinterpret_cast< char const* > \
-												               (sqlite3_column_text(_stmt, x)));
-												(verbose) ? std::cout << sqlite3_column_text(_stmt, x) << "  " : \
-												    std::cout <<"";
-										}
+								_sql = exec_string.c_str();
+
+								/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
+								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
+										/* Insert them to the tables storage */
+										db_tables[table.first] = fields;
+										/* Assign the new values to the _tables in the handler */
+										this->_tables = db_tables;
 								}
-						(verbose) ? std::cout << '\n' : \
-						    std::cout <<"";
+								else{
+										fprintf(stderr, "Error loading field names from %s\n", table.first.c_str());
+										return EXIT_FAILURE;
+								}
+						}
 				}
 		}
-		/*
-		   If something went wrong it means the query may be incorrect or the data does not exist.
-		   Else-> all was executed and  the data extracted
-		 */
-		if (_rc != SQLITE_DONE) {
-				_zErrMsg = sqlite3_errmsg(_db);
-				fprintf(stderr, "SQL error: %s\n", _zErrMsg);
+		else {
+				fprintf(stderr, "Error loading tables from %s\n", this->_db_path);
 				return EXIT_FAILURE;
 		}
-		else {
-				return EXIT_SUCCESS;
-		}
-		/* The command is ended */
-		sqlite3_finalize(_stmt);
 
+		return EXIT_SUCCESS;
 }
+
+
+/****************GETTERS, SETTERS AND OTHER FUNCTIONS*********************************/
 
 /******************************getAffinity*******************************************/
 const std::string handler::Sqlite3Db::getAffinity(std::string field_datatype){
@@ -672,6 +640,11 @@ int handler::Sqlite3Db::callback(void *NotUsed, int argc, \
 
 /*************************getters and setters******************************/
 
+
+std::string handler::Sqlite3Db::getDbPath(){
+		return this->_db_path;
+};
+
 std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
 		std::vector<std::string> fields;
 
@@ -689,11 +662,6 @@ std::vector<std::string> handler::Sqlite3Db::getTables(){
 		}
 		return names;
 };
-
-std::string handler::Sqlite3Db::getDbPath(){
-		return this->_db_path;
-};
-
 
 int handler::Sqlite3Db::getTablesSize(){
 		return this->_tables.size();

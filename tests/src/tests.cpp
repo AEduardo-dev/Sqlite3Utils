@@ -68,13 +68,6 @@ TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
 		ASSERT_EQ(UserHandler.getTablesSize(), 0);
 }
 
-/*******************DISCONNECTION AND CONNECTIONS**************************/
-/* Disconnecting from the db causes no exceptions or errors */
-TEST(SqliteConnection, DisconnectDB){
-		handler::Sqlite3Db MyHandler("MyDB.db");
-		ASSERT_NO_THROW(MyHandler.closeConnection());
-}
-
 /*******************CREATE TABLE FUNCTION*********************************/
 /* Create a table normally */
 TEST(SqliteCreateTable, CreateTable){
@@ -207,6 +200,22 @@ TEST(SqliteInsertion, InsertIncorrectType){
 
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
+}
+
+/*******************DISCONNECTION AND CONNECTIONS**************************/
+/* Disconnecting from the db causes no exceptions or errors */
+TEST(SqliteConnection, DisconnectDB){
+		handler::Sqlite3Db MyHandler("MyDB.db");
+		ASSERT_NO_THROW(MyHandler.closeConnection());
+}
+
+/* Reconnecting to the db is possible and loads info */
+TEST(SqliteConnection, ReconnectDB){
+		handler::Sqlite3Db MyHandler("MyDB.db");
+		ASSERT_NO_THROW(MyHandler.closeConnection());
+		ASSERT_EQ(MyHandler.reconnectDb(), EXIT_SUCCESS);
+		ASSERT_GT(MyHandler.getTablesSize(), 0);
+		ASSERT_EQ(MyHandler.getTables()[0], table_name);
 }
 
 /*********************OPERATIONS ON LOADED DB***************************/
@@ -533,6 +542,43 @@ TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
 		                                                          false, "", group_by, having_cond, \
 		                                                          order_by, order_type, limit, offset);
+
+		ASSERT_TRUE(data.empty());
+}
+
+/* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
+TEST(SqliteSelectRecords, SelectStructSpecificAllConditions){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		handler::select_query_param select_query;
+		select_query.table_name = table_name;
+		select_query.fields = {"*"};
+		select_query.group_by = {"NAME"};
+		select_query.order_by = {"SUM(AGE)"};
+		select_query.having_cond = "count(name) < 2";
+		select_query.order_type = "DESC";
+		select_query.limit = 10;
+		std::vector<std::string> data = UserHandler.selectRecords(select_query);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33", "3", "23", "Edu"};
+		ASSERT_FALSE(data.empty());
+		ASSERT_EQ(data, data_to_get);
+}
+
+/* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
+TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		handler::select_query_param select_query;
+		select_query.table_name = table_name;
+		select_query.fields = {"*"};
+		select_query.group_by = {"NAME"};
+		select_query.order_by = {"SUM(AGE)"};
+		select_query.having_cond = "count(name) < 2";
+		select_query.order_type = "DESC";
+		select_query.limit = 10;
+		select_query.offset = 10;
+		std::vector<std::string> data = UserHandler.selectRecords(select_query);
 
 		ASSERT_TRUE(data.empty());
 }
