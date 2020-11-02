@@ -90,16 +90,19 @@ $(document).ready(function(){initNavTree('namespacequery_1_1data.html',''); init
 </div><!--header-->
 <div class="contents">
 
-<p>namespace containing the query data types and options  
+<p>namespace containing the query data types and options.  
 <a href="namespacequery_1_1data.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a33b41178f41bfdbc81a0ff4082b2f874"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874">len</a> (int)</td></tr>
-<tr class="separator:a33b41178f41bfdbc81a0ff4082b2f874"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f97816615b29f0066f9fdf761b7abb2"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2">len</a> (int length)</td></tr>
+<tr class="memdesc:a7f97816615b29f0066f9fdf761b7abb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates sqlite3 definition of length for a datatype.  <a href="namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2">More...</a><br /></td></tr>
+<tr class="separator:a7f97816615b29f0066f9fdf761b7abb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22f83295f710cda7482eaec6bd5690ce"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacequery_1_1data.html#a22f83295f710cda7482eaec6bd5690ce">trigger</a> (const std::string db_name, const std::string trigger_name)</td></tr>
+<tr class="memdesc:a22f83295f710cda7482eaec6bd5690ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a trigger definition with the database and trigger name given.  <a href="namespacequery_1_1data.html#a22f83295f710cda7482eaec6bd5690ce">More...</a><br /></td></tr>
 <tr class="separator:a22f83295f710cda7482eaec6bd5690ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2e01b7e216d2a515712fd1a372d7d73"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacequery_1_1data.html#ab2e01b7e216d2a515712fd1a372d7d73">view</a> (const std::string db_name, const std::string view_name)</td></tr>
+<tr class="memdesc:ab2e01b7e216d2a515712fd1a372d7d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a view definition with the database and view name given.  <a href="namespacequery_1_1data.html#ab2e01b7e216d2a515712fd1a372d7d73">More...</a><br /></td></tr>
 <tr class="separator:ab2e01b7e216d2a515712fd1a372d7d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -127,10 +130,10 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>table</b
 <tr class="separator:a766d82ead9cba617d53e01940503002c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>namespace containing the query data types and options </p>
+<div class="textblock"><p>namespace containing the query data types and options. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a33b41178f41bfdbc81a0ff4082b2f874"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33b41178f41bfdbc81a0ff4082b2f874">&#9670;&nbsp;</a></span>len()</h2>
+<a id="a7f97816615b29f0066f9fdf761b7abb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f97816615b29f0066f9fdf761b7abb2">&#9670;&nbsp;</a></span>len()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -139,18 +142,20 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>table</b
           <td class="memname">const std::string query::data::len </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>x</em></td><td>)</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>[len description] </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Generates sqlite3 definition of length for a datatype. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">int</td><td>[description] </td></tr>
+    <tr><td class="paramname">length</td><td>Integer number to be defined as length limit.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>[description] </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The composed length for a datatype. "([length])" </dd></dl>
 
 </div>
 </div>
@@ -179,14 +184,16 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>table</b
         </tr>
       </table>
 </div><div class="memdoc">
-<p>[trigger description] </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Generates a trigger definition with the database and trigger name given. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">db_name</td><td>[description] </td></tr>
-    <tr><td class="paramname">trigger_name</td><td>[description] </td></tr>
+    <tr><td class="paramname">db_name</td><td>Name of the database where the trigger is located. </td></tr>
+    <tr><td class="paramname">trigger_name</td><td>Name of the trigger.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>[description] </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The trigger declaration. "db_name.trigger_name" </dd></dl>
 
 </div>
 </div>
@@ -215,14 +222,16 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>table</b
         </tr>
       </table>
 </div><div class="memdoc">
-<p>[view description] </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Generates a view definition with the database and view name given. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">db_name</td><td>[description] </td></tr>
-    <tr><td class="paramname">view_name</td><td>[description] </td></tr>
+    <tr><td class="paramname">db_name</td><td>Name of the database where the view is located. </td></tr>
+    <tr><td class="paramname">view_name</td><td>Name of the view.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>[description] </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The view declaration. "db_name.view_name" </dd></dl>
 
 </div>
 </div>

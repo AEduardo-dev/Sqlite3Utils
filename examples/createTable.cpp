@@ -1,5 +1,5 @@
-#include "dbquery.h"
-#include "sqlite3handler.h"
+#include <sqlite3handler.hpp>
+#include <sqlite3query.hpp>
 
 int main(int argc, char const *argv[]) {
 		handler::Sqlite3Db myHandler;
@@ -9,7 +9,9 @@ int main(int argc, char const *argv[]) {
 				{"PHONE", query::data::int_+query::data::not_null}, \
 				{"NAME",query::data::char_+query::data::len(50)+query::data::not_null}};
 
-		myHandler.createTable("COMPANY", v);
+		if (myHandler.createTable("COMPANY", v) == EXIT_SUCCESS) {
+			...
+		}
 
 		return 0;
 }

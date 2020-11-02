@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['len_14',['len',['../namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874',1,'query::data']]],
-  ['like_15',['like',['../namespacequery_1_1cl.html#abf631013ecc8a993dc18f68fadd197bf',1,'query::cl']]],
-  ['limit_16',['limit',['../namespacequery_1_1cl.html#a1e26ea83c9eef2fc04084928f759d2eb',1,'query::cl']]]
+  ['insertrecord_20',['insertRecord',['../classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072',1,'handler::Sqlite3Db']]],
+  ['isaffined_21',['isAffined',['../classhandler_1_1Sqlite3Db.html#a4e36920e78f1232804ffe05031cf1620',1,'handler::Sqlite3Db']]],
+  ['isnotaplhaint_22',['isNotAplhaInt',['../classhandler_1_1Sqlite3Db.html#a09e504d7de92813c6fbbccd504b4b831',1,'handler::Sqlite3Db']]],
+  ['isnotaplhareal_23',['isNotAplhaReal',['../classhandler_1_1Sqlite3Db.html#a3281cd5f8a30f28e35c7392596f07ab0',1,'handler::Sqlite3Db']]],
+  ['isvalidint_24',['isValidInt',['../classhandler_1_1Sqlite3Db.html#a927a8accadf7e2b4a1a115524052de94',1,'handler::Sqlite3Db']]],
+  ['isvalidreal_25',['isValidReal',['../classhandler_1_1Sqlite3Db.html#a59013bdda1a243788c681329e47570d0',1,'handler::Sqlite3Db']]]
 ];

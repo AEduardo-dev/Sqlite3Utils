@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['view_58',['view',['../namespacequery_1_1data.html#ab2e01b7e216d2a515712fd1a372d7d73',1,'query::data']]]
+  ['updatehandler_87',['updateHandler',['../classhandler_1_1Sqlite3Db.html#a8a84491f3ac991ac24c2db0eca2a5344',1,'handler::Sqlite3Db']]]
 ];

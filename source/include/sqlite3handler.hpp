@@ -26,16 +26,18 @@ typedef std::pair<std::string, std::string> FieldDescription;/*!< For use when d
 static std::vector<std::string> empty_vec;/*!< Empty vector used as default value for executeQuery, when no data is extracted, where a vector for the data is needed.*/
 
 struct select_query_param {
-		std::string table_name;
-		std::vector<std::string> fields = {"*"};
-		bool select_distinct = false;
-		std::string where_cond = "";
-		std::vector<std::string> group_by = {};
-		std::string having_cond = "";
-		std::vector<std::string> order_by = {};
-		std::string order_type = "ASC";
-		int limit = 0;
-		int offset = 0;
+
+		std::string table_name;/*!< Name of the table in which the select query will be applied */
+		std::vector<std::string> fields = {"*"};/*!< Fields to be shown in the result */
+		bool select_distinct = false;/*!< Flag for showing only distinct results */
+		std::string where_cond = "";/*!< Condition to be applied with a WHERE clause*/
+		std::vector<std::string> group_by = {};/*!< Fields grouped in the result*/
+		std::string having_cond = "";/*!< Having filter condition to be applied*/
+		std::vector<std::string> order_by = {};/*!< Fields or conditions to order the results*/
+		std::string order_type = "ASC";/*!< Type of ordering of the results "ASC" or "DESC"*/
+		int limit = 0;/*!< Maximum number of results to be processed*/
+		int offset = 0;/*!< Starting point in the results to apply the limit quantity
+		*/
 };/*!< Structure used for storing all options that may be used during a select query.*/
 
 /*! \brief Class for handling connection and operations in a sqlite3 database.
@@ -67,6 +69,8 @@ public:
 		 *
 		 * @param db_name name of the database to be connected to.
 		 *
+		 * \include constructor.cpp
+		 *
 		 * @overload
 		 */
 		Sqlite3Db(std::string db_path);
@@ -82,8 +86,10 @@ public:
 		/*!
 		 * \brief Close connection to the current database
 		 *
-		 * The closing of the connection also destroys the handler, since it's main
-		 * purpose is to manage the action in an open database
+		 * The closing of the connection is not recommended, since the main purpose of the Handler
+		 *  is to manage an open database while connected to it.
+		 *
+		 * \include closeConnection.cpp
 		 */
 		void closeConnection();
 
@@ -137,7 +143,7 @@ public:
 		 * An example of usage could be as follows:
 		 *
 		 *
-		 * \include insertRecord.cpp
+		 * \include dropTable.cpp
 		 */
 		bool dropTable(std::string table_name);
 
@@ -155,6 +161,8 @@ public:
 		 * @return              EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
 		 * The data vector is passed by reference, so the content of it is changed during the
 		 * query execution.
+		 *
+		 *
 		 */
 		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
 		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
@@ -182,10 +190,17 @@ public:
 		 * \brief Reconnects the handler to it's linked database
 		 *
 		 * While doing the reconnection all the data inside of the handler is renewed, in case
-		 *  some hcnages tool place during the time it was offline.
+		 *  some changes took place during the time it was offline.
 		 *
 		 * @return         EXIT_SUCCESS if the db was reopened and it's information loaded
-		 *  correctly. EXIT_FAILURE otherwise.
+		 *  							 correctly. EXIT_FAILURE otherwise.
+		 *
+		 *
+		 * An example of usage could be as follows:
+		 *
+		 *
+		 * \include reconnectDb.cpp
+		 *
 		 */
 		bool reconnectDb ();
 
@@ -197,23 +212,31 @@ public:
 		 * parameters are needed.
 		 *
 		 * @param table_name      Name of the table from where the data will be selected.
-		 * @param fields          Container of the names of the fields of the table that will be retrieved from the results in string format. Default value is "*" to take all the fields.
+		 * @param fields          Container of the names of the fields of the table that will be
+		 * 												retrieved from the results in string format. Default value is "*"
+		 * 												to take all the fields.
 		 * @param select_distinct Boolean flag to set whether or not only unique results should
-		 * be selected. Default value is false.
-		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause in the select query composition. It is empty by default.
-		 * @param group_by        If set, it contains the condition that will be used to group the results of the select query. It is empty  by default.
-		 * @param having_cond     If set, it contains the condition applied to the query after a HAVING clause. It is empty by default.
-		 * @param order_by        If set, it contains the condition that will be used to order the results of the select query. It is empty by default.
+		 * 												be selected. Default value is false.
+		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause in
+		 * 												the select query composition. It is empty by default.
+		 * @param group_by        If set, it contains the condition that will be used to group the
+		 * 												results of the select query. It is empty  by default.
+		 * @param having_cond     If set, it contains the condition applied to the query after a
+		 * 												HAVING clause. It is empty by default.
+		 * @param order_by        If set, it contains the condition that will be used to order the
+		 * 												results of the select query. It is empty by default.
 		 * @param order_type      Only applied if the order_by argument is set. Defines the type
-		 * of ordering to be applied. The types are "ASC" or "DESC". Default value is "ASC"
+		 * 												of ordering to be applied. The types are "ASC" or "DESC". Default
+		 * 												value is "ASC"
 		 * @param limit           If set, it defines the number of results that will be extracted
-		 * from the select query data. Default value is 0 for no limit.
+		 * 												from the select query data. Default value is 0 for no limit.
 		 * @param offset          If set, it defines the number of results that will be skipped
-		 * from the select query data before extracting them. Default value is 0 for none.
+		 * 												from the select query data before extracting them. Default value
+		 * 												is 0 for none.
 		 *
-		 * @return A vector containing all the values retrieved in order. This means that, if three
-		 * fuelds were given as argument, each group of three elements of this vector will
-		 * correspond to a row of data.
+		 * @return 								A vector containing all the values retrieved in order. This means
+		 * 												that, if three fuelds were given as argument, each group of three
+		 * 												elements of this vector will correspond to a row of data.
 		 */
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
@@ -226,8 +249,8 @@ public:
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
 		 *
-		 * @param select_options structure containing all the necessary options to be used during
-		 * the select statement.
+		 * @param select_options Structure containing all the necessary options to be used during
+		 * 											 the select statement.
 		 *
 		 * @overload
 		 */
@@ -242,7 +265,7 @@ public:
 		 *  that is stored in the handler, so it can operate normally from different connections.
 		 *
 		 * @return	EXIT_SUCCESS if the information was updated. EXIT_FAILURE if an error occurred
-		 *  during the process.
+		 *  				during the process.
 		 */
 		bool updateHandler();
 
@@ -255,8 +278,8 @@ public:
 		 *
 		 * @param  field_datatype The datatype for which the affinity token will be calculated.
 		 *
-		 * @return	Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC", depending on
-		 * the input.
+		 * @return								Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC",
+		 * 												depending on the input.
 		 */
 		const std::string getAffinity(const std::string field_datatype);
 
@@ -404,13 +427,13 @@ public:
 		};
 
 private:
-		int _rc; /*!< Flag that contains the status of the latest action executed.*/
-		const char *_db_path; /*!< Realtive path to database for file operations.*/
-		sqlite3 *_db; /*!< Pointer to the database provided in the constructor.*/
-		const char *_sql; /*!< Pointer to the latest sql query in use.*/
-		sqlite3_stmt *_stmt; /*!< Pointer to the sql query output data.*/
-		const char *_zErrMsg = 0; /*!<Pointer to sql error message generated during the query execution.*/
-		DbTables _tables; /*!< Map containing the names of tables in database and their fields.*/
+		int _rc;/*!< Flag that contains the status of the latest action executed.*/
+		const char *_db_path;/*!< Realtive path to database for file operations.*/
+		sqlite3 *_db;/*!< Pointer to the database provided in the constructor.*/
+		const char *_sql;/*!< Pointer to the latest sql query in use.*/
+		sqlite3_stmt *_stmt;/*!< Pointer to the sql query output data.*/
+		const char *_zErrMsg = 0;/*!< Pointer to sql error message generated during the query execution.*/
+		DbTables _tables;/*!< Map containing the names of tables in database and their fields.*/
 
 };
 

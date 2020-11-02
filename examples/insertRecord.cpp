@@ -1,5 +1,5 @@
-#include "../source/include/dbquery.h"
-#include "../source/include/sqlite3handler.h"
+#include <sqlite3handler.hpp>
+#include <sqlite3query.hpp>
 
 int main(int argc, char const *argv[]) {
 		handler::Sqlite3Db myHandler;
@@ -9,12 +9,16 @@ int main(int argc, char const *argv[]) {
 		                                  //ID  AGE    PHONE      NAME
 		std::vector<std::string> values = {"1", "34", "5521664", "James"};
     //Insert record with all fields defined
-		myHandler.insertRecord(table_name, values);
+		if (MyHandler.insertRecord(table_name, values) == EXIT_SUCCESS){
+			...
+		}
 
 		                                              //ID  AGE PHONE  NAME
 		std::vector<std::string> values_incomplete = {"2", "34", "", "Thomas"};
     //Insert record with one or more fields not specified
-    myHandler.insertRecord(table_name, values_incomplete);
+		if (MyHandler.insertRecord(table_name, values_incomplete) == EXIT_SUCCESS){
+			...
+		}
 
 		return 0;
 }

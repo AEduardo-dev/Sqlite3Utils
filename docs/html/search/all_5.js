@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['insertrecord_13',['insertRecord',['../classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072',1,'handler::Sqlite3Db::insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)'],['../classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072',1,'handler::Sqlite3Db::insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)']]]
+  ['handler_18',['handler',['../namespacehandler.html',1,'']]],
+  ['having_5fcond_19',['having_cond',['../structhandler_1_1select__query__param.html#a13bae740b2156ba234c211d9a6029739',1,'handler::select_query_param']]]
 ];

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['not_5f_17',['not_',['../namespacequery_1_1cl.html#a0791fa6c33abe70c6b57b41d152f68de',1,'query::cl']]]
+  ['len_26',['len',['../namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2',1,'query::data']]],
+  ['like_27',['like',['../namespacequery_1_1cl.html#abf631013ecc8a993dc18f68fadd197bf',1,'query::cl']]],
+  ['limit_28',['limit',['../structhandler_1_1select__query__param.html#a82a24eae42db505f45dd3328845922b0',1,'handler::select_query_param::limit()'],['../namespacequery_1_1cl.html#a1e26ea83c9eef2fc04084928f759d2eb',1,'query::cl::limit()']]]
 ];

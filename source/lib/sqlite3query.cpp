@@ -1,8 +1,12 @@
-#include "../include/dbquery.hpp"
+#include "../include/sqlite3query.hpp"
 
 const std::string query::cl::glob(const std::string pattern){
 		const std::string single_quote = "'";
 		return (" GLOB "+single_quote+pattern+single_quote+" ");
+}
+
+const std::string query::data::len(int length){
+		return (" ("+std::to_string(length)+") ");
 }
 
 const std::string query::cl::like(const std::string pattern){
@@ -16,11 +20,6 @@ const std::string query::cl::limit(int limit_value){
 
 const std::string query::cl::offset(int offset_value){
 		return (" OFFSET "+std::to_string(offset_value)+" ");
-}
-
-
-const std::string query::data::len(int x){
-		return (" ("+std::to_string(x)+") ");
 }
 
 const std::string query::cl::table_info(const std::string table_name){

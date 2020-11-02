@@ -3,17 +3,16 @@
 
 #include <string>
 #include <vector>
-//TODO: 24/10/2020 DOCSTRING for dbquery class
 
 /******************************************************************************
    Definition file used for easier sql query composition
 ******************************************************************************/
 /*!
- * \brief namespace containing the macros for queries definitons
+ * \brief namespace containing the macros for queries definitons.
  */
 namespace query {
   /*!
-   * \brief namespace containing the data affinity definitions and calculation
+   * \brief namespace containing the data affinity definitions and calculation.
    */
   namespace affinity {
     const std::string integer           = "INTEGER";
@@ -32,7 +31,7 @@ namespace query {
                               CLAUSES
 *********************************************************************/
   /*!
-   * \brief namespace containing the query clauses
+   * \brief namespace containing the query clauses.
    */
  namespace cl {
 
@@ -95,16 +94,20 @@ namespace query {
     const std::string sum               = " SUM ";
 
     /*!
-     * [table_info description]
-     * @param  table_name [description]
-     * @return            [description]
+     * \brief Generates a table_info clause used in PRAGMA statements.
+     *
+     * @param  table_name The name of the table that the information is needed from.
+     *
+     * @return            The composed table_info clause. "table_info([table_name])"
      */
     const std::string table_info(const std::string table_name);
 
     /*!
-     * [type description]
-     * @param  type [description]
-     * @return      [description]
+     * \brief Generates a type='' clause for WHERE clause.
+     *
+     * @param  type The type that will be added to the clause.
+     *
+     * @return      The composed type clause. "type='[type]'"
      */
     const std::string type(const std::string type);
     const std::string values            = " VALUES ";
@@ -115,9 +118,8 @@ namespace query {
 /*********************************************************************
                         DB-QUERY STATEMENTS
 *********************************************************************/
-  /*! \brief namespace containing the query commands
-   *
-   *
+  /*!
+   * \brief namespace containing the query commands.
    */
   namespace cmd {
 
@@ -161,19 +163,20 @@ namespace query {
 /*********************************************************************
                         DATATYPES AND DB TYPES
 *********************************************************************/
-  /*! \brief namespace containing the query data types and options
-   *
-   *
+  /*!
+   * \brief namespace containing the query data types and options.
    */
   namespace data {
 
     const std::string char_              = " CHAR ";
     /*!
-     * [len description]
-     * @param  int [description]
-     * @return     [description]
+     * \brief Generates sqlite3 definition of length for a datatype.
+     *
+     * @param  length Integer number to be defined as length limit.
+     *
+     * @return        The composed length for a datatype. "([length])"
      */
-    const std::string len(int);
+    const std::string len(int length);
     const std::string int_               = " INT ";
     const std::string not_null           = " NOT NULL ";
     const std::string null               = " NULL ";
@@ -182,21 +185,27 @@ namespace query {
     const std::string table              = " TABLE ";
 
     /*!
-     * [trigger description]
-     * @param  db_name      [description]
-     * @param  trigger_name [description]
-     * @return              [description]
+     * \brief Generates a trigger definition with the database and trigger name given.
+     *
+     * @param  db_name      Name of the database where the trigger is located.
+     * @param  trigger_name Name of the trigger.
+     *
+     * @return              The trigger declaration. "db_name.trigger_name"
      */
     const std::string trigger(const std::string db_name, const std::string trigger_name);
 
     /*!
-     * [view description]
-     * @param  db_name   [description]
-     * @param  view_name [description]
-     * @return           [description]
+     * \brief Generates a view definition with the database and view name given.
+     *
+     * @param  db_name      Name of the database where the view is located.
+     * @param  view_name Name of the view.
+     *
+     * @return              The view declaration. "db_name.view_name"
      */
     const std::string view(const std::string db_name, const std::string view_name);
+
   } /* data */
+
   const std::string end_query             =";";
 
 } /* query */

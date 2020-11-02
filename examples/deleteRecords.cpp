@@ -1,5 +1,4 @@
-#include "../source/include/dbquery.h"
-#include "../source/include/sqlite3handler.h"
+#include <sqlite3handler.hpp>
 
 int main(int argc, char const *argv[]) {
 		handler::Sqlite3Db myHandler;
@@ -9,10 +8,14 @@ int main(int argc, char const *argv[]) {
 		std::string condition = "ID == 1";
 
 		//Delete record that meets condition
-		myHandler.deleteRecords(table_name, condition);
+		if (myHandler.deleteRecords(table_name, condition) == EXIT_SUCCESS){
+			...
+		}
 
 		//Delete all records in the table "table_name"
-		myHandler.deleteRecords(table_name, condition="all");
+		if (myHandler.deleteRecords(table_name, condition="all")){
+			...
+		}
 
 		return 0;
 }

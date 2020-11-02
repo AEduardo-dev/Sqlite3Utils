@@ -1,10 +1,20 @@
 var namespacequery =
 [
+    [ "affinity", "namespacequery_1_1affinity.html", [
+      [ "blob", "namespacequery_1_1affinity.html#abbad33675cc9fc45fd02c9edc569e8a6", null ],
+      [ "blob_affinity", "namespacequery_1_1affinity.html#ae7007811e4c692829955fde5cf6e59b6", null ],
+      [ "int_affinity", "namespacequery_1_1affinity.html#ae7c591f01d3b57de0e4f6c44f52ad515", null ],
+      [ "integer", "namespacequery_1_1affinity.html#a38f241ffac22ad300dec74e692b87346", null ],
+      [ "numeric", "namespacequery_1_1affinity.html#aac8bcc49d1ef78267e13124bdbe1d5fe", null ],
+      [ "real", "namespacequery_1_1affinity.html#ae77bd4c9917c4baf28f1abe0c0ae132f", null ],
+      [ "real_affinity", "namespacequery_1_1affinity.html#aae217039e5266aac15a972d196dbe813", null ],
+      [ "text", "namespacequery_1_1affinity.html#abe9b693a8db63d51762e478210d97524", null ],
+      [ "text_affinity", "namespacequery_1_1affinity.html#adbfc831a748fbd042d04293989ae1028", null ]
+    ] ],
     [ "cl", "namespacequery_1_1cl.html", [
       [ "glob", "namespacequery_1_1cl.html#a9d4deb5f73056b73bbf5ec5978b4646f", null ],
       [ "like", "namespacequery_1_1cl.html#abf631013ecc8a993dc18f68fadd197bf", null ],
       [ "limit", "namespacequery_1_1cl.html#a1e26ea83c9eef2fc04084928f759d2eb", null ],
-      [ "not_", "namespacequery_1_1cl.html#a0791fa6c33abe70c6b57b41d152f68de", null ],
       [ "offset", "namespacequery_1_1cl.html#aaeaacb56b76c7ef7d219070103343fc2", null ],
       [ "table_info", "namespacequery_1_1cl.html#af9dee59352e9b9ddda617b2e9015439e", null ],
       [ "type", "namespacequery_1_1cl.html#a9b07396a6c860240c358fc17493cd4d3", null ],
@@ -21,6 +31,7 @@ var namespacequery =
       [ "group_by", "namespacequery_1_1cl.html#a9a2bb706a6a3f339853eebf6d7a526c8", null ],
       [ "having", "namespacequery_1_1cl.html#ae7f784612c3ef96d0f49f80e3142321e", null ],
       [ "in", "namespacequery_1_1cl.html#ad1f2cb0a00b7712f84f72533dd13d289", null ],
+      [ "not_", "namespacequery_1_1cl.html#a765927cd47f9d2fc3fc31cd1ca5cae24", null ],
       [ "on", "namespacequery_1_1cl.html#a3d7a8a0fb31b182eb867d0bc1a302d6d", null ],
       [ "or_", "namespacequery_1_1cl.html#a09de9a02709a6ead2eef2f24af48686a", null ],
       [ "order_by", "namespacequery_1_1cl.html#ab36d06317f23cfe2ab24bc17fabb5800", null ],
@@ -65,7 +76,7 @@ var namespacequery =
       [ "vacuum", "namespacequery_1_1cmd.html#a6da723656f6ffa11dca0f6d0f06934fd", null ]
     ] ],
     [ "data", "namespacequery_1_1data.html", [
-      [ "len", "namespacequery_1_1data.html#a33b41178f41bfdbc81a0ff4082b2f874", null ],
+      [ "len", "namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2", null ],
       [ "trigger", "namespacequery_1_1data.html#a22f83295f710cda7482eaec6bd5690ce", null ],
       [ "view", "namespacequery_1_1data.html#ab2e01b7e216d2a515712fd1a372d7d73", null ],
       [ "char_", "namespacequery_1_1data.html#ae620656b261c13950188255c1e61e4c2", null ],

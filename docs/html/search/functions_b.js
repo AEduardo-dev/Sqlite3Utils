@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7esqlite3db_59',['~Sqlite3Db',['../classhandler_1_1Sqlite3Db.html#a071aa2c29636b503d59a6dc8b850d4d8',1,'handler::Sqlite3Db::~Sqlite3Db()'],['../classhandler_1_1Sqlite3Db.html#a071aa2c29636b503d59a6dc8b850d4d8',1,'handler::Sqlite3Db::~Sqlite3Db()']]]
+  ['view_88',['view',['../namespacequery_1_1data.html#ab2e01b7e216d2a515712fd1a372d7d73',1,'query::data']]]
 ];
