@@ -28,22 +28,22 @@ handler::Sqlite3Db::Sqlite3Db() {
 /******************************CONSTRUCTOR*********************************/
 handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 
-	const char *name = _db_path.c_str();
-	std::vector<std::string> tables_names, fields;
+		const char *name = _db_path.c_str();
+		std::vector<std::string> tables_names, fields;
 
-	_rc = sqlite3_open(name, &_db);
+		_rc = sqlite3_open(name, &_db);
 
-	if (_rc) {
-			fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
-			/* If the _db cannot be opened -> delete the object */
-			delete this;
-	} else {
-			fprintf(stderr, "Opened %s database successfully\n", name);
-			this->_db_path = name;
-			if (updateHandler() == EXIT_FAILURE)
-					/* If the _db cannot be opened -> delete the object */
-					delete this;
-	}
+		if (_rc) {
+				fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+				/* If the _db cannot be opened -> delete the object */
+				delete this;
+		} else {
+				fprintf(stderr, "Opened %s database successfully\n", name);
+				this->_db_path = name;
+				if (updateHandler() == EXIT_FAILURE)
+						/* If the _db cannot be opened -> delete the object */
+						delete this;
+		}
 }
 
 /******************************DESTRUCTOR*************************************/
@@ -381,7 +381,13 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 		/* If we want to order the results */
 		if (!order_by.empty()) {
-
+				/*!
+				 * \brief Lambda to convert the input string to uppercase for further processing.
+				 *
+				 */
+				std::for_each(order_type.begin(), order_type.end(), [](char & c){
+						c = ::toupper(c);
+				});
 				if(order_type != "ASC" && order_type != "DESC") {
 						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", order_type.c_str());
 						return empty_vec;
@@ -463,6 +469,15 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 		/* If we want to order the results */
 		if (!select_options.order_by.empty()) {
 
+				/*!
+				 * \brief Lambda to convert the input string to uppercase for further processing.
+				 *
+				 */
+				std::for_each(select_options.order_type.begin(), select_options.order_type.end(), \
+				              [](char & c){
+						c = ::toupper(c);
+				});
+
 				if(select_options.order_type != "ASC" && select_options.order_type != "DESC") {
 						fprintf(stderr, "Order option does not match. It should be either \"ASC\" or \"DESC\", not \"%s\"\n", select_options.order_type.c_str());
 						return empty_vec;
@@ -508,9 +523,9 @@ bool handler::Sqlite3Db::updateHandler(){
 		/* If _db already exists, try to get the names of the tables in it
 		         std::string exec_string = "SELECT name " \
 		         "FROM sqlite_master " \
-						 "WHERE type='table' " \
-						 "ORDER BY name;";
-		*/
+		                                 "WHERE type='table' " \
+		                                 "ORDER BY name;";
+		 */
 		std::string exec_string = query::cmd::select + "name" + \
 		                          query::cl::from + "sqlite_master" + \
 		                          query::cl::where + query::cl::type("table") + \
