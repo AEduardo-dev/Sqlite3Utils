@@ -445,6 +445,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 		_sql = exec_string.c_str();
 
+		std::cout << _sql << '\n';
+
 		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
@@ -513,9 +515,17 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 }
 
 /******************************getAffinity*******************************************/
-const std::string handler::Sqlite3Db::getAffinity(const std::string field_datatype){
+const std::string handler::Sqlite3Db::getAffinity(std::string field_datatype){
 
 		std::string affinity = "";
+
+		/*!
+		 * \brief Lambda to convert the input string to uppercase for further processing.
+		 *
+		 */
+		std::for_each(field_datatype.begin(), field_datatype.end(), [](char & c){
+				c = ::toupper(c);
+		});
 
 		if (field_datatype.find("NULL") != std::string::npos) {
 				affinity = "NULL";
