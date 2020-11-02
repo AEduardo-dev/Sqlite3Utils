@@ -39,7 +39,6 @@ struct select_query_param {
 };/*!< Structure used for storing all options that may be used during a select query.*/
 
 /*! \brief Class for handling connection and operations in a sqlite3 database.
- *         Brief description continued.
  *
  *  This class contains all of the basic operations available in the sqlite3
  *	syntax, including a custom executeQuery(), so that the user can pass their
@@ -180,9 +179,13 @@ public:
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
 
 		/*!
-		 * [reconnectDb  description]
-		 * @param  db_name [description]
-		 * @return         [description]
+		 * \brief Reconnects the handler to it's linked database
+		 *
+		 * While doing the reconnection all the data inside of the handler is renewed, in case
+		 *  some hcnages tool place during the time it was offline.
+		 *
+		 * @return         EXIT_SUCCESS if the db was reopened and it's information loaded
+		 *  correctly. EXIT_FAILURE otherwise.
 		 */
 		bool reconnectDb ();
 
@@ -231,16 +234,29 @@ public:
 		std::vector<std::string>  selectRecords(select_query_param select_options);
 
 		/*!
-		 * [updateHandler description]
-		 * @return [description]
+		 * \brief Updates the information contained in the handler.
+		 *
+		 * If multiple connections are being used in the same database, it may be possible that a
+		 *  table is changed, or a new one created, without the current hanlder knowing it. For
+		 *  this purpose, execution of this method will updated all the tables and field information
+		 *  that is stored in the handler, so it can operate normally from different connections.
+		 *
+		 * @return	EXIT_SUCCESS if the information was updated. EXIT_FAILURE if an error occurred
+		 *  during the process.
 		 */
 		bool updateHandler();
 
 		/*!
-		 * [getAffinity description]
-		 * @param  field_datatype [description]
-		 * @param  value_to_check [description]
-		 * @return                [description]
+		 * \brief Calculate the affinity token corresponding to a datatype given.
+		 *
+		 * Using the data affinities defined in the SQLite3 documentation, and with the rules
+		 *  specified to calculate them, this method will return the affinity according to the
+		 *  datatype it receives.
+		 *
+		 * @param  field_datatype The datatype for which the affinity token will be calculated.
+		 *
+		 * @return	Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC", depending on
+		 * the input.
 		 */
 		const std::string getAffinity(const std::string field_datatype);
 
@@ -320,17 +336,29 @@ public:
 		static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 		/*!
-		 * [checkFieldAffinity description]
-		 * @param  field_datatype [description]
-		 * @param  value_to_check [description]
-		 * @return                [description]
+		 * \brief Compares the value of some field to it's corresponding affinity.
+		 *
+		 * The value of the data in a field is compared against it's affinity. The comparison
+		 *  determines if the data given is valid for that field or not.
+		 *
+		 * It is important to notice that only "INTEGER", "REAL" and "NUMERIC" affinities need
+		 * this validation. The "TEXT" or "BLOB" affinities can contain numbers, but numbers cannot
+		 * contains characters inside of them, except from "," or "." for decimal depending on the
+		 * country.
+		 *
+		 * @param  affinity The affinity token of the corresponding field to be checked.
+		 * @param  value_to_check The value that needs to be validated before an operation.
+		 *
+		 * @return  True if the value is valid for the field given, false otherwise.
 		 */
 		bool isAffined(const std::string affinity, const std::string value_to_check);
 
 		/*!
-		 * [IsNotAplhaReal description]
-		 * @param  c [description]
-		 * @return   [description]
+		 * \brief Check if a character is valid for being inside of a real number
+		 *
+		 * @param  c The character to be checked.
+		 *
+		 * @return   True if the character is not alphabetic or a space. False otherwise.
 		 */
 		static inline bool isNotAplhaReal(char c)
 		{
@@ -338,9 +366,12 @@ public:
 		};
 
 		/*!
-		 * [IsNotAplhaInt description]
-		 * @param  c [description]
-		 * @return   [description]
+		 * \brief Check if a character is valid for being inside of an integer number
+		 *
+		 * @param  c The character to be checked.
+		 *
+		 * @return   True if the character is not alphabetic, a space, or a comma or dot.
+		 *  					False otherwise.
 		 */
 		static inline bool isNotAplhaInt(char c)
 		{
@@ -348,9 +379,11 @@ public:
 		};
 
 		/*!
-		 * [IsValidInt description]
-		 * @param  str [description]
-		 * @return     [description]
+		 * \brief Checks if a string is a valid integer number.
+		 *
+		 * @param  str String to be checked.
+		 *
+		 * @return     True if the string is a valid integer. False otherwise.
 		 */
 		bool isValidInt(const std::string &str)
 		{
@@ -358,9 +391,11 @@ public:
 		};
 
 		/*!
-		 * [IsValidReal description]
-		 * @param  str [description]
-		 * @return     [description]
+		 * \brief Checks if a string is a valid real number.
+		 *
+		 * @param  str String to be checked.
+		 *
+		 * @return     True if the string is a valid real (float, double...). False otherwise.
 		 */
 		bool isValidReal(const std::string &str)
 		{
