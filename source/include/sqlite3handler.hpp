@@ -164,6 +164,7 @@ public:
 		 *
 		 *
 		 */
+		//TODO: 02/11/2020 Usage example executeQuery method
 		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
 		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
 
@@ -238,6 +239,7 @@ public:
 		 * 												that, if three fuelds were given as argument, each group of three
 		 * 												elements of this vector will correspond to a row of data.
 		 */
+		//TODO: 02/11/2020 Usage example selectRecords method
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
 		                                        bool select_distinct = false, \
@@ -267,6 +269,7 @@ public:
 		 * @return	EXIT_SUCCESS if the information was updated. EXIT_FAILURE if an error occurred
 		 *  				during the process.
 		 */
+		//TODO: 02/11/2020 Usage example updateHandler method
 		bool updateHandler();
 
 		/*!
@@ -281,6 +284,7 @@ public:
 		 * @return								Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC",
 		 * 												depending on the input.
 		 */
+		//TODO: 02/11/2020 Usage example getAffinity method
 		const std::string getAffinity(const std::string field_datatype);
 
 
@@ -291,6 +295,7 @@ public:
 		 *
 		 * @return A vector containing the names of the fields of the table.
 		 */
+		//TODO: 02/11/2020 Usage example getFields method
 		std::vector<std::string> getFields(std::string table_name);
 
 		/*!
@@ -299,6 +304,7 @@ public:
 		 *
 		 * @return The number of tables.
 		 */
+		//TODO: 02/11/2020 Usage example getTablesSize method
 		int getTablesSize();
 
 		/*!
@@ -308,6 +314,7 @@ public:
 		 *
 		 * @return A vector containing the names of the tables.
 		 */
+		//TODO: 02/11/2020 Usage example getTables method
 		std::vector<std::string> getTables();
 
 		/*!
@@ -317,6 +324,7 @@ public:
 		 *
 		 * @return A vector containing the names of the tables.
 		 */
+		//TODO: 02/11/2020 Usage example getDbPath method
 		std::string getDbPath();
 
 
@@ -374,6 +382,8 @@ public:
 		 *
 		 * @return  True if the value is valid for the field given, false otherwise.
 		 */
+
+		//TODO: 02/11/2020 Usage example isAffined method
 		bool isAffined(const std::string affinity, const std::string value_to_check);
 
 		/*!
