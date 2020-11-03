@@ -171,9 +171,10 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 		/* First make sure we are working with an empty vector */
 		data.clear();
-
+		/* Store the query in the handler to keep track of it */
+		this->_sql = sql_query;
 		/* Then SQL Command is executed if no error occurs */
-		_rc = sqlite3_prepare_v2(_db, sql_query, -1, &_stmt, NULL);
+		_rc = sqlite3_prepare_v2(_db, _sql, -1, &_stmt, NULL);
 
 		if (_rc != SQLITE_OK) {
 				_zErrMsg = sqlite3_errmsg(_db);
@@ -557,14 +558,16 @@ bool handler::Sqlite3Db::updateHandler(){
 								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 										/* Insert them to the tables storage */
 										db_tables[table.first] = fields;
-										/* Assign the new values to the _tables in the handler */
-										this->_tables = db_tables;
 								}
 								else{
 										fprintf(stderr, "Error loading field names from %s\n", table.first.c_str());
 										return EXIT_FAILURE;
 								}
 						}
+
+						/* Assign the new values to the _tables in the handler if the information changed */
+						if ( db_tables != this->_tables)
+								this->_tables = db_tables;
 				}
 		}
 		else {

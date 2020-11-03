@@ -627,6 +627,9 @@ TEST(SqliteDropTable, DropNonexistentTable){
 		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
 }
 
+/****************UPDATE AND MULTICONNECTION OPERATIONS*************/
+//TODO: 3/11/2020 Angel Include tests for multiconnection and updating handler info.
+
 
 int main(int argc, char *argv[]) {
 		testing::InitGoogleTest(&argc, argv);
