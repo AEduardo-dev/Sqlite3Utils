@@ -519,7 +519,6 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 bool handler::Sqlite3Db::updateHandler(){
 
 		std::vector<std::string> tables_names, fields;
-		DbTables db_tables;
 
 		/* If _db already exists, try to get the names of the tables in it
 		         std::string exec_string = "SELECT name " \
@@ -538,14 +537,16 @@ bool handler::Sqlite3Db::updateHandler(){
 		/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
 
 		if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
+				/* First reset the tables information for the new load */
+				this->_tables.clear();
 				/* Load the names to the handler variable */
 				for (auto key : tables_names) {
-						db_tables[key] = fields;
+						this->_tables[key] = fields;
 				}
 				/* If some tables exist, load their fields as well */
-				if (!db_tables.empty()) {
+				if (!this->_tables.empty()) {
 
-						for (auto table : db_tables) {
+						for (auto table : this->_tables) {
 								/* Convert tables names for use in sql */
 								std::string name = table.first;
 								/* Get table info query */
@@ -557,17 +558,13 @@ bool handler::Sqlite3Db::updateHandler(){
 								/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
 								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 										/* Insert them to the tables storage */
-										db_tables[table.first] = fields;
+										this->_tables[table.first] = fields;
 								}
 								else{
 										fprintf(stderr, "Error loading field names from %s\n", table.first.c_str());
 										return EXIT_FAILURE;
 								}
 						}
-
-						/* Assign the new values to the _tables in the handler if the information changed */
-						if ( db_tables != this->_tables)
-								this->_tables = db_tables;
 				}
 		}
 		else {

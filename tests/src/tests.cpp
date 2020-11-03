@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 #include "../../source/include/sqlite3handler.hpp"
-#include "../../source/include/dbquery.hpp"
+#include "../../source/include/sqlite3query.hpp"
 
 /*!
  * \brief Checks if the file given exists in the directory
