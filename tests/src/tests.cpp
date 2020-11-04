@@ -65,21 +65,21 @@ TEST(SqliteHandlerConstructor, MultiConnectDB){
 /* If no tables exist the database should be loaded but no table will be in the handler */
 TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
 		ASSERT_NO_THROW(handler::Sqlite3Db UserHandler("MyDB.db"));
-		ASSERT_EQ(UserHandler.getTablesSize(), 0);
+		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
 /*******************CREATE TABLE FUNCTION*********************************/
 /* Create a table normally */
 TEST(SqliteCreateTable, CreateTable){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition), EXIT_SUCCESS);
-		ASSERT_EQ(UserHandler.getTablesSize(), 1);
+		ASSERT_EQ(UserHandler.getNumTables(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
 
 /* Create a table with a typo in it's definition */
 TEST(SqliteCreateTable, CreateTableWrongDefinition){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition_wrong), EXIT_FAILURE);
-		ASSERT_EQ(UserHandler.getTablesSize(), 1);
+		ASSERT_EQ(UserHandler.getNumTables(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
 
@@ -164,7 +164,7 @@ TEST(SqliteAffinity, CheckBlobWrongAffinity){
 /*******************INSERT RECORDS FUNCTION******************************/
 /* Correct insertion statement with all fields given */
 TEST(SqliteInsertion, InsertCompleteCorrect){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"1", "32", "665", "ANTHON33"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
@@ -172,7 +172,7 @@ TEST(SqliteInsertion, InsertCompleteCorrect){
 
 /* Correct insertion statement with some fields given. Respecting the not null constraints */
 TEST(SqliteInsertion, InsertIncompleteCorrect){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"2", "43", "", "Julia"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
@@ -180,7 +180,7 @@ TEST(SqliteInsertion, InsertIncompleteCorrect){
 
 /* Incorrect insertion statement with some fields given. No respecting the not null constraints */
 TEST(SqliteInsertion, InsertIncompleteIncorrect){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"4", "", "", "Robert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
@@ -188,7 +188,7 @@ TEST(SqliteInsertion, InsertIncompleteIncorrect){
 
 /* Incorrect insertion statement giving a non existent table name */
 TEST(SqliteInsertion, InsertNoTable){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"5", "32", "665", "BRUNO"};
 		ASSERT_EQ(UserHandler.insertRecord("CONECTIONS", values_to_insert), EXIT_FAILURE);
@@ -196,7 +196,7 @@ TEST(SqliteInsertion, InsertNoTable){
 
 /* Incorrect insertion statement giving incorrect datatype to a field */
 TEST(SqliteInsertion, InsertIncorrectType){
-		EXPECT_TRUE(UserHandler.getTablesSize() == 1);
+		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
@@ -214,7 +214,7 @@ TEST(SqliteConnection, ReconnectDB){
 		handler::Sqlite3Db MyHandler("MyDB.db");
 		ASSERT_NO_THROW(MyHandler.closeConnection());
 		ASSERT_EQ(MyHandler.reconnectDb(), EXIT_SUCCESS);
-		ASSERT_GT(MyHandler.getTablesSize(), 0);
+		ASSERT_GT(MyHandler.getNumTables(), 0);
 		ASSERT_EQ(MyHandler.getTables()[0], table_name);
 }
 
@@ -224,7 +224,7 @@ TEST(SqliteLoadedDb, LoadDatabase){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 
-		ASSERT_GT(LoaderHandler.getTablesSize(), 0);
+		ASSERT_GT(LoaderHandler.getNumTables(), 0);
 		ASSERT_EQ(LoaderHandler.getTables()[0], table_name);
 }
 
@@ -232,7 +232,7 @@ TEST(SqliteLoadedDb, LoadDatabase){
 TEST(SqliteLoadedDb, InsertAfterLoad){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
-		EXPECT_GT(LoaderHandler.getTablesSize(), 0);
+		EXPECT_GT(LoaderHandler.getNumTables(), 0);
 
 		std::vector<std::string> values_to_insert = {"3", "23", "", "Edu"};
 		ASSERT_EQ(LoaderHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
@@ -242,7 +242,7 @@ TEST(SqliteLoadedDb, InsertAfterLoad){
 /* Select all records inside of a table correctly */
 TEST(SqliteSelectRecords, SelectAll){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 
 		std::vector<std::string> data = UserHandler.selectRecords(table_name);
 		ASSERT_EQ(data, data_to_check);
@@ -251,7 +251,7 @@ TEST(SqliteSelectRecords, SelectAll){
 /* Select all records of a non existent table */
 TEST(SqliteSelectRecords, SelectAllNoTable){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 
 		ASSERT_TRUE(UserHandler.selectRecords("Conections").empty());
 }
@@ -259,7 +259,7 @@ TEST(SqliteSelectRecords, SelectAllNoTable){
 /* Select specific field from all records */
 TEST(SqliteSelectRecords, SelectSpecific){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {table_definition[2].first});
 		ASSERT_EQ(data.size(), 1);
@@ -269,7 +269,7 @@ TEST(SqliteSelectRecords, SelectSpecific){
 /* Select non existent specific field from all records of existent table */
 TEST(SqliteSelectRecords, SelectSpecificNoField){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"SURNAME"});
 		ASSERT_TRUE(data.empty());
@@ -280,7 +280,7 @@ TEST(SqliteSelectRecords, SelectSpecificDistinct){
 
 		/* Check the names in the records */
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> data_before = UserHandler.selectRecords(table_name, {"NAME"});
 
 		/* The name already exists */
@@ -306,7 +306,7 @@ TEST(SqliteSelectRecords, SelectSpecificDistinct){
 /* Select all records from table with where condition for records selection */
 TEST(SqliteSelectRecords, SelectAllWhere){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 100";
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
 		                                                          false, where_cond);
@@ -318,7 +318,7 @@ TEST(SqliteSelectRecords, SelectAllWhere){
 /* Select all records from table with where condition for records selection */
 TEST(SqliteSelectRecords, SelectSpecificWhere){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 100";
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"AGE"}, \
 		                                                          false, where_cond);
@@ -330,7 +330,7 @@ TEST(SqliteSelectRecords, SelectSpecificWhere){
 /* Select all records from table with wrong where condition for records selection */
 TEST(SqliteSelectRecords, SelectAllWhereWrong){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGEe > 100";
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"AGE"}, \
 		                                                          false, where_cond);
@@ -340,7 +340,7 @@ TEST(SqliteSelectRecords, SelectAllWhereWrong){
 /* Select all records from table with where condition that selects nothing */
 TEST(SqliteSelectRecords, SelectAllWhereNone){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 1000";
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"AGE"}, \
 		                                                          false, where_cond);
@@ -350,7 +350,7 @@ TEST(SqliteSelectRecords, SelectAllWhereNone){
 /* Select all records from table grouping by and using sum for select */
 TEST(SqliteSelectRecords, SelectSpecificGroupBy){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"SUM(AGE)", "NAME"}, \
 		                                                          false, "", group_by);
@@ -363,7 +363,7 @@ TEST(SqliteSelectRecords, SelectSpecificGroupBy){
 /* Select all records from table grouping by a non existent field */
 TEST(SqliteSelectRecords, SelectSpecificGroupByWrongField){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAMEe"};
 		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"SUM(AGE)", "NAME"}, \
 		                                                          false, "", group_by);
@@ -374,7 +374,7 @@ TEST(SqliteSelectRecords, SelectSpecificGroupByWrongField){
 /* Select all records from table grouping by a field and ordering by the sum of a field*/
 TEST(SqliteSelectRecords, SelectSpecificOrderByAscendentOrder){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string order_type = "ASC";
@@ -390,7 +390,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByAscendentOrder){
 /* Select all records from table grouping by a field and ordering by the sum of a field*/
 TEST(SqliteSelectRecords, SelectSpecificOrderByDescendentOrder){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string order_type = "DESC";
@@ -406,7 +406,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByDescendentOrder){
 /* Select all records from table grouping by a field and ordering by a wrong field*/
 TEST(SqliteSelectRecords, SelectSpecificOrderByWrongField){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGEe)"};
 		std::string order_type = "DESC";
@@ -419,7 +419,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByWrongField){
 /* Select all records from table grouping by a field and ordering by a wrong field*/
 TEST(SqliteSelectRecords, SelectSpecificOrderByWrongOrderType){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string order_type = "DES";
@@ -432,7 +432,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByWrongOrderType){
 /* Select all records from table grouping and ordering using having for filter*/
 TEST(SqliteSelectRecords, SelectSpecificHaving){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 2";
@@ -449,7 +449,7 @@ TEST(SqliteSelectRecords, SelectSpecificHaving){
 /* Select all records from table grouping and ordering using having to filter getting no results*/
 TEST(SqliteSelectRecords, SelectSpecificHavingNone){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 1";
@@ -463,7 +463,7 @@ TEST(SqliteSelectRecords, SelectSpecificHavingNone){
 /* Select all records from table grouping and ordering using a wrong having condition */
 TEST(SqliteSelectRecords, SelectSpecificHavingWrong){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(namee) < 2";
@@ -477,7 +477,7 @@ TEST(SqliteSelectRecords, SelectSpecificHavingWrong){
 /* Select all records from table grouping and ordering using having and showing only 1 result */
 TEST(SqliteSelectRecords, SelectSpecificLimit){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 2";
@@ -495,7 +495,7 @@ TEST(SqliteSelectRecords, SelectSpecificLimit){
 /* Select all records from table grouping and ordering using having and limiting to one with offset to show from second */
 TEST(SqliteSelectRecords, SelectSpecificLimitOffset){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 2";
@@ -514,7 +514,7 @@ TEST(SqliteSelectRecords, SelectSpecificLimitOffset){
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
 TEST(SqliteSelectRecords, SelectSpecificBiggerLimit){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 2";
@@ -532,7 +532,7 @@ TEST(SqliteSelectRecords, SelectSpecificBiggerLimit){
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
 TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
 		std::vector<std::string> order_by = {"SUM(AGE)"};
 		std::string having_cond = "count(name) < 2";
@@ -549,7 +549,7 @@ TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
 TEST(SqliteSelectRecords, SelectStructSpecificAllConditions){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		handler::select_query_param select_query;
 		select_query.table_name = table_name;
 		select_query.fields = {"*"};
@@ -568,7 +568,7 @@ TEST(SqliteSelectRecords, SelectStructSpecificAllConditions){
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
 TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		handler::select_query_param select_query;
 		select_query.table_name = table_name;
 		select_query.fields = {"*"};
@@ -588,47 +588,69 @@ TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
 /* Delete specific records of a table using condition */
 TEST(SqliteDelete, DeleteRecord){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
 }
 
 /* Delete all records in a table */
 TEST(SqliteDelete, DeleteAllRecords){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
 }
 
 /* Try to delete records of non existent table */
 TEST(SqliteDelete, DeleteWrongTable){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
 }
 
 /* Try to delete records with non possible condition */
 TEST(SqliteDelete, DeleteWrongCondition){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
 }
 
 /* Drop a table from the db */
 TEST(SqliteDropTable, DropTable){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
 }
 
 /* Try to drop a table from the db that does not exist */
 TEST(SqliteDropTable, DropNonexistentTable){
 		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getTablesSize(), 0);
+		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
 }
 
 /****************UPDATE AND MULTICONNECTION OPERATIONS*************/
 //TODO: 3/11/2020 Angel Include tests for multiconnection and updating handler info.
+/* Try to drop a table from the db that does not exist */
+TEST(SqliteUpdateHandler, UpdateHandler){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+
+		handler::Sqlite3Db NewHandler("MyDB.db");
+		ASSERT_EQ(UserHandler.getNumTables(), NewHandler.getNumTables());
+
+		std::vector<handler::FieldDescription> fields = \
+		{{"NAME",query::data::char_+query::data::primary_key+query::data::not_null}, \
+				{"SURNAME",query::data::char_+query::data::len(50)+query::data::not_null}};
+
+		ASSERT_EQ(UserHandler.createTable("NEWTABLE", fields), EXIT_SUCCESS);
+		std::vector<std::string> values_to_insert = {"Angel Eduardo", "Vega"};
+		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
+
+		ASSERT_NE(UserHandler.getNumTables(), NewHandler.getNumTables());
+		ASSERT_GT(UserHandler.getNumTables(), NewHandler.getNumTables());
+
+		ASSERT_EQ(NewHandler.updateHandler(), EXIT_SUCCESS);
+		ASSERT_EQ(NewHandler.getNumTables(), UserHandler.getNumTables());
+}
 
 
 int main(int argc, char *argv[]) {

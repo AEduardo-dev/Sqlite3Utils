@@ -414,9 +414,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		              query::end_query;
 
 		_sql = exec_string.c_str();
-
-		std::cout << _sql << '\n';
-
+		
 		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
@@ -505,8 +503,6 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 
 		_sql = exec_string.c_str();
 
-		std::cout << _sql << '\n';
-
 		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
@@ -535,12 +531,13 @@ bool handler::Sqlite3Db::updateHandler(){
 
 		/* SQL Command is executed */
 		/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-
-		if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
+		if (executeQuery(_sql, tables_names, {0}, true) == EXIT_SUCCESS) {
+			if(!tables_names.empty()){
 				/* First reset the tables information for the new load */
 				this->_tables.clear();
 				/* Load the names to the handler variable */
 				for (auto key : tables_names) {
+						std::cout << key << '\n';
 						this->_tables[key] = fields;
 				}
 				/* If some tables exist, load their fields as well */
@@ -556,7 +553,7 @@ bool handler::Sqlite3Db::updateHandler(){
 								_sql = exec_string.c_str();
 
 								/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
+								if (executeQuery(_sql, fields, {1}, true) == EXIT_SUCCESS) {
 										/* Insert them to the tables storage */
 										this->_tables[table.first] = fields;
 								}
@@ -566,6 +563,8 @@ bool handler::Sqlite3Db::updateHandler(){
 								}
 						}
 				}
+			}
+
 		}
 		else {
 				fprintf(stderr, "Error loading tables from %s\n", this->_db_path);
@@ -678,6 +677,6 @@ std::vector<std::string> handler::Sqlite3Db::getTables(){
 		return names;
 };
 
-int handler::Sqlite3Db::getTablesSize(){
+int handler::Sqlite3Db::getNumTables(){
 		return this->_tables.size();
 };

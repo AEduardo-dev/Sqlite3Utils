@@ -239,8 +239,9 @@ public:
 		 * @return 								A vector containing all the values retrieved in order. This means
 		 * 												that, if three fuelds were given as argument, each group of three
 		 * 												elements of this vector will correspond to a row of data.
+		 *
+		 * /include selectRecords.cpp
 		 */
-		//TODO: 02/11/2020 Usage example selectRecords method
 		std::vector<std::string>  selectRecords(std::string table_name, \
 		                                        std::vector<std::string> fields = {"*"},  \
 		                                        bool select_distinct = false, \
@@ -256,8 +257,9 @@ public:
 		 * 											 the select statement.
 		 *
 		 * @overload
+		 *
+		 * /include selectRecordsStruct.cpp
 		 */
-		//TODO: 02/11/2020 Usage example selectRecords method ewith struct usage
 		std::vector<std::string>  selectRecords(select_query_param select_options);
 
 		/*!
@@ -309,7 +311,7 @@ public:
 		 *
 		 * @return The number of tables.
 		 */
-		int getTablesSize();
+		int getNumTables();
 
 		/*!
 		 * \brief Get table's names from the database.
