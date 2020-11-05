@@ -213,9 +213,9 @@ TEST(SqliteConnection, DisconnectDB){
 TEST(SqliteConnection, ReconnectDB){
 		handler::Sqlite3Db MyHandler("MyDB.db");
 		ASSERT_NO_THROW(MyHandler.closeConnection());
-		ASSERT_EQ(MyHandler.reconnectDb(), EXIT_SUCCESS);
+		ASSERT_EQ(MyHandler.connectDb(), EXIT_SUCCESS);
 		ASSERT_GT(MyHandler.getNumTables(), 0);
-		ASSERT_EQ(MyHandler.getTables()[0], table_name);
+		ASSERT_EQ(MyHandler.getTablesNames()[0], table_name);
 }
 
 /*********************OPERATIONS ON LOADED DB***************************/
@@ -225,7 +225,7 @@ TEST(SqliteLoadedDb, LoadDatabase){
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 
 		ASSERT_GT(LoaderHandler.getNumTables(), 0);
-		ASSERT_EQ(LoaderHandler.getTables()[0], table_name);
+		ASSERT_EQ(LoaderHandler.getTablesNames()[0], table_name);
 }
 
 /* Check if the hanlder is able to operate the db just from the data loaded at initialization */
@@ -253,7 +253,8 @@ TEST(SqliteSelectRecords, SelectAllNoTable){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
-		ASSERT_TRUE(UserHandler.selectRecords("Conections").empty());
+		std::vector<std::string> data = UserHandler.selectRecords("Conections");
+		ASSERT_TRUE(data.empty());
 }
 
 /* Select specific field from all records */
@@ -583,6 +584,41 @@ TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
 		ASSERT_TRUE(data.empty());
 }
 
+/****************UPDATE AND MULTICONNECTION OPERATIONS*************/
+
+TEST(SqliteUpdateHandler, UpdateSingle){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+		handler::DbTables tables = UserHandler.getTables();
+		ASSERT_EQ(UserHandler.updateHandler(), EXIT_SUCCESS);
+		ASSERT_EQ(UserHandler.getTables(), tables);
+}
+
+/* Try to drop a table from the db that does not exist */
+TEST(SqliteUpdateHandler, UpdateHandler){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+
+		handler::Sqlite3Db NewHandler("MyDB.db");
+		ASSERT_EQ(UserHandler.getNumTables(), NewHandler.getNumTables());
+
+		std::vector<handler::FieldDescription> fields = \
+		{{"NAME",query::data::char_+query::data::primary_key+query::data::not_null}, \
+				{"SURNAME",query::data::char_+query::data::len(50)+query::data::not_null}};
+
+		ASSERT_EQ(UserHandler.createTable("NEWTABLE", fields), EXIT_SUCCESS);
+		std::vector<std::string> values_to_insert = {"Angel Eduardo", "Vega"};
+		ASSERT_EQ(UserHandler.insertRecord("NEWTABLE", values_to_insert), EXIT_SUCCESS);
+
+		handler::DbTables tables = UserHandler.getTables();
+
+		ASSERT_NE(UserHandler.getNumTables(), NewHandler.getNumTables());
+		ASSERT_GT(UserHandler.getNumTables(), NewHandler.getNumTables());
+
+		ASSERT_EQ(NewHandler.updateHandler(), EXIT_SUCCESS);
+		ASSERT_EQ(NewHandler.getTables(), UserHandler.getTables());
+}
+
 
 /**************************DELETE AND DROP OPERATIONS***********************/
 /* Delete specific records of a table using condition */
@@ -613,13 +649,6 @@ TEST(SqliteDelete, DeleteWrongCondition){
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
 }
 
-/* Drop a table from the db */
-TEST(SqliteDropTable, DropTable){
-		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getNumTables(), 0);
-		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
-}
-
 /* Try to drop a table from the db that does not exist */
 TEST(SqliteDropTable, DropNonexistentTable){
 		EXPECT_TRUE(exists("MyDB.db"));
@@ -627,29 +656,11 @@ TEST(SqliteDropTable, DropNonexistentTable){
 		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
 }
 
-/****************UPDATE AND MULTICONNECTION OPERATIONS*************/
-//TODO: 3/11/2020 Angel Include tests for multiconnection and updating handler info.
-/* Try to drop a table from the db that does not exist */
-TEST(SqliteUpdateHandler, UpdateHandler){
+/* Drop a table from the db */
+TEST(SqliteDropTable, DropTable){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
-
-		handler::Sqlite3Db NewHandler("MyDB.db");
-		ASSERT_EQ(UserHandler.getNumTables(), NewHandler.getNumTables());
-
-		std::vector<handler::FieldDescription> fields = \
-		{{"NAME",query::data::char_+query::data::primary_key+query::data::not_null}, \
-				{"SURNAME",query::data::char_+query::data::len(50)+query::data::not_null}};
-
-		ASSERT_EQ(UserHandler.createTable("NEWTABLE", fields), EXIT_SUCCESS);
-		std::vector<std::string> values_to_insert = {"Angel Eduardo", "Vega"};
-		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_SUCCESS);
-
-		ASSERT_NE(UserHandler.getNumTables(), NewHandler.getNumTables());
-		ASSERT_GT(UserHandler.getNumTables(), NewHandler.getNumTables());
-
-		ASSERT_EQ(NewHandler.updateHandler(), EXIT_SUCCESS);
-		ASSERT_EQ(NewHandler.getNumTables(), UserHandler.getNumTables());
+		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
 }
 
 

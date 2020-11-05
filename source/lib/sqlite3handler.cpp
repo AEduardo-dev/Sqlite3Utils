@@ -316,7 +316,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 }
 
 /******************************reconnectDb***********************************/
-bool handler::Sqlite3Db::reconnectDb(){
+bool handler::Sqlite3Db::connectDb(){
 
 		_rc = sqlite3_open(this->_db_path, &this->_db);
 
@@ -344,6 +344,13 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
 		std::vector<std::string> select_data;
+
+		if (this->_tables.find(table_name) == this->_tables.end()) {
+				fprintf(stderr, "SQL error: no such table %s. Select operation aborted.", \
+				        table_name.c_str());
+
+				return empty_vec;
+		}
 
 		/* If it is not the wildcard */
 		if (fields[0] != "*") {
@@ -414,7 +421,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		              query::end_query;
 
 		_sql = exec_string.c_str();
-		
+
 		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
@@ -429,6 +436,13 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
 		std::vector<std::string> select_data;
+
+		if (this->_tables.find(select_options.table_name) == this->_tables.end()) {
+				fprintf(stderr, "SQL error: no such table %s. Select operation aborted.", \
+				        select_options.table_name.c_str());
+
+				return empty_vec;
+		}
 
 		/* If it is not the wildcard */
 		if (select_options.fields[0] != "*") {
@@ -531,13 +545,11 @@ bool handler::Sqlite3Db::updateHandler(){
 
 		/* SQL Command is executed */
 		/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-		if (executeQuery(_sql, tables_names, {0}, true) == EXIT_SUCCESS) {
-			if(!tables_names.empty()){
+		if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
 				/* First reset the tables information for the new load */
 				this->_tables.clear();
 				/* Load the names to the handler variable */
 				for (auto key : tables_names) {
-						std::cout << key << '\n';
 						this->_tables[key] = fields;
 				}
 				/* If some tables exist, load their fields as well */
@@ -553,7 +565,7 @@ bool handler::Sqlite3Db::updateHandler(){
 								_sql = exec_string.c_str();
 
 								/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-								if (executeQuery(_sql, fields, {1}, true) == EXIT_SUCCESS) {
+								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
 										/* Insert them to the tables storage */
 										this->_tables[table.first] = fields;
 								}
@@ -563,15 +575,12 @@ bool handler::Sqlite3Db::updateHandler(){
 								}
 						}
 				}
-			}
-
+				return EXIT_SUCCESS;
 		}
 		else {
 				fprintf(stderr, "Error loading tables from %s\n", this->_db_path);
 				return EXIT_FAILURE;
 		}
-
-		return EXIT_SUCCESS;
 }
 
 
@@ -668,15 +677,19 @@ std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
 		return fields;
 };
 
-std::vector<std::string> handler::Sqlite3Db::getTables(){
+int handler::Sqlite3Db::getNumTables(){
+		return this->_tables.size();
+};
+
+handler::DbTables handler::Sqlite3Db::getTables(){
+		return this->_tables;
+};
+
+std::vector<std::string> handler::Sqlite3Db::getTablesNames(){
 		std::vector<std::string> names;
 
 		for(auto table : this->_tables) {
 				names.push_back(table.first);
 		}
 		return names;
-};
-
-int handler::Sqlite3Db::getNumTables(){
-		return this->_tables.size();
 };

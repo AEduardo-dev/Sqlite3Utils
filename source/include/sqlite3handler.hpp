@@ -204,7 +204,7 @@ public:
 		 * \include reconnectDb.cpp
 		 *
 		 */
-		bool reconnectDb ();
+		bool connectDb ();
 
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
@@ -308,24 +308,26 @@ public:
 		/*!
 		 * \brief Get number of tables in the database.
 		 *
-		 *
 		 * @return The number of tables.
 		 */
 		int getNumTables();
 
 		/*!
-		 * \brief Get table's names from the database.
-		 *
-		 * @param table_name The name of the table which field's names are needed.
+		 * \brief Get tables information map stored in the handler.
 		 *
 		 * @return A vector containing the names of the tables.
 		 */
-		std::vector<std::string> getTables();
+		DbTables getTables();
+
+		/*!
+		 * \brief Get table's names from the database.
+		 *
+		 * @return A vector containing the names of the tables.
+		 */
+		std::vector<std::string> getTablesNames();
 
 		/*!
 		 * \brief Gets db relative path from the database.
-		 *
-		 * @param table_name The name of the table which field's names are needed.
 		 *
 		 * @return A vector containing the names of the tables.
 		 */
