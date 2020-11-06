@@ -20,7 +20,7 @@ LFLAGS   = -Wall -I. -lsqlite3 -o
 OBJDIR=obj
 LIBDIR=lib
 INCDIR=include
-SRCDIR=src
+SRCDIR=./
 BINDIR=bin
 
 LIBS=-lm
