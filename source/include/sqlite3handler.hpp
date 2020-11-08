@@ -397,9 +397,9 @@ public:
 		 *
 		 * @return   True if the character is not alphabetic or a space. False otherwise.
 		 */
-		static inline bool isNotAplhaReal(char c)
+		static inline bool isReal(char c)
 		{
-				return (isalpha(c) || (c == ' '));
+				return !(isdigit(c) || (c == '.') || (c == ','));
 		};
 
 		/*!
@@ -410,9 +410,9 @@ public:
 		 * @return   True if the character is not alphabetic, a space, or a comma or dot.
 		 *  					False otherwise.
 		 */
-		static inline bool isNotAplhaInt(char c)
+		static inline bool isInt(char c)
 		{
-				return (isalpha(c) || (c == ' ') || (c == ',') || (c == '.'));
+				return (!isdigit(c));
 		};
 
 		/*!
@@ -424,7 +424,10 @@ public:
 		 */
 		bool isValidInt(const std::string &str)
 		{
-				return (find_if(str.begin(), str.end(), isNotAplhaInt) == str.end());
+				if(!str.empty())
+						return (find_if(str.begin(), str.end(), isInt) == str.end());
+				else
+						return false;
 		};
 
 		/*!
@@ -436,8 +439,10 @@ public:
 		 */
 		bool isValidReal(const std::string &str)
 		{
-				return (find_if(str.begin(), str.end(), isNotAplhaReal) == str.end() || \
-				        find_if(str.begin(), str.end(), isNotAplhaInt) == str.end());
+				if(!str.empty())
+						return (find_if(str.begin(), str.end(), isReal) == str.end());
+				else
+						return false;
 		};
 
 private:

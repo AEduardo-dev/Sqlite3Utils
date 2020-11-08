@@ -84,14 +84,13 @@ TEST(SqliteCreateTable, CreateTableWrongDefinition){
 }
 
 /**********************AFFINITY OPERATIONS*****************************/
-/* Get the affinity of an integer number datatype and check a correct value against it */
-TEST(SqliteAffinity, CheckIntAffinityUpper){
-		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+TEST(SqliteAffinity, CheckIntAffinityLower){
+		ASSERT_EQ(UserHandler.getAffinity("medint"), "INTEGER");
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
 
-TEST(SqliteAffinity, CheckIntAffinityLower){
-		ASSERT_EQ(UserHandler.getAffinity("medint"), "INTEGER");
+/* Get the affinity of an integer number datatype and check a correct value against it */TEST(SqliteAffinity, CheckIntAffinityUpper){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
 
@@ -104,6 +103,34 @@ TEST(SqliteAffinity, CheckIntWrongAffinity){
 TEST(SqliteAffinity, CheckIntAffinityWrongValue){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33,86"));
+}
+
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckIntAffinityWrongValueText){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33a86"));
+}
+
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckIntAffinityWrongValueSymbol){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33+86"));
+}
+
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckIntAffinityNothing){
+		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
+		ASSERT_FALSE(UserHandler.isAffined("INTEGER", ""));
+}
+
+/* Get the affinity of a real number datatype in lower case*/
+TEST(SqliteAffinity, CheckRealAffinitLower){
+		ASSERT_EQ(UserHandler.getAffinity("double"), "REAL");
+}
+
+/* Get the affinity of a real number datatype in upper case*/
+TEST(SqliteAffinity, CheckRealAffinityUpper){
+		ASSERT_EQ(UserHandler.getAffinity("DOUBLE"), "REAL");
 }
 
 /* Get the affinity of a real number datatype and check a correct value against it (comma)*/
@@ -129,13 +156,29 @@ TEST(SqliteAffinity, CheckRealAffinityWrongValue){
 		ASSERT_FALSE(UserHandler.isAffined("REAL", "33a86"));
 }
 
-/* Get the affinity of a text datatype */
-TEST(SqliteAffinity, CheckTextAffinityUpper){
-		ASSERT_EQ(UserHandler.getAffinity("CHAR (90)"), "TEXT");
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckRealAffinityWrongValueText){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", "33aasd86"));
 }
 
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckRealAffinityWrongValueSymbol){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", "33/86"));
+}
+
+/* Get the affinity of an integer number datatype and check a wrong value against it */
+TEST(SqliteAffinity, CheckRealAffinityNothing){
+		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", ""));
+}
+
+/* Get the affinity of a text datatype in lower case */
 TEST(SqliteAffinity, CheckTextAffinityLower){
 		ASSERT_EQ(UserHandler.getAffinity("char(90)"), "TEXT");
+}
+
+/* Get the affinity of a text datatype in upper case */
+TEST(SqliteAffinity, CheckTextAffinityUpper){
+		ASSERT_EQ(UserHandler.getAffinity("CHAR (90)"), "TEXT");
 }
 
 /* Get the affinity of a real datatype and check no false text is received*/
@@ -143,15 +186,17 @@ TEST(SqliteAffinity, CheckTextWrongAffinity){
 		ASSERT_NE(UserHandler.getAffinity("REAL"), "TEXT");
 }
 
-/* Get the affinity of a blob datatype */
-TEST(SqliteAffinity, CheckBlobAffinityUpper){
-		ASSERT_EQ(UserHandler.getAffinity("BLOB"), "BLOB");
-}
-
+/* Get the affinity of a blob datatype in lower case */
 TEST(SqliteAffinity, CheckBlobAffinityLower){
 		ASSERT_EQ(UserHandler.getAffinity("blob"), "BLOB");
 }
 
+/* Get the affinity of a blob datatype in upper case */
+TEST(SqliteAffinity, CheckBlobAffinityUpper){
+		ASSERT_EQ(UserHandler.getAffinity("BLOB"), "BLOB");
+}
+
+/* Get the affinity of a blob datatype with no datatype defined */
 TEST(SqliteAffinity, CheckBlobAffinityNothing){
 		ASSERT_EQ(UserHandler.getAffinity(""), "BLOB");
 }
@@ -159,6 +204,14 @@ TEST(SqliteAffinity, CheckBlobAffinityNothing){
 /* Get the affinity of a real datatype and check no false blob is received*/
 TEST(SqliteAffinity, CheckBlobWrongAffinity){
 		ASSERT_NE(UserHandler.getAffinity("Text"), "BLOB");
+}
+
+/* Check all affinities with mixed upper and lower case */
+TEST(SqliteAffinity, CheckMixedCaseAffinities){
+		ASSERT_EQ(UserHandler.getAffinity("ChAr (100)"), "TEXT");
+		ASSERT_EQ(UserHandler.getAffinity("BlOB"), "BLOB");
+		ASSERT_EQ(UserHandler.getAffinity("InTeGer"), "INTEGER");
+		ASSERT_EQ(UserHandler.getAffinity("ReaL"), "REAL");
 }
 
 /*******************INSERT RECORDS FUNCTION******************************/
