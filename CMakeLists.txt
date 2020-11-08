@@ -1,17 +1,20 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.15)
 
-# set the project name
+# Set the project name
 project(DatabaseHandler VERSION 1.0.0)
 
-# specify the C++ standard
+# Specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-#configure a header file for version number
+# Add subdirectories
+# add_subdirectory(examples)
+# add_subdirectory(tests)
+add_subdirectory(source)
+
+# Configure a header file for version number
 configure_file(DatabaseHandlerConfig.h.in DatabaseHandlerConfig.h)
 
-# add the libraries
-add_subdirectory(lib)
 
 # Check for required sqlite3 library
 find_library(sqlite3 REQUIRED True)
@@ -20,16 +23,14 @@ find_library(sqlite3 REQUIRED True)
 target_link_libraries(sqlite3handler PRIVATE sqlite3)
 target_link_libraries(sqlite3handler PRIVATE sqlite3query)
 
-# add the executable
-add_executable(DatabaseHandler "${PROJECT_SOURCE_DIR}/src/minimalHandler.cpp")
+# Add the executable
+add_executable(DatabaseHandler "${PROJECT_SOURCE_DIR}/minimalHandler.cpp")
 
 # Link libraries
 target_link_libraries(DatabaseHandler
                       PUBLIC sqlite3handler
-                      PUBLIC sqlite3query)
-
-
-
+                      PUBLIC sqlite3query
+                      )
 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
@@ -53,3 +54,17 @@ add_test(NAME Usage COMMAND DatabaseHandler)
 set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )
+
+# Define a function to simplify adding tests in the future
+function(do_test target arg result)
+  add_test(NAME Comp${arg} COMMAND ${target} ${arg})
+  set_tests_properties(Comp${arg}
+    PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+    )
+endfunction(do_test)
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "$${PROJECT_SOURCE_DIR}../LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${DatabaseHandler_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${DatabaseHandler_VERSION_MINOR}")
+include(CPack)
