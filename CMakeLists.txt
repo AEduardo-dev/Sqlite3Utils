@@ -10,11 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add subdirectories
 # add_subdirectory(examples)
 # add_subdirectory(tests)
-add_subdirectory(source)
+add_subdirectory(src)
+add_subdirectory(include)
 
 # Configure a header file for version number
 configure_file(DatabaseHandlerConfig.h.in DatabaseHandlerConfig.h)
-
 
 # Check for required sqlite3 library
 find_library(sqlite3 REQUIRED True)
@@ -24,7 +24,7 @@ target_link_libraries(sqlite3handler PRIVATE sqlite3)
 target_link_libraries(sqlite3handler PRIVATE sqlite3query)
 
 # Add the executable
-add_executable(DatabaseHandler "${PROJECT_SOURCE_DIR}/minimalHandler.cpp")
+add_executable(DatabaseHandler "${PROJECT_SOURCE_DIR}/src/minimalHandler.cpp")
 
 # Link libraries
 target_link_libraries(DatabaseHandler
@@ -39,6 +39,7 @@ target_include_directories(DatabaseHandler PUBLIC
                           )
 
 # Installation rules
+# Executable
 install(TARGETS DatabaseHandler DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/DatabaseHandlerConfig.h"
         DESTINATION include
@@ -64,7 +65,7 @@ function(do_test target arg result)
 endfunction(do_test)
 
 include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE "$${PROJECT_SOURCE_DIR}../LICENSE")
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR "${DatabaseHandler_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${DatabaseHandler_VERSION_MINOR}")
 include(CPack)
