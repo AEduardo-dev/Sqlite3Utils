@@ -16,8 +16,21 @@ add_subdirectory(include)
 # Configure a header file for version number
 configure_file(DatabaseHandlerConfig.h.in DatabaseHandlerConfig.h)
 
+message(CHECK_START "-> Finding sqlite3...")
 # Check for required sqlite3 library
-find_library(sqlite3 REQUIRED True)
+find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
+
+if(NOT FOUND_SQLITE3)
+
+  message(CHECK_FAIL "  Sqlite3 not found")
+  message(FATAL_ERROR " Sqlite3 dependency not found." )
+  file(DOWNLOAD "https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz" "sqlite3_install"
+       TIMEOUT 60
+     EXPECTED_HASH SHA3 "7ebb78ae95450b7466f570c3339103ac6ca9690efc991248652339b3ef5460be")
+
+else()
+  message(CHECK_PASS "  Sqlite3 found")
+endif(NOT FOUND_SQLITE3)
 
 # Link sqlite3handler with it's libraries dependencies
 target_link_libraries(sqlite3handler PRIVATE sqlite3)
