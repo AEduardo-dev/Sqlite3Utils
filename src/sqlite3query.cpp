@@ -1,4 +1,4 @@
-#include "../include/sqlite3query.hpp"
+#include "../include/query.hpp"
 
 const std::string query::cl::glob(const std::string pattern){
 		const std::string single_quote = "'";

@@ -1,5 +1,5 @@
-#include "../include/sqlite3handler.hpp"
-#include "../include/sqlite3query.hpp"
+#include "../include/handler.hpp"
+#include "../include/query.hpp"
 
 using handler::Sqlite3Db;
 

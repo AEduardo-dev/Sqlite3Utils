@@ -1,3 +1,0 @@
-// the configured options and settings for Database
-#define DatabaseHandler_VERSION_MAJOR @DatabaseHandler_VERSION_MAJOR@
-#define DatabaseHandler_VERSION_MINOR @DatabaseHandler_VERSION_MINOR@

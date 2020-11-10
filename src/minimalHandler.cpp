@@ -1,7 +1,6 @@
-#include <sqlite3handler.hpp>
-#include <sqlite3query.hpp>
-#include <DatabaseHandlerConfig.h>
-
+#include "../include/handler.hpp"
+#include "../include/query.hpp"
+#include "../DatabaseHandlerConfig.h"
 
 using namespace query;
 
