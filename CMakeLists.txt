@@ -55,12 +55,12 @@ IF(NOT FOUND_SQLITE3)
     execute_process(COMMAND echo "Installation starting...")
 
     IF(UNIX)
-      execute_process(COMMAND echo ./configure
+      execute_process(COMMAND ./configure
                       WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
-      execute_process(COMMAND echo make WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
+      execute_process(COMMAND make WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
 
     ELSEIF(WIN32)
-      execute_process(COMMAND echo nmake /f Makefile.msc
+      execute_process(COMMAND nmake /f Makefile.msc
                       WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
 
     ENDIF()
