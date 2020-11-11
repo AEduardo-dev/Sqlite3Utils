@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.18)
 
 # Set the project name
 project(Sqlite3Utils VERSION 1.0.0)
@@ -15,6 +15,15 @@ set(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(main_lib_dest "lib/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
 set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
+set(SQLITE3_INSTALL_DIRNAME "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf-3330000")
+
+# Define some options for processing
+
+option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration" OFF)
+option(BUILD_TESTS "Build the tests program" OFF)
+option(BUILD_EXAMPLES "Build the example programs" OFF)
+option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
 
 
 # Add subdirectories
@@ -23,28 +32,61 @@ set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
 add_subdirectory(src)
 add_subdirectory(include)
 
-
 # Configure a header file for version number
 configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
 
-message(CHECK_START "-> Finding sqlite3...")
-# Check for required sqlite3 library
-find_library(FOUND_SQLITE3 sqlite4 REQUIRED True)
+message(CHECK_START " FINDING --> sqlite3")
 
-if(NOT FOUND_SQLITE3)
+# Check for dependency sqlite3 library
+find_library(FOUND_SQLITE3 sqlite4)
 
-  message(CHECK_FAIL "  Sqlite3 not found")
-  file(DOWNLOAD "https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz" "./sqlite3_install"
-       TIMEOUT 60
-       TLS_VERIFY ON
-       #TODO: CHECKSUM does not match, check will algo it uses
-     EXPECTED_HASH SHA3_512=7ebb78ae95450b7466f570c3339103ac6ca9690efc991248652339b3ef5460be)
+IF(NOT FOUND_SQLITE3)
+  message(CHECK_FAIL " sqlite3 NOT FOUND")
 
-else()
-  message(CHECK_PASS "  Sqlite3 found")
-endif(NOT FOUND_SQLITE3)
+  # Ask if the user wants the Installation to be done for sqlite3
+  IF(INSTALL_DEPENDENCIES)
+    file(DOWNLOAD "https://www.sqlite.org/2020/${SQLITE3_INSTALL_FILE}" "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf"
+         TIMEOUT 60
+         TLS_VERIFY ON
+         EXPECTED_HASH SHA3_256=6e94e9453cedf8f2023e3923f856741d1e28a2271e9f93d24d95fa48870edaad
+         )
+    file(ARCHIVE_EXTRACT INPUT sqlite-autoconf)
 
-# Link sqlite3handler with it's libraries dependencies
+    execute_process(COMMAND echo "Installation starting...")
+
+    IF(UNIX)
+      execute_process(COMMAND echo ./configure
+                      WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
+      execute_process(COMMAND echo make WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
+
+    ELSEIF(WIN32)
+      execute_process(COMMAND echo nmake /f Makefile.msc
+                      WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
+
+    ENDIF()
+
+  ELSE()
+    # If installation is not selected, let the user know they can re-run the cmake
+    message(STATUS "If you would like to install sqlite3 automatically,\n please re-run cmake like the following->\n \"cmake -DINSTALL_DEPENDENCIES=ON ..\"")
+    # Exit the configuration witha an error
+    message(FATAL_ERROR "Sqlite3 is not installed. Configuration stopped")
+  ENDIF()
+
+
+  # Check if installation was done. If not, exit with error message
+  message(CHECK_START " VERIFYING INSTALLATION sqlite3 ->")
+
+  find_library(FOUND_SQLITE3 sqlite4 REQUIRED True)
+
+  IF(FOUND_SQLITE3)
+    message(CHECK_PASS "Sqlite3 installed succesfully")
+  ENDIF()
+
+ELSE()
+  message(CHECK_PASS "Sqlite3 FOUND")
+ENDIF(NOT FOUND_SQLITE3)
+
+# Link sqlite3handler with it's dependencies
 target_link_libraries(handler PRIVATE sqlite3)
 target_link_libraries(handler PRIVATE query)
 

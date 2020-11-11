@@ -1,6 +1,6 @@
 #include "../include/handler.hpp"
 #include "../include/query.hpp"
-#include "../DatabaseHandlerConfig.h"
+#include "../Sqlite3UtilsConfig.h"
 
 using namespace query;
 
