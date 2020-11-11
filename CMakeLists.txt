@@ -67,9 +67,10 @@ IF(NOT FOUND_SQLITE3)
 
   ELSE()
     # If installation is not selected, let the user know they can re-run the cmake
-    message(STATUS "If you would like to install sqlite3 automatically,\n please re-run cmake like the following->\n \"cmake -DINSTALL_DEPENDENCIES=ON ..\"")
-    # Exit the configuration witha an error
-    message(FATAL_ERROR "Sqlite3 is not installed. Configuration stopped")
+    message(NOTICE "\nRequired dependency sqlite3 missing.\n")
+    message(NOTICE "Please re-run this cmake like the following->\"cmake -DINSTALL_DEPENDENCIES=ON ..\", or install it manually\n")
+    # Exit the configuration with an error
+    message(FATAL_ERROR "Sqlite3 is not installed. Configuration stopped.")
   ENDIF()
 
 
