@@ -1,5 +1,4 @@
 #include "../include/handler.hpp"
-#include "../include/query.hpp"
 
 using handler::Sqlite3Db;
 
@@ -431,6 +430,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		}
 }
 
+/******************************selectRecordsStruct*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param select_options){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
@@ -526,6 +526,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 		}
 }
 
+/******************************updateHandler*********************************/
 bool handler::Sqlite3Db::updateHandler(){
 
 		std::vector<std::string> tables_names, fields;
@@ -536,7 +537,7 @@ bool handler::Sqlite3Db::updateHandler(){
 		                                 "WHERE type='table' " \
 		                                 "ORDER BY name;";
 		 */
-		std::string exec_string = query::cmd::select + "name" + \
+		std::string exec_string = query::cmd::select + "name" +\
 		                          query::cl::from + "sqlite_master" + \
 		                          query::cl::where + query::cl::type("table") + \
 		                          query::cl::order_by + "name" + query::end_query;

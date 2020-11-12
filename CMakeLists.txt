@@ -15,22 +15,17 @@ set(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(main_lib_dest "lib/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
 set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(include_dest "tests")
 set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
 set(SQLITE3_INSTALL_DIRNAME "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf-3330000")
+# set(GTEST_ROOT "/usr/src/googletest/googletest/include" CACHE PATH "/usr/src/googletest")
 
 # Define some options for processing
 
 option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration" OFF)
-option(BUILD_TESTS "Build the tests program" OFF)
+option(BUILD_TESTS "Build the google test framework program" OFF)
 option(BUILD_EXAMPLES "Build the example programs" OFF)
 option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
-
-
-# Add subdirectories
-# add_subdirectory(examples)
-# add_subdirectory(tests)
-add_subdirectory(src)
-add_subdirectory(include)
 
 # Configure a header file for version number
 configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
@@ -38,7 +33,7 @@ configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
 message(CHECK_START " FINDING --> sqlite3")
 
 # Check for dependency sqlite3 library
-find_library(FOUND_SQLITE3 sqlite4)
+find_library(FOUND_SQLITE3 sqlite3)
 
 IF(NOT FOUND_SQLITE3)
   message(CHECK_FAIL " sqlite3 NOT FOUND")
@@ -77,7 +72,7 @@ IF(NOT FOUND_SQLITE3)
   # Check if installation was done. If not, exit with error message
   message(CHECK_START " VERIFYING INSTALLATION sqlite3 ->")
 
-  find_library(FOUND_SQLITE3 sqlite4 REQUIRED True)
+  find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
 
   IF(FOUND_SQLITE3)
     message(CHECK_PASS "Sqlite3 installed succesfully")
@@ -87,9 +82,18 @@ ELSE()
   message(CHECK_PASS "Sqlite3 FOUND")
 ENDIF(NOT FOUND_SQLITE3)
 
+# Add subdirectories four source and include files
+add_subdirectory(src)
+add_subdirectory(include)
+
 # Link sqlite3handler with it's dependencies
 target_link_libraries(handler PRIVATE sqlite3)
 target_link_libraries(handler PRIVATE query)
+
+# If selected, add the subdirectories for examples, docs or tests
+add_subdirectory(tests)
+# add_subdirectory(examples)
+# add_subdirectory(docs)
 
 # Add the executable
 add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")

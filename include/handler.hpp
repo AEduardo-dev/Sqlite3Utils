@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <vector>
 #include <map>
+#include "query.hpp"
 
 
 /*! \brief namespace containing the Sqlite3Db class

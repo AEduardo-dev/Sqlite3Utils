@@ -8,8 +8,8 @@ int main(int argc, char const *argv[]) {
 
 		if (argc < 2) {
 				// report version
-				std::cout << argv[0] << " Version " << DatabaseHandler_VERSION_MAJOR << "."
-				          << DatabaseHandler_VERSION_MINOR << std::endl;
+				std::cout << argv[0] << " Version " << Sqlite3Utils_VERSION_MAJOR << "."
+				          << Sqlite3Utils_VERSION_MINOR << std::endl;
 				std::cout << "Usage: " << argv[0] << " <database_name || database_path> " << std::endl;
 				return 1;
 		}

@@ -1,12 +1,11 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <sqlite3.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string>
 #include <fstream>
-#include "../../source/include/sqlite3handler.hpp"
-#include "../../source/include/sqlite3query.hpp"
+#include "../include/handler.hpp"
+#include "../include/query.hpp"
 
 /*!
  * \brief Checks if the file given exists in the directory
@@ -544,6 +543,24 @@ TEST(SqliteSelectRecords, SelectSpecificLimit){
 		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
 		ASSERT_FALSE(data.empty());
 		ASSERT_EQ(data, data_to_get);
+}
+
+/* Select all records from table grouping and ordering using having and showing only 1 result */
+TEST(SqliteSelectRecords, SelectSpecificNegativeLimit){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = -1;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
+		ASSERT_TRUE(data.empty());
+		ASSERT_EQ(data, handler::empty_vec);
 }
 
 /* Select all records from table grouping and ordering using having and limiting to one with offset to show from second */
