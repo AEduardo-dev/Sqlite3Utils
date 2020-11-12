@@ -337,7 +337,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
                                                             std::vector<std::string> group_by, \
                                                             std::string having_cond, \
                                                             std::vector<std::string> order_by, \
-                                                            std::string order_type, int limit, \
+                                                            std::string order_type,\
+																														int limit, \
                                                             int offset){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
@@ -415,8 +416,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 		              ((!group_by.empty()) ? query::cl::group_by + group_list : "")+ \
 		              ((having_cond != "") ? query::cl::having + having_cond : "")+ \
 		              ((!order_by.empty()) ? query::cl::order_by + order_list + order_type : "")+ \
-		              ((limit != 0) ? query::cl::limit(limit) : "") + \
-		              ((offset != 0) ? query::cl::offset(offset) : "") + \
+		              ((limit > 0) ? query::cl::limit(limit) : "") + \
+		              ((offset > 0) ? query::cl::offset(offset) : "") + \
 		              query::end_query;
 
 		_sql = exec_string.c_str();
@@ -511,8 +512,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 		              ((!select_options.group_by.empty()) ? query::cl::group_by + group_list : "")+ \
 		              ((select_options.having_cond != "") ? query::cl::having + select_options.having_cond : "")+ \
 		              ((!select_options.order_by.empty()) ? query::cl::order_by + order_list + select_options.order_type : "")+ \
-		              ((select_options.limit != 0) ? query::cl::limit(select_options.limit) : "") + \
-		              ((select_options.offset != 0) ? query::cl::offset(select_options.offset) : "") + \
+		              ((select_options.limit > 0) ? query::cl::limit(select_options.limit) : "") + \
+		              ((select_options.offset > 0) ? query::cl::offset(select_options.offset) : "") + \
 		              query::end_query;
 
 		_sql = exec_string.c_str();
