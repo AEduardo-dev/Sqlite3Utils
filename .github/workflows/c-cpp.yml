@@ -35,7 +35,15 @@ jobs:
       - name: Installing handler
         run: |
           git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
-          cd  ${{ github.workspace }}/
+          
+      - name: Current Dir
+        run: pwd
+        
+      - name: Enter Repo
+        run: cd  ${{ github.workspace }}/
+        
+      - name: Current Dir
+        run: pwd
           
       - name: Checkout
         run: git checkout cmake_installer
