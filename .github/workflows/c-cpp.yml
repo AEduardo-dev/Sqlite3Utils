@@ -34,22 +34,8 @@ jobs:
     steps:        
       - name: Installing handler
         run: |
-          git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
-          
-      - name: Current Dir
-        run: pwd
-        
-      - name: Enter Repo
-        run: cd  ${{ github.workspace }}/
-        
-      - name: Current Dir
-        run: pwd
-        
-      - name: List Files
-        run: ls -ltr
-          
-      - name: Checkout
-        run: git checkout cmake_installer
+          git clone -b cmake_installer https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
+          cd dbHandler-sqlite3/
         
       - name: run-cmake
         # You may pin to the exact commit or the version.
