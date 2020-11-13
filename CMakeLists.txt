@@ -15,7 +15,7 @@ set(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(main_lib_dest "lib/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
 set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
-set(include_dest "tests")
+set(tests_dest "tests")
 set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
 set(SQLITE3_INSTALL_DIRNAME "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf-3330000")
 # set(GTEST_ROOT "/usr/src/googletest/googletest/include" CACHE PATH "/usr/src/googletest")
@@ -90,11 +90,6 @@ add_subdirectory(include)
 target_link_libraries(handler PRIVATE sqlite3)
 target_link_libraries(handler PRIVATE query)
 
-# If selected, add the subdirectories for examples, docs or tests
-add_subdirectory(tests)
-# add_subdirectory(examples)
-# add_subdirectory(docs)
-
 # Add the executable
 add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")
 
@@ -116,6 +111,11 @@ install(TARGETS DatabaseHandler DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/DatabaseHandlerConfig.h"
         DESTINATION ${include_dest}
         )
+
+# If selected, add the subdirectories for tests
+IF(BUILD_TESTS)
+  add_subdirectory(tests)
+ENDIF()
 
 # Installation rules
 # Libraries
@@ -149,6 +149,8 @@ set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )
 
+add_test(NAME unit_testing COMMAND unit_tests)
+
 # Define a function to simplify adding tests in the future
 function(do_test target arg result)
   add_test(NAME Comp${arg} COMMAND ${target} ${arg})
@@ -157,8 +159,9 @@ function(do_test target arg result)
     )
 endfunction(do_test)
 
+
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
-set(CPACK_PACKAGE_VERSION_MAJOR "${DatabaseHandler_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${DatabaseHandler_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${Sqlite3Utils_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${Sqlite3Utils_VERSION_MINOR}")
 include(CPack)
