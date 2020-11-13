@@ -2,10 +2,10 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ cmake_installer ]
     
   pull_request:
-    branches: [ main ]
+    branches: [ cmake_installer ]
     
   schedule:
     - cron: "0 2 * * 1-5"
@@ -31,23 +31,38 @@ jobs:
     needs: [set_environment]
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        
+    steps:        
       - name: Installing handler
         run: |
           git clone https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
           cd dbHandler-sqlite3
-            
-      - name: Install Dependencies
-        run: |
-          sudo apt-get install sqlite3
           
-      - name: Build Solution
-        run: |
-          cd source
-          make      
+      - name: Checkout
+        run: git checkout cmake_installer
+        
+      - name: run-cmake
+        # You may pin to the exact commit or the version.
+        # uses: lukka/run-cmake@47a0d061008e6df0acac012dcf4e36dbc11dd763
+        uses: lukka/run-cmake@v3.1
+        with:
+          # Select the mode of the action. There are three different modes: CMakeListsTxtBasic: Run CMake using a CMakeLists.txt - Basic configuration, CMakeListsTxtAdvanced: Run CMake using a CMakeLists.txt - Advanced configuration, CMakeSettingsJson: Run CMake using a CMakeSettings.json of Visual Studio.
+          cmakeListsOrSettingsJson: CMakeListsTxtBasic
+          # Path to CMakeLists.txt. Used for both CMakeListsTxtBasic and CMakeListsTxtAdvanced modes.
+          cmakeListsTxtPath: ${{ github.workspace }}/CMakeLists.txt
+          # Select the build configuration, typically Debug or Release. Used by CMakeListsTxtBasic mode.
+          cmakeBuildType: Debug
+          # Specify the CMake generator to use. Possible values: Ninja: Ninja, NinjaMulti: Ninja Multi-Config UnixMakefiles: Unix Makefiles, VS16Win64: Visual Studio 2019 x64, VS16Arm64: Visual Studio 2019 ARM64, VS16Arm: Visual Studio 2019 ARM, VS16Win32: Visual Studio 2019 Win32, VS15Win64: Visual Studio 2017 x64, VS15Arm64: Visual Studio 2017 ARM64, VS15Arm: Visual Studio 2017 ARM, VS15Win32: Visual Studio 2017 Win32. Used by CMakeListsTxtBasic mode.
+          cmakeGenerator: UnixMakefiles
+          # Set the build directory, i.e. where CMake generates the build system files. Defaults to `$(Build.ArtifactStagingDirectory)` for CMakeLists.txt, and to `$(Build.ArtifactStagingDirectory)/<configuration-name>` for CMakeSettings.json. Used by any mode.
+          buildDirectory: ${{ github.workspace }}/../../_temp
+          # Provides a mean to provide all the CMake arguments. This is required when using CMakeLists.txt in Advanced mode. For CMakeSettings.json, the arguments are already inferred, but you can append your arguments providing them here.  Used by CMakeListsTxtAdvanced and CMakeSettingsJson modes.
+          cmakeAppendedArgs: -DINSTALL_DEPENDENCIES=ON
+          # Indicates whether to run 'cmake --build' after CMake project files have been generated successfully. Used by any mode.
+          buildWithCMake: true
+          # Specify which shell to be used when launching commands. 'true' means the default shell is used. 'false' means no shell is used. It also can be an absolute with arguments of the shell to spawn commands with.
+          useShell: true
+
+     
       
   cppcheck:
     needs: [set_environment, build_ubuntu]
