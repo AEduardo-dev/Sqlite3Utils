@@ -44,6 +44,9 @@ jobs:
         
       - name: Current Dir
         run: pwd
+        
+      - name: List Files
+        run: ls -ltr
           
       - name: Checkout
         run: git checkout cmake_installer
