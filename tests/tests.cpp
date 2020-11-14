@@ -66,6 +66,12 @@ TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
 		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
+/* Contructor wrong db name */
+TEST(SqliteHandlerConstructor, DatabaseNoFileExtension){
+		ASSERT_NO_THROW(handler::Sqlite3Db UserHandler("BadDB"));
+		ASSERT_EQ(UserHandler.getNumTables(), 0);
+}
+
 /*******************CREATE TABLE FUNCTION*********************************/
 /* Create a table normally */
 TEST(SqliteCreateTable, CreateTable){
@@ -87,7 +93,7 @@ TEST(SqliteAffinity, CheckIntAffinityLower){
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
 
-/* Get the affinity of an integer number datatype and check a correct value against it */TEST(SqliteAffinity, CheckIntAffinityUpper){
+/* Get the affinity of an integer number datatype and check a correct value against it */ TEST(SqliteAffinity, CheckIntAffinityUpper){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
@@ -256,17 +262,42 @@ TEST(SqliteInsertion, InsertIncorrectType){
 /*******************DISCONNECTION AND CONNECTIONS**************************/
 /* Disconnecting from the db causes no exceptions or errors */
 TEST(SqliteConnection, DisconnectDB){
-		handler::Sqlite3Db MyHandler("MyDB.db");
-		ASSERT_NO_THROW(MyHandler.closeConnection());
+		ASSERT_NO_THROW(UserHandler.closeConnection());
+}
+
+/* Disconnecting from the db while already disconnected causes no exceptions or errors */
+TEST(SqliteConnection, DisconnectionAlreadyDisconnected){
+		ASSERT_NO_THROW(UserHandler.closeConnection());
+}
+
+/* Trying to create a table while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedCreateTable){
+		ASSERT_EQ(UserHandler.createTable("DISCONNECT", table_definition), EXIT_FAILURE);
+}
+
+/* Insertion of elements while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedInsert){
+		std::vector<std::string> values_to_insert = {"10", "86", "5654668", "Robert"};
+		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
+}
+
+/* Selection of elements while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedSelect){
+		handler::select_query_param select_options;
+		select_options.table_name = table_name;
+		ASSERT_EQ(UserHandler.selectRecords(select_options), handler::empty_vec);
 }
 
 /* Reconnecting to the db is possible and loads info */
 TEST(SqliteConnection, ReconnectDB){
-		handler::Sqlite3Db MyHandler("MyDB.db");
-		ASSERT_NO_THROW(MyHandler.closeConnection());
-		ASSERT_EQ(MyHandler.connectDb(), EXIT_SUCCESS);
-		ASSERT_GT(MyHandler.getNumTables(), 0);
-		ASSERT_EQ(MyHandler.getTablesNames()[0], table_name);
+		ASSERT_EQ(UserHandler.connectDb(), EXIT_SUCCESS);
+		ASSERT_GT(UserHandler.getNumTables(), 0);
+		ASSERT_EQ(UserHandler.getTablesNames()[0], table_name);
+}
+
+/* Reconnecting to the db is possible when already connected and throws no error */
+TEST(SqliteConnection, ReconnectAlreadyConnectedDB){
+		ASSERT_EQ(UserHandler.connectDb(), EXIT_FAILURE);
 }
 
 /*********************OPERATIONS ON LOADED DB***************************/

@@ -54,7 +54,12 @@ handler::Sqlite3Db::~Sqlite3Db() {
 
 /******************************closeConnection*******************************/
 void handler::Sqlite3Db::closeConnection(){
-		sqlite3_close(_db);
+		if(this->_db != NULL) {
+				sqlite3_close(_db);
+				//Reinitialize the pointer to null value
+				this->_db = NULL;
+		}
+
 }
 
 /*********************************createTable**********************************/
@@ -316,16 +321,24 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 
 /******************************reconnectDb***********************************/
 bool handler::Sqlite3Db::connectDb(){
+		if(this->_db == NULL) {
+				sqlite3_close(_db);
+				//Reinitialize the pointer to null value
+				this->_db = NULL;
 
-		_rc = sqlite3_open(this->_db_path, &this->_db);
+				_rc = sqlite3_open(this->_db_path, &this->_db);
 
-		if (_rc) {
-				fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
-				/* If the _db cannot be opened -> delete the object */
+				if (_rc) {
+						fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+						/* If the _db cannot be opened -> delete the object */
+						return EXIT_FAILURE;
+				} else {
+						fprintf(stderr, "Opened %s database successfully\n", this->_db_path);
+						return (updateHandler());
+				}
+		}
+		else{
 				return EXIT_FAILURE;
-		} else {
-				fprintf(stderr, "Opened %s database successfully\n", this->_db_path);
-				return (updateHandler());
 		}
 }
 
@@ -337,8 +350,8 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
                                                             std::vector<std::string> group_by, \
                                                             std::string having_cond, \
                                                             std::vector<std::string> order_by, \
-                                                            std::string order_type,\
-																														int limit, \
+                                                            std::string order_type, \
+                                                            int limit, \
                                                             int offset){
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
@@ -538,7 +551,7 @@ bool handler::Sqlite3Db::updateHandler(){
 		                                 "WHERE type='table' " \
 		                                 "ORDER BY name;";
 		 */
-		std::string exec_string = query::cmd::select + "name" +\
+		std::string exec_string = query::cmd::select + "name" + \
 		                          query::cl::from + "sqlite_master" + \
 		                          query::cl::where + query::cl::type("table") + \
 		                          query::cl::order_by + "name" + query::end_query;

@@ -87,8 +87,8 @@ public:
 		/*!
 		 * \brief Close connection to the current database
 		 *
-		 * The closing of the connection is not recommended, since the main purpose of the Handler
-		 *  is to manage an open database while connected to it.
+		 * The closing of the connection is not recommended, since the main purpose of the
+		 * Handler is to manage an open database while connected to it.
 		 *
 		 * \include closeConnection.cpp
 		 */

@@ -139,7 +139,7 @@ set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )
 
-# Run the unit tests
+# Run the unit tests deleting the databases that may have been created on previous iterations
 add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
 
 # Define a function to simplify adding tests in the future
@@ -149,7 +149,6 @@ function(do_test target arg result)
     PROPERTIES PASS_REGULAR_EXPRESSION ${result}
     )
 endfunction(do_test)
-
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
