@@ -139,6 +139,9 @@ set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )
 
+# Run the unit tests
+add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
+
 # Define a function to simplify adding tests in the future
 function(do_test target arg result)
   add_test(NAME Comp${arg} COMMAND ${target} ${arg})

@@ -544,7 +544,7 @@ TEST(SqliteSelectRecords, SelectSpecificLimit){
 		ASSERT_EQ(data, data_to_get);
 }
 
-/* Select all records from table grouping and ordering using having and showing only 1 result */
+/* Select all records from table grouping and ordering using having and showing all results as any numbre <= 0 is considered as no limit stablished */
 TEST(SqliteSelectRecords, SelectSpecificNegativeLimit){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
@@ -558,8 +558,25 @@ TEST(SqliteSelectRecords, SelectSpecificNegativeLimit){
 		                                                          order_by, order_type, limit);
 
 		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
-		ASSERT_TRUE(data.empty());
-		ASSERT_EQ(data, handler::empty_vec);
+		ASSERT_FALSE(data.empty());
+}
+
+/* Select all records from table grouping and ordering using having and showing only 1 result */
+TEST(SqliteSelectRecords, SelectSpecificNegativeOffset){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = -1;
+		int offset = -1;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit, offset);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
+		ASSERT_FALSE(data.empty());
 }
 
 /* Select all records from table grouping and ordering using having and limiting to one with offset to show from second */
