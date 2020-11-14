@@ -82,40 +82,30 @@ ELSE()
   message(CHECK_PASS "Sqlite3 FOUND")
 ENDIF(NOT FOUND_SQLITE3)
 
-# Add subdirectories four source and include files
+# Add subdirectories for source and include files
 add_subdirectory(src)
 add_subdirectory(include)
-
-# Link sqlite3handler with it's dependencies
-target_link_libraries(handler PRIVATE sqlite3)
-target_link_libraries(handler PRIVATE query)
-
-# Add the executable
-add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")
-
-# Link libraries
-target_link_libraries(DatabaseHandler
-                      PUBLIC handler
-                      PUBLIC query
-                      )
-
-# add the binary tree to the search path for include files
-# so that we will find TutorialConfig.h
-target_include_directories(DatabaseHandler PUBLIC
-                          "${PROJECT_BINARY_DIR}"
-                          )
-
-# Installation rules
-# Executable
-install(TARGETS DatabaseHandler DESTINATION bin)
-install(FILES "${PROJECT_BINARY_DIR}/DatabaseHandlerConfig.h"
-        DESTINATION ${include_dest}
-        )
 
 # If selected, add the subdirectories for tests
 IF(BUILD_TESTS)
   add_subdirectory(tests)
 ENDIF()
+
+
+# Add the executable
+add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")
+
+# Link libraries
+target_link_libraries(DatabaseHandler PUBLIC handler query)
+
+# add the binary tree to the search path for include files
+# so that we will find TutorialConfig.h
+target_include_directories(DatabaseHandler PUBLIC "${PROJECT_BINARY_DIR}")
+
+# Installation rules
+# Executable
+install(TARGETS DatabaseHandler DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/Sqlite3UtilsConfig.h" DESTINATION ${include_dest})
 
 # Installation rules
 # Libraries
@@ -148,8 +138,6 @@ add_test(NAME Usage COMMAND DatabaseHandler)
 set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )
-
-add_test(NAME unit_testing COMMAND unit_tests)
 
 # Define a function to simplify adding tests in the future
 function(do_test target arg result)

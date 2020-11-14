@@ -1,5 +1,6 @@
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
+
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
   RESULT_VARIABLE result
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
@@ -30,4 +31,10 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 add_executable(unit_tests "${TESTS_DIR}/tests.cpp")
 
 # Link libraries
-target_link_libraries(unit_tests gtest_main handler query)
+target_link_libraries(unit_tests PUBLIC handler query)
+target_link_libraries(unit_tests PRIVATE gtest_main)
+
+# Installation rules
+# Executable tests
+install(TARGETS unit_tests DESTINATION ${tests_dest})
+install(FILES "${TESTS_DIR}/tests.cpp" DESTINATION ${tests_dest})

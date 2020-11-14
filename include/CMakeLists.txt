@@ -19,3 +19,7 @@ target_include_directories(query INTERFACE
                       $<INSTALL_INTERFACE:${include_dest}> # for client in install mode
                       $<INSTALL_INTERFACE:${lib_dest}> # for config_impl.hpp in install mode
                       )
+
+# Link sqlite3handler with it's dependencies
+target_link_libraries(handler PUBLIC sqlite3)
+target_link_libraries(handler PUBLIC query)
