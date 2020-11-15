@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.11)
 
 # Set the project name
 project(Sqlite3Utils VERSION 1.0.0)
@@ -30,10 +30,10 @@ option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation
 # Check if the version is good for dependencies installation
 IF(CMAKE_VERSION < 3.18)
   IF(INSTALL_DEPENDENCIES)
-      MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation")
+      MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation (available in cmake 3.18)")
   ENDIF()
 
-  MESSAGE(WARNING "Please consider updating your cmake version. Otherwise avoid using\n   \"-DINSTALL_DEPENDENCIES=ON\" option since it will not work on your system")
+  MESSAGE(WARNING "Please consider updating your cmake version to 3.18. Otherwise avoid using\n   \"-DINSTALL_DEPENDENCIES=ON\" option since it will not work on your system")
 ENDIF()
 
 # Configure a header file for version number

@@ -1,5 +1,5 @@
 dist: xenial
-sudo: required
+os: linux
 language:
   - cpp
 compiler:
@@ -23,10 +23,6 @@ script:
   # Check versions of gcc, g++ and cmake
   - gcc -v && g++ -v && cmake --version
   # Run your build commands next
-  # Clone the repository information
-  - git clone -b cmake_installer https://${{ secrets.GIT_TOKEN }}:x-oauth-basic@github.com/AEduardo-png/dbHandler-sqlite3.git
-  # Enter the repo
-  - cd dbHandler-sqlite3/
   # Create dir for build files
   - mkdir build && cd build/
   # Run cmake default way
