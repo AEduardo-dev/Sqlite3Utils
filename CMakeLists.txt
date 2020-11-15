@@ -33,7 +33,7 @@ IF(${CMAKE_VERSION} VERSION_LESS "3.18")
       MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation (available in cmake 3.18)")
   ENDIF()
 
-  MESSAGE(WARNING "Please consider updating your cmake version to 3.18. Otherwise avoid using\n   \"-DINSTALL_DEPENDENCIES=ON\" option since it will not work on your system")
+  MESSAGE(WARNING "Please consider updating your cmake version to 3.18. Otherwise avoid using\n  \"-DINSTALL_DEPENDENCIES=ON\" \n option since it will not work on your system")
 ENDIF()
 
 # Configure a header file for version number
@@ -84,16 +84,20 @@ IF(NOT FOUND_SQLITE3)
   find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
 
   IF(FOUND_SQLITE3)
-    message(CHECK_PASS "Sqlite3 installed succesfully")
+    message(CHECK_PASS " Sqlite3 installed succesfully")
   ENDIF()
 
 ELSE()
-  message(CHECK_PASS "Sqlite3 FOUND")
+  message(CHECK_PASS " Sqlite3 FOUND")
 ENDIF(NOT FOUND_SQLITE3)
 
 # Add subdirectories for source and include files
 add_subdirectory(src)
 add_subdirectory(include)
+
+# Link sqlite3handler with it's dependencies
+target_link_libraries(handler PUBLIC sqlite3)
+target_link_libraries(handler PUBLIC query)
 
 # If selected, add the subdirectories for tests
 IF(UNIT_TESTS)
