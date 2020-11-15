@@ -45,10 +45,10 @@ std::vector<std::string> data_to_check = {"1", "32", "665", "ANTHON33", \
 /********************CONSTRUCTOR AND DESTRUCTOR TESTS************************/
 /* Check if db is created if it does not exist */
 TEST(SqliteHandlerConstructor, CreateDatabase){
-		EXPECT_FALSE(exists("MyDB.db"));
-		handler::Sqlite3Db testHandler("MyDB.db");
+		EXPECT_FALSE(exists("CreatedDB.db"));
+		handler::Sqlite3Db testHandler("CreatedDB.db");
 
-		ASSERT_TRUE(exists("MyDB.db"));
+		ASSERT_TRUE(exists("CreatedDB.db"));
 }
 
 /* Check if multiple handlers can be connected to the same db */
@@ -692,6 +692,45 @@ TEST(SqliteUpdateHandler, UpdateHandler){
 
 		ASSERT_EQ(NewHandler.updateHandler(), EXIT_SUCCESS);
 		ASSERT_EQ(NewHandler.getTables(), UserHandler.getTables());
+}
+
+/*****************************EXECUTE QUERY********************************/
+/* Custom query wanting no output */
+TEST(SqliteExecuteCustomQuery, CustomQueryCorrectNoOutput){
+		std::string query = query::cmd::select + "*" + query::cl::from + table_name;
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str()), EXIT_SUCCESS);
+}
+
+/* Custom query extracting output */
+TEST(SqliteExecuteCustomQuery, CustomQueryCorrectOutput){
+		std::string query = query::cmd::select + "*" + query::cl::from + table_name;
+		std::vector<std::string> data_vec;
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_SUCCESS);
+		ASSERT_FALSE(data_vec.empty());
+}
+
+/* Custom query with wrong query definition and no output expected */
+TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectNoOutput){
+		std::string query = query::cmd::select + query::cl::from + table_name;
+		std::vector<std::string> data_vec;
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str()), EXIT_FAILURE);
+		ASSERT_TRUE(data_vec.empty());
+}
+
+/* Custom query extracting output */
+TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectOutput){
+		std::string query = query::cmd::select + query::cl::from + table_name;
+		std::vector<std::string> data_vec;
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_FAILURE);
+		ASSERT_TRUE(data_vec.empty());
+}
+
+/*Try to extract data with custom query selecting an index where no data is stored */
+TEST(SqliteExecuteCustomQuery, CustomQueryNonExistentIndex){
+		std::string query = query::cmd::select + query::cl::from + table_name;
+		std::vector<std::string> data_vec;
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {5}), EXIT_FAILURE);
+		ASSERT_TRUE(data_vec.empty());
 }
 
 /*******************DISCONNECTION AND CONNECTION**************************/

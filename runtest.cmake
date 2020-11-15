@@ -5,6 +5,7 @@ execute_process(COMMAND ./unit_tests
 )
 
 file(REMOVE ${CMAKE_BINARY_DIR}/tests/MyDB.db)
+file(REMOVE ${CMAKE_BINARY_DIR}/tests/CreatedDB.db)
 file(REMOVE ${CMAKE_BINARY_DIR}/tests/NoExtensionDB)
 
 if(status)

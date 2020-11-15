@@ -23,9 +23,18 @@ set(SQLITE3_INSTALL_DIRNAME "${CMAKE_BINARY_DIR}/sqlite-autoconf-3330000")
 # Define some options for processing
 
 option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration" OFF)
-option(BUILD_TESTS "Build the google test framework program" OFF)
+option(UNIT_TESTS "Build the google test framework program" OFF)
 option(BUILD_EXAMPLES "Build the example programs" OFF)
 option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
+
+# Check if the version is good for dependencies installation
+IF(CMAKE_VERSION < 3.18)
+  IF(INSTALL_DEPENDENCIES)
+      MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation")
+  ENDIF()
+
+  MESSAGE(WARNING "Please consider updating your cmake version. Otherwise avoid using\n   \"-DINSTALL_DEPENDENCIES=ON\" option since it will not work on your system")
+ENDIF()
 
 # Configure a header file for version number
 configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
@@ -87,7 +96,7 @@ add_subdirectory(src)
 add_subdirectory(include)
 
 # If selected, add the subdirectories for tests
-IF(BUILD_TESTS)
+IF(UNIT_TESTS)
   add_subdirectory(tests)
 ENDIF()
 
@@ -128,7 +137,7 @@ install(FILES "${INCLUDES_DIR}/handler.hpp"
               DESTINATION ${include_dest}
               )
 
-enable_testing()
+include(CTest)
 
 
 
