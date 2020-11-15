@@ -28,7 +28,7 @@ option(BUILD_EXAMPLES "Build the example programs" OFF)
 option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
 
 # Check if the version is good for dependencies installation
-IF(CMAKE_VERSION < 3.18)
+IF(${CMAKE_VERSION} VERSION_LESS "3.18")
   IF(INSTALL_DEPENDENCIES)
       MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation (available in cmake 3.18)")
   ENDIF()
