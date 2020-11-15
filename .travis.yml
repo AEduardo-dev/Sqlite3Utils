@@ -10,13 +10,49 @@ compiler:
 
 addons:
   apt:
-    # sources:
-    #   - ubuntu-toolchain-r-test
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - gcc-9
       - g++-9
       - cmake
       - sqlite3
+
+# Matrix for macOS systems
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install gcc5 && CC=gcc-5 && CXX=g++-5"
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install gcc6 && CC=gcc-6 && CXX=g++-6"
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install gcc && CC=gcc-8 && CXX=g++-8"
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install gcc && CC=gcc-9 && CXX=g++-9"
+
+before_install:
+    - eval "${MATRIX_EVAL}"
+
 
 script:
   # Export CC and CXX to tell cmake which compiler to use
