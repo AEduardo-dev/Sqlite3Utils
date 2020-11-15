@@ -146,10 +146,13 @@ set_tests_properties(Usage
   )
 
 # Run the unit tests deleting the databases that may have been created on previous iterations
-add_test(NAME unit_testing
-  COMMAND ${CMAKE_COMMAND}
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/runtest.cmake
-)
+IF(UNIT_TESTS)
+    add_test(NAME unit_testing
+      COMMAND ${CMAKE_COMMAND}
+        -P ${CMAKE_CURRENT_SOURCE_DIR}/runtest.cmake
+    )
+ENDIF()
+
 
 # add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
 

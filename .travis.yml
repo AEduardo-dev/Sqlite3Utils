@@ -1,6 +1,6 @@
+os: linux
 dist: xenial
-language:
-  - cpp
+language: cpp
 compiler:
   - gcc
 addons:
@@ -26,6 +26,6 @@ script:
   # Then build the project
   - cmake --build .
   # Run the tests
-  - ctest
+  - ctest --progress --verbose
   # Then install the project
   - cmake --install .
