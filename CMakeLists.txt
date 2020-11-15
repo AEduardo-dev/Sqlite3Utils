@@ -116,11 +116,6 @@ target_include_directories(DatabaseHandler PUBLIC "${PROJECT_BINARY_DIR}")
 install(TARGETS DatabaseHandler DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/Sqlite3UtilsConfig.h" DESTINATION ${include_dest})
 
-# Installation rules
-# Libraries
-install(TARGETS handler EXPORT handler DESTINATION ${lib_dest})
-install(TARGETS query EXPORT query DESTINATION ${lib_dest})
-
 # Version Control
 configure_file(sqlite3_utils-config-version.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/sqlite3_utils-config-version.cmake @ONLY)
 
