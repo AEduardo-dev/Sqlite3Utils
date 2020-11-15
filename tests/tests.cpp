@@ -45,30 +45,30 @@ std::vector<std::string> data_to_check = {"1", "32", "665", "ANTHON33", \
 /********************CONSTRUCTOR AND DESTRUCTOR TESTS************************/
 /* Check if db is created if it does not exist */
 TEST(SqliteHandlerConstructor, CreateDatabase){
-		EXPECT_FALSE(exists("test.db"));
-		handler::Sqlite3Db testHandler;
+		EXPECT_FALSE(exists("MyDB.db"));
+		handler::Sqlite3Db testHandler("MyDB.db");
 
-		ASSERT_TRUE(exists("test.db"));
+		ASSERT_TRUE(exists("MyDB.db"));
 }
 
 /* Check if multiple handlers can be connected to the same db */
 TEST(SqliteHandlerConstructor, MultiConnectDB){
-		EXPECT_TRUE(exists("test.db"));
-		handler::Sqlite3Db firstConnection;
-		handler::Sqlite3Db secondConnection;
+		EXPECT_TRUE(exists("MyDB.db"));
+		handler::Sqlite3Db firstConnection("MyDB.db");
+		handler::Sqlite3Db secondConnection("MyDB.db");
 
-		ASSERT_NO_FATAL_FAILURE(handler::Sqlite3Db thirdConnection);
+		ASSERT_NO_FATAL_FAILURE(handler::Sqlite3Db thirdConnection("MyDB.db"));
 }
 
 /* If no tables exist the database should be loaded but no table will be in the handler */
 TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
-		ASSERT_NO_THROW(handler::Sqlite3Db UserHandler("MyDB.db"));
+		ASSERT_NO_THROW(handler::Sqlite3Db MyHandler("MyDB.db"));
 		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
 /* Contructor wrong db name */
 TEST(SqliteHandlerConstructor, DatabaseNoFileExtension){
-		ASSERT_NO_THROW(handler::Sqlite3Db UserHandler("BadDB"));
+		ASSERT_NO_THROW(handler::Sqlite3Db MyHandler("NoExtensionDB"));
 		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
@@ -258,48 +258,6 @@ TEST(SqliteInsertion, InsertIncorrectType){
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
-
-/*******************DISCONNECTION AND CONNECTIONS**************************/
-/* Disconnecting from the db causes no exceptions or errors */
-TEST(SqliteConnection, DisconnectDB){
-		ASSERT_NO_THROW(UserHandler.closeConnection());
-}
-
-/* Disconnecting from the db while already disconnected causes no exceptions or errors */
-TEST(SqliteConnection, DisconnectionAlreadyDisconnected){
-		ASSERT_NO_THROW(UserHandler.closeConnection());
-}
-
-/* Trying to create a table while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedCreateTable){
-		ASSERT_EQ(UserHandler.createTable("DISCONNECT", table_definition), EXIT_FAILURE);
-}
-
-/* Insertion of elements while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedInsert){
-		std::vector<std::string> values_to_insert = {"10", "86", "5654668", "Robert"};
-		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
-}
-
-/* Selection of elements while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedSelect){
-		handler::select_query_param select_options;
-		select_options.table_name = table_name;
-		ASSERT_EQ(UserHandler.selectRecords(select_options), handler::empty_vec);
-}
-
-/* Reconnecting to the db is possible and loads info */
-TEST(SqliteConnection, ReconnectDB){
-		ASSERT_EQ(UserHandler.connectDb(), EXIT_SUCCESS);
-		ASSERT_GT(UserHandler.getNumTables(), 0);
-		ASSERT_EQ(UserHandler.getTablesNames()[0], table_name);
-}
-
-/* Reconnecting to the db is possible when already connected and throws no error */
-TEST(SqliteConnection, ReconnectAlreadyConnectedDB){
-		ASSERT_EQ(UserHandler.connectDb(), EXIT_FAILURE);
-}
-
 /*********************OPERATIONS ON LOADED DB***************************/
 /* Hanlder declarations loads all the information inside of the db (tables and field in the map) */
 TEST(SqliteLoadedDb, LoadDatabase){
@@ -736,6 +694,46 @@ TEST(SqliteUpdateHandler, UpdateHandler){
 		ASSERT_EQ(NewHandler.getTables(), UserHandler.getTables());
 }
 
+/*******************DISCONNECTION AND CONNECTION**************************/
+/* Disconnecting from the db causes no exceptions or errors */
+TEST(SqliteConnection, DisconnectDB){
+		ASSERT_NO_THROW(UserHandler.closeConnection());
+}
+
+/* Disconnecting from the db while already disconnected causes no exceptions or errors */
+TEST(SqliteConnection, DisconnectionAlreadyDisconnected){
+		ASSERT_NO_THROW(UserHandler.closeConnection());
+}
+
+/* Trying to create a table while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedCreateTable){
+		ASSERT_EQ(UserHandler.createTable("DISCONNECT", table_definition), EXIT_FAILURE);
+}
+
+/* Insertion of elements while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedInsert){
+		std::vector<std::string> values_to_insert = {"10", "86", "5654668", "Robert"};
+		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
+}
+
+/* Selection of elements while disconnected is not possible */
+TEST(SqliteConnection, DisconnectedSelect){
+		handler::select_query_param select_options;
+		select_options.table_name = table_name;
+		ASSERT_EQ(UserHandler.selectRecords(select_options), handler::empty_vec);
+}
+
+/* Reconnecting to the db is possible and loads info */
+TEST(SqliteConnection, ReconnectDB){
+		ASSERT_EQ(UserHandler.connectDb(), EXIT_SUCCESS);
+		ASSERT_GT(UserHandler.getNumTables(), 0);
+		ASSERT_EQ(UserHandler.getTablesNames()[0], table_name);
+}
+
+/* Reconnecting to the db is possible when already connected and throws no error */
+TEST(SqliteConnection, ReconnectAlreadyConnectedDB){
+		ASSERT_EQ(UserHandler.connectDb(), EXIT_FAILURE);
+}
 
 /**************************DELETE AND DROP OPERATIONS***********************/
 /* Delete specific records of a table using condition */
@@ -779,6 +777,7 @@ TEST(SqliteDropTable, DropTable){
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
 }
+
 
 
 int main(int argc, char *argv[]) {

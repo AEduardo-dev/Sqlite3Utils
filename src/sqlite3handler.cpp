@@ -5,8 +5,8 @@ using handler::Sqlite3Db;
 /******************************Constructor (test)***************************/
 
 handler::Sqlite3Db::Sqlite3Db() {
-		std::string _db_name = "test.db";
-		const char *name = _db_name.c_str();
+		std::string db_name = "test.db";
+		const char *name = db_name.c_str();
 		std::vector<std::string> tables_names, fields;
 
 		_rc = sqlite3_open(name, &_db);
@@ -17,7 +17,8 @@ handler::Sqlite3Db::Sqlite3Db() {
 				delete this;
 		} else {
 				fprintf(stderr, "Opened %s database successfully\n", name);
-				this->_db_path = name;
+				_db_name = db_name;
+				_db_path = _db_name.c_str();
 				if (updateHandler() == EXIT_FAILURE)
 						/* If the _db cannot be opened -> delete the object */
 						delete this;
@@ -25,9 +26,9 @@ handler::Sqlite3Db::Sqlite3Db() {
 }
 
 /******************************CONSTRUCTOR*********************************/
-handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
+handler::Sqlite3Db::Sqlite3Db(std::string db_path) {
 
-		const char *name = _db_path.c_str();
+		const char *name = db_path.c_str();
 		std::vector<std::string> tables_names, fields;
 
 		_rc = sqlite3_open(name, &_db);
@@ -38,7 +39,9 @@ handler::Sqlite3Db::Sqlite3Db(std::string _db_path) {
 				delete this;
 		} else {
 				fprintf(stderr, "Opened %s database successfully\n", name);
-				this->_db_path = name;
+				_db_name = db_path;
+				_db_path = _db_name.c_str();
+				std::cout << _db_path << '\n';
 				if (updateHandler() == EXIT_FAILURE)
 						/* If the _db cannot be opened -> delete the object */
 						delete this;
@@ -65,6 +68,12 @@ void handler::Sqlite3Db::closeConnection(){
 /*********************************createTable**********************************/
 bool handler::Sqlite3Db::createTable(std::string table_name, \
                                      std::vector<FieldDescription> fields) {
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Create Table operation aborted\n");
+				return EXIT_FAILURE;
+		}
+
+
 		std::string exec_string;
 		std::string extra_options;
 
@@ -119,6 +128,12 @@ bool handler::Sqlite3Db::createTable(std::string table_name, \
 /******************************deleteRecord***********************************/
 bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condition){
 
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Delete Records operation aborted \n");
+				return EXIT_FAILURE;
+		}
+
+
 		std::string exec_string;
 
 		/* Generate parametrized query */
@@ -143,6 +158,13 @@ bool handler::Sqlite3Db::deleteRecords(std::string table_name, std::string condi
 
 /******************************dropTable*************************************/
 bool handler::Sqlite3Db::dropTable(std::string table_name){
+
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Drop Table operation aborted \n");
+				return EXIT_FAILURE;
+		}
+
+
 		std::string exec_string;
 
 		/* Generate parametrized query */
@@ -172,6 +194,11 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
                                       std::vector<std::string> &data, \
                                       std::vector<int> indexes_stmt, \
                                       bool verbose){
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Query Execution operation aborted \n");
+				return EXIT_FAILURE;
+		}
+
 
 		/* First make sure we are working with an empty vector */
 		data.clear();
@@ -221,6 +248,11 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 /**********************************insertRecord*******************************/
 bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::string> values){
+
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Insert Record operation aborted \n");
+				return EXIT_FAILURE;
+		}
 
 		std::string exec_string, fields, values_to_insert;
 		const std::string key = table_name;
@@ -322,18 +354,13 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 /******************************reconnectDb***********************************/
 bool handler::Sqlite3Db::connectDb(){
 		if(this->_db == NULL) {
-				sqlite3_close(_db);
-				//Reinitialize the pointer to null value
-				this->_db = NULL;
-
-				_rc = sqlite3_open(this->_db_path, &this->_db);
-
+				_rc = sqlite3_open(_db_name.c_str(), &_db);
 				if (_rc) {
 						fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
-						/* If the _db cannot be opened -> delete the object */
 						return EXIT_FAILURE;
 				} else {
-						fprintf(stderr, "Opened %s database successfully\n", this->_db_path);
+						_db_path = _db_name.c_str();
+						fprintf(stderr, "Opened %s database successfully\n", _db_path);
 						return (updateHandler());
 				}
 		}
@@ -353,6 +380,12 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
                                                             std::string order_type, \
                                                             int limit, \
                                                             int offset){
+
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Selection operation aborted \n");
+				return handler::empty_vec;
+		}
+
 
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
@@ -447,6 +480,10 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 /******************************selectRecordsStruct*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param select_options){
 
+	if(this->_db == NULL) {
+			fprintf(stderr, "Database is not connected, Selection operation aborted \n");
+			return handler::empty_vec;
+	}
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
 		std::vector<std::string> select_data;
@@ -542,6 +579,11 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 
 /******************************updateHandler*********************************/
 bool handler::Sqlite3Db::updateHandler(){
+
+	if(this->_db == NULL) {
+			fprintf(stderr, "Database is not connected, Update operation aborted \n");
+			return EXIT_FAILURE;
+	}
 
 		std::vector<std::string> tables_names, fields;
 

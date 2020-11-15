@@ -17,7 +17,7 @@ set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
 set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(tests_dest "tests")
 set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
-set(SQLITE3_INSTALL_DIRNAME "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf-3330000")
+set(SQLITE3_INSTALL_DIRNAME "${CMAKE_BINARY_DIR}/sqlite-autoconf-3330000")
 # set(GTEST_ROOT "/usr/src/googletest/googletest/include" CACHE PATH "/usr/src/googletest")
 
 # Define some options for processing
@@ -130,6 +130,8 @@ install(FILES "${INCLUDES_DIR}/handler.hpp"
 
 enable_testing()
 
+
+
 # Does the application run
 add_test(NAME Runs COMMAND DatabaseHandler mydb.db)
 
@@ -140,7 +142,12 @@ set_tests_properties(Usage
   )
 
 # Run the unit tests deleting the databases that may have been created on previous iterations
-add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
+add_test(NAME unit_testing
+  COMMAND ${CMAKE_COMMAND}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/runtest.cmake
+)
+
+# add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
 
 # Define a function to simplify adding tests in the future
 function(do_test target arg result)

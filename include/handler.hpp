@@ -448,7 +448,8 @@ public:
 
 private:
 		int _rc;/*!< Flag that contains the status of the latest action executed.*/
-		const char *_db_path;/*!< Realtive path to database for file operations.*/
+		std::string _db_name;/*!< Relative path to database for file operations in string format.*/
+		const char *_db_path;/*!< Relative path to database for file operations.*/
 		sqlite3 *_db;/*!< Pointer to the database provided in the constructor.*/
 		const char *_sql;/*!< Pointer to the latest sql query in use.*/
 		sqlite3_stmt *_stmt;/*!< Pointer to the sql query output data.*/
