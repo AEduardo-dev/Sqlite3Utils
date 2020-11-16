@@ -29,9 +29,11 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - clang-10
+            - cmake
             - sqlite3
       env:
-        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+        - MATRIX_EVAL="CC=clang-10.0 && CXX=clang++-10.0"
       # BIONIC
     - os: linux
       dist: bionic
@@ -41,8 +43,8 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-9
-            - g++-9
+            - gcc-7
+            - g++-7
             - cmake
             - sqlite3
       env:
@@ -57,6 +59,8 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - clang-7
+            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
@@ -70,8 +74,8 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-9
-            - g++-9
+            - gcc-5
+            - g++-5
             - cmake
             - sqlite3
       env:
@@ -86,9 +90,11 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - clang-5
+            - cmake
             - sqlite3
       env:
-        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
     # - os: windows
 
@@ -118,7 +124,7 @@ jobs:
       osx_image: xcode8
       compiler: clang
       env:
-        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
 
 
