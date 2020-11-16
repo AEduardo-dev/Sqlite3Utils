@@ -13,6 +13,9 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - gcc-9
+            - g++-9
+            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
@@ -38,6 +41,9 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - gcc-9
+            - g++-9
+            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
@@ -64,7 +70,9 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-
+            - gcc-9
+            - g++-9
+            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
@@ -78,8 +86,6 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - clang-7
-            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
@@ -87,27 +93,32 @@ jobs:
     # - os: windows
 
     # Test clang since gcc is usually not used in macos
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode12.2
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode12u
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode12
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode11.6
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode11.3
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode10.3
+    # - os: osx
+    #   compiler: clang
+    #   osx_image: xcode9.4
     - os: osx
+      osx_image: xcode8
       compiler: clang
-      osx_image: xcode12.2
-    - os: osx
-      compiler: clang
-      osx_image: xcode12u
-    - os: osx
-      compiler: clang
-      osx_image: xcode12
-    - os: osx
-      compiler: clang
-      osx_image: xcode11.6
-    - os: osx
-      compiler: clang
-      osx_image: xcode11.3
-    - os: osx
-      compiler: clang
-      osx_image: xcode10.3
-    - os: osx
-      compiler: clang
-      osx_image: xcode9.4
+      env:
+        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
 
 
 
