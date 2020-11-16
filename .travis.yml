@@ -1,64 +1,115 @@
 language: cpp
-os:
-  - linux
-  - osx
-  # - windows
 
-compiler:
-  - gcc
-  - clang
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-9
-      - g++-9
-      - cmake
-      - sqlite3
-
-# Matrix for macOS systems
+# Matrix for the different operating systems jobs
 jobs:
   include:
-      # works on Precise and Trusty
+      # Test both gcc and clang for the different distros of linux+
+      # Focal
     - os: linux
+      dist: focal
+      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-9
-            - g++-9
-            - cmake
             - sqlite3
       env:
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 
     # works on Trusty
     - os: linux
-      dist: xenial
+      dist: focal
+      compiler: clang
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - clang-10
+            - sqlite3
+      env:
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+      # BIONIC
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - sqlite3
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+    # works on Trusty
+    - os: linux
+      dist: bionic
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - sqlite3
+      env:
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+
+      # XENIAL
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+
+            - sqlite3
+      env:
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    # works on Trusty
+    - os: linux
+      dist: xenial
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang-7
             - cmake
             - sqlite3
       env:
-        - MATRIX_EVAL="CC=clang-10.0 && CXX=clang++-10.0"
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
 
     # - os: windows
 
-
+    # Test clang since gcc is usually not used in macos
     - os: osx
+      compiler: clang
+      osx_image: xcode12.2
+    - os: osx
+      compiler: clang
+      osx_image: xcode12u
+    - os: osx
+      compiler: clang
+      osx_image: xcode12
+    - os: osx
+      compiler: clang
+      osx_image: xcode11.6
+    - os: osx
+      compiler: clang
+      osx_image: xcode11.3
+    - os: osx
+      compiler: clang
+      osx_image: xcode10.3
+    - os: osx
+      compiler: clang
       osx_image: xcode9.4
 
-    - os: osx
-      osx_image: xcode8
-      env:
-        - MATRIX_EVAL="brew install gcc && CC=gcc-9 && CXX=g++-9"
+
 
 before_install:
     - eval "${MATRIX_EVAL}"
