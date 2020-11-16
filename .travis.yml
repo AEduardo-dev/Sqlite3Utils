@@ -6,195 +6,195 @@ jobs:
       # Test both gcc and clang for the different distros of linux+
       # Focal
     - os:             linux
-        dist:         focal
-        compiler:     gcc
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - gcc-9
-              - g++-9
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/gcc-9
-          - export CXX=/usr/bin/g++-9
-          # Check versions of gcc, g++ and cmake
-          - gcc -v && g++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
-        env:
-          - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
+      dist:         focal
+      compiler:     gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-9
+            - g++-9
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/gcc-9
+        - export CXX=/usr/bin/g++-9
+        # Check versions of gcc, g++ and cmake
+        - gcc -v && g++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
+      env:
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 
     # works on Trusty
     - os:             linux
-        dist:         focal
-        compiler:     clang
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/clang-7
-          - export CXX=/usr/bin/clang++-7
-          # Check versions of gcc, g++ and cmake
-          - clang -v && clang++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
-        env:
-          - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+      dist:         focal
+      compiler:     clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/clang-7
+        - export CXX=/usr/bin/clang++-7
+        # Check versions of gcc, g++ and cmake
+        - clang -v && clang++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
+      env:
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
       # BIONIC
     - os:             linux
-        dist:         bionic
-        compiler:     gcc
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - gcc-7
-              - g++-7
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/gcc-7
-          - export CXX=/usr/bin/g++-7
-          # Check versions of gcc, g++ and cmake
-          - gcc -v && g++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
-        env:
-          - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      dist:         bionic
+      compiler:     gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - g++-7
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/gcc-7
+        - export CXX=/usr/bin/g++-7
+        # Check versions of gcc, g++ and cmake
+        - gcc -v && g++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     # works on Trusty
     - os:             linux
-        dist:         bionic
-        compiler:     clang
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/clang-7
-          - export CXX=/usr/bin/clang++-7
-          # Check versions of gcc, g++ and cmake
-          - clang -v && clang++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
-        env:
-          - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+      dist:         bionic
+      compiler:     clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/clang-7
+        - export CXX=/usr/bin/clang++-7
+        # Check versions of gcc, g++ and cmake
+        - clang -v && clang++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
+      env:
+        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
 
       # XENIAL
     - os:             linux
-        dist:         xenial
-        compiler:     gcc
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - gcc-5
-              - g++-5
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/gcc-5
-          - export CXX=/usr/bin/g++-5
-          # Check versions of gcc, g++ and cmake
-          - gcc -v && g++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
-        env:
-          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+      dist:         xenial
+      compiler:     gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/gcc-5
+        - export CXX=/usr/bin/g++-5
+        # Check versions of gcc, g++ and cmake
+        - gcc -v && g++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
+      env:
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 
     # works on Trusty
     - os:             linux
-        dist:         xenial
-        compiler:     clang
-        addons:
-          apt:
-            sources:
-              - ubuntu-toolchain-r-test
-            packages:
-              - cmake
-              - sqlite3
-        script:
-          # Export CC and CXX to tell cmake which compiler to use
-          - export CC=/usr/bin/clang-5
-          - export CXX=/usr/bin/clang++-5
-          # Check versions of gcc, g++ and cmake
-          - clang -v && clang++ -v && cmake --version
-          # Run your build commands next
-          # Create dir for build files
-          - mkdir build && cd build/
-          # Run cmake default way
-          - cmake ..
-          # Then build the project
-          - cmake --build .
-          # Run the tests
-          - ctest --progress --verbose
-          # Then install the project
-          - cmake --install .
+      dist:         xenial
+      compiler:     clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - cmake
+            - sqlite3
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/bin/clang-5
+        - export CXX=/usr/bin/clang++-5
+        # Check versions of gcc, g++ and cmake
+        - clang -v && clang++ -v && cmake --version
+        # Run your build commands next
+        # Create dir for build files
+        - mkdir build && cd build/
+        # Run cmake default way
+        - cmake ..
+        # Then build the project
+        - cmake --build .
+        # Run the tests
+        - ctest --progress --verbose
+        # Then install the project
+        - cmake --install .
 
-        env:
-          - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
     # - os:           windows
 
@@ -221,16 +221,16 @@ jobs:
     #   compiler:     clang
     #   osx_image:    xcode9.4
     - os:             osx
-        osx_image:    xcode8
-        compiler:     gcc
-        addons:
-          homebrew:
-            packages:
-              - gcc
-              - cmake
-              - sqlite3
-        env:
-          - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      osx_image:    xcode8
+      compiler:     gcc
+      addons:
+        homebrew:
+          packages:
+            - gcc
+            - cmake
+            - sqlite3
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
 
 
