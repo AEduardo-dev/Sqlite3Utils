@@ -1,13 +1,13 @@
-language:             cpp
+language:           cpp
+os:                 linux
+dist:               focal
 
 # Matrix for the different operating systems jobs
 jobs:
   include:
       # Test both gcc and clang for the different distros of linux+
       # Focal
-    - os:             linux
-      dist:         focal
-      compiler:     gcc
+    - compiler:     gcc
       addons:
         apt:
           sources:
@@ -28,9 +28,7 @@ jobs:
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 
     # works on Trusty
-    - os:             linux
-      dist:         focal
-      compiler:     clang
+    - compiler:     clang
       addons:
         apt:
           sources:
@@ -48,7 +46,7 @@ jobs:
       env:
         - MATRIX_EVAL="CC=clang-7.0.0 && CXX=clang++-7.0.0"
       # BIONIC
-    - os:             linux
+    - os:           linux
       dist:         bionic
       compiler:     gcc
       addons:
@@ -71,7 +69,7 @@ jobs:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     # works on Trusty
-    - os:             linux
+    - os:           linux
       dist:         bionic
       compiler:     clang
       addons:
@@ -91,7 +89,7 @@ jobs:
         - MATRIX_EVAL="CC=clang-7.0.0 && CXX=clang++-7.0.0"
 
       # XENIAL
-    - os:             linux
+    - os:           linux
       dist:         xenial
       compiler:     gcc
       addons:
@@ -133,31 +131,31 @@ jobs:
       env:
         - MATRIX_EVAL="CC=clang-7.0.0 && CXX=clang++-7.0.0"
 
-    # - os:           windows
+    # - os:         windows
 
     # Test clang since gcc is usually not used in macos
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode12.2
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode12u
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode12
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode11.6
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode11.3
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode10.3
-    # - os:           osx
-    #   compiler:     clang
-    #   osx_image:    xcode9.4
-    - os:             osx
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode12.2
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode12u
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode12
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode11.6
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode11.3
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode10.3
+    # - os:         osx
+    #   compiler:   clang
+    #   osx_image:  xcode9.4
+    - os:           osx
       osx_image:    xcode12
       compiler:     gcc
       addons:
@@ -175,6 +173,51 @@ jobs:
 
       env:
         - MATRIX_EVAL="CC=gcc-7.0.0 && CXX=g++-7.0.0"
+
+    - os: windows
+      compiler: gcc
+      before_install:
+      - |-
+          case $TRAVIS_OS_NAME in
+            windows)
+              [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
+              choco uninstall -y mingw
+              choco upgrade --no-progress -y msys2
+              export msys2='cmd //C RefreshEnv.cmd '
+              export msys2+='& set MSYS=winsymlinks:nativestrict '
+              export msys2+='& C:\\tools\\msys64\\msys2_shell.cmd -defterm -no-start'
+              export mingw64="$msys2 -mingw64 -full-path -here -c "\"\$@"\" --"
+              export msys2+=" -msys2 -c "\"\$@"\" --"
+              $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-toolchain
+              ## Install more MSYS2 packages from https://packages.msys2.org/base here
+              taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
+              export PATH=/C/tools/msys64/mingw64/bin:$PATH
+              export MAKE=mingw32-make  # so that Autotools can find it
+              ;;
+          esac
+
+      before_cache:
+      - |-
+          case $TRAVIS_OS_NAME in
+            windows)
+              # https://unix.stackexchange.com/a/137322/107554
+              $msys2 pacman --sync --clean --noconfirm
+              ;;
+          esac
+
+      script:
+        # Export CC and CXX to tell cmake which compiler to use
+        - export CC=/usr/local/gcc-7.0.0/bin
+        - export CXX=/usr/local/g++-7.0.0/bin
+        # Check versions of gcc, g++ and cmake
+        - gcc -v && g++ -v && cmake --version
+        - clang -v && clang++ -v && cmake --version
+
+cache:
+    directories:
+    - $HOME/AppData/Local/Temp/chocolatey
+    - /C/tools/msys64
+
 
 
 
