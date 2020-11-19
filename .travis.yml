@@ -207,8 +207,15 @@ jobs:
 
       script:
         # Download and install sqlite3 with autoconf
+        # Download
         - curl https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz --output sqlite3.tar.gz
+        # Extract
         - 7z e sqlite3.tar.gz
+        # Check path
+        - ls
+        # Enter the directory
+        - cd sqlite.tar.gz/
+        # Execute the installation command
         - nmake /f Makefile.msc
         # Run your build commands next
         # Create dir for build files
