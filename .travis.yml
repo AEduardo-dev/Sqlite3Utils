@@ -214,7 +214,7 @@ jobs:
         # Check path
         - ls
         # Enter the directory
-        - cd sqlite.tar.gz/
+        - cd sqlite.tar/
         # Execute the installation command
         - nmake /f Makefile.msc
         # Run your build commands next
