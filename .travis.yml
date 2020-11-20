@@ -193,7 +193,7 @@ jobs:
               taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
               export PATH=/C/tools/msys64/mingw64/bin:$PATH
               export MAKE=mingw32-make  # so that Autotools can find it
-              pacman -S --needed git base-devel mingw-w64-x86_64-gcc
+              $msys2 pacman -S --needed git base-devel mingw-w64-x86_64-gcc
               ;;
           esac
 
