@@ -35,6 +35,5 @@ target_link_libraries(unit_tests PUBLIC handler query)
 target_link_libraries(unit_tests PRIVATE gtest_main)
 
 # Installation rules
-# Executable tests
-install(TARGETS unit_tests DESTINATION ${tests_dest})
+# Tests source file
 install(FILES "${TESTS_DIR}/tests.cpp" DESTINATION ${tests_dest})

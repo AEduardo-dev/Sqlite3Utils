@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('classhandler_1_1Sqlite3Db.html',''); i
 <p>Class for handling connection and operations in a sqlite3 database.  
  <a href="classhandler_1_1Sqlite3Db.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="sqlite3handler_8hpp_source.html">sqlite3handler.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="handler_8hpp_source.html">handler.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -126,9 +126,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a07224a51607ccca1c6a213c2434da072"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a> (std::string table_name, std::vector&lt; std::string &gt; values)</td></tr>
 <tr class="memdesc:a07224a51607ccca1c6a213c2434da072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert record data inside of a table.  <a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">More...</a><br /></td></tr>
 <tr class="separator:a07224a51607ccca1c6a213c2434da072"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3927165bbc9f42601b58ff7da0fe5ca4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a3927165bbc9f42601b58ff7da0fe5ca4">reconnectDb</a> ()</td></tr>
-<tr class="memdesc:a3927165bbc9f42601b58ff7da0fe5ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reconnects the handler to it's linked database.  <a href="classhandler_1_1Sqlite3Db.html#a3927165bbc9f42601b58ff7da0fe5ca4">More...</a><br /></td></tr>
-<tr class="separator:a3927165bbc9f42601b58ff7da0fe5ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab00a27f88a8182e7a004f02e0ef88325"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#ab00a27f88a8182e7a004f02e0ef88325">connectDb</a> ()</td></tr>
+<tr class="memdesc:ab00a27f88a8182e7a004f02e0ef88325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reconnects the handler to it's linked database.  <a href="classhandler_1_1Sqlite3Db.html#ab00a27f88a8182e7a004f02e0ef88325">More...</a><br /></td></tr>
+<tr class="separator:ab00a27f88a8182e7a004f02e0ef88325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afffad63c6732bfab591b37eed1c2a1bb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#afffad63c6732bfab591b37eed1c2a1bb">selectRecords</a> (std::string table_name, std::vector&lt; std::string &gt; fields={&quot;*&quot;}, bool select_distinct=false, std::string where_cond=&quot;&quot;, std::vector&lt; std::string &gt; group_by={}, std::string having_cond=&quot;&quot;, std::vector&lt; std::string &gt; order_by={}, std::string order_type=&quot;ASC&quot;, int limit=0, int offset=0)</td></tr>
 <tr class="memdesc:afffad63c6732bfab591b37eed1c2a1bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects and extracts the records that meet certain conditions.  <a href="classhandler_1_1Sqlite3Db.html#afffad63c6732bfab591b37eed1c2a1bb">More...</a><br /></td></tr>
 <tr class="separator:afffad63c6732bfab591b37eed1c2a1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,12 +144,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#aed0f2adcae3e7ea4b9c4e7433f90ccb2">getFields</a> (std::string table_name)</td></tr>
 <tr class="memdesc:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get field's names from a table in the database.  <a href="classhandler_1_1Sqlite3Db.html#aed0f2adcae3e7ea4b9c4e7433f90ccb2">More...</a><br /></td></tr>
 <tr class="separator:aed0f2adcae3e7ea4b9c4e7433f90ccb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">getTablesSize</a> ()</td></tr>
-<tr class="memdesc:a384fcbe8835d1aa5dede836fe87c21e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of tables in the database.  <a href="classhandler_1_1Sqlite3Db.html#a384fcbe8835d1aa5dede836fe87c21e9">More...</a><br /></td></tr>
-<tr class="separator:a384fcbe8835d1aa5dede836fe87c21e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e75b3fa032a566cecfc96f938418755"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a3e75b3fa032a566cecfc96f938418755">getTables</a> ()</td></tr>
-<tr class="memdesc:a3e75b3fa032a566cecfc96f938418755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get table's names from the database.  <a href="classhandler_1_1Sqlite3Db.html#a3e75b3fa032a566cecfc96f938418755">More...</a><br /></td></tr>
-<tr class="separator:a3e75b3fa032a566cecfc96f938418755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae16853bdae85d532facec4d0b7debb57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#ae16853bdae85d532facec4d0b7debb57">getNumTables</a> ()</td></tr>
+<tr class="memdesc:ae16853bdae85d532facec4d0b7debb57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of tables in the database.  <a href="classhandler_1_1Sqlite3Db.html#ae16853bdae85d532facec4d0b7debb57">More...</a><br /></td></tr>
+<tr class="separator:ae16853bdae85d532facec4d0b7debb57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a328eadaf6fdf897454eee1d8169f094b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehandler.html#a58791a62828bd11868b1b2555fadd7c0">DbTables</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a328eadaf6fdf897454eee1d8169f094b">getTables</a> ()</td></tr>
+<tr class="memdesc:a328eadaf6fdf897454eee1d8169f094b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get tables information map stored in the handler.  <a href="classhandler_1_1Sqlite3Db.html#a328eadaf6fdf897454eee1d8169f094b">More...</a><br /></td></tr>
+<tr class="separator:a328eadaf6fdf897454eee1d8169f094b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a069afceeb1db1ec519cb1e042b27e7b0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a069afceeb1db1ec519cb1e042b27e7b0">getTablesNames</a> ()</td></tr>
+<tr class="memdesc:a069afceeb1db1ec519cb1e042b27e7b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get table's names from the database.  <a href="classhandler_1_1Sqlite3Db.html#a069afceeb1db1ec519cb1e042b27e7b0">More...</a><br /></td></tr>
+<tr class="separator:a069afceeb1db1ec519cb1e042b27e7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a7cdb3a597859dc9782539bbdf9c22e3c">getDbPath</a> ()</td></tr>
 <tr class="memdesc:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets db relative path from the database.  <a href="classhandler_1_1Sqlite3Db.html#a7cdb3a597859dc9782539bbdf9c22e3c">More...</a><br /></td></tr>
 <tr class="separator:a7cdb3a597859dc9782539bbdf9c22e3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,12 +171,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af6366ea2a9f1057d6cf276667626c724"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#af6366ea2a9f1057d6cf276667626c724">callback</a> (void *NotUsed, int argc, char **argv, char **azColName)</td></tr>
 <tr class="memdesc:af6366ea2a9f1057d6cf276667626c724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to show the output of sqlite3_exec()  <a href="classhandler_1_1Sqlite3Db.html#af6366ea2a9f1057d6cf276667626c724">More...</a><br /></td></tr>
 <tr class="separator:af6366ea2a9f1057d6cf276667626c724"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3281cd5f8a30f28e35c7392596f07ab0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a3281cd5f8a30f28e35c7392596f07ab0">isNotAplhaReal</a> (char c)</td></tr>
-<tr class="memdesc:a3281cd5f8a30f28e35c7392596f07ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a character is valid for being inside of a real number.  <a href="classhandler_1_1Sqlite3Db.html#a3281cd5f8a30f28e35c7392596f07ab0">More...</a><br /></td></tr>
-<tr class="separator:a3281cd5f8a30f28e35c7392596f07ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09e504d7de92813c6fbbccd504b4b831"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#a09e504d7de92813c6fbbccd504b4b831">isNotAplhaInt</a> (char c)</td></tr>
-<tr class="memdesc:a09e504d7de92813c6fbbccd504b4b831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a character is valid for being inside of an integer number.  <a href="classhandler_1_1Sqlite3Db.html#a09e504d7de92813c6fbbccd504b4b831">More...</a><br /></td></tr>
-<tr class="separator:a09e504d7de92813c6fbbccd504b4b831"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad74ae0402eca2ae6e952f5ef48af4324"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#ad74ae0402eca2ae6e952f5ef48af4324">isReal</a> (char c)</td></tr>
+<tr class="memdesc:ad74ae0402eca2ae6e952f5ef48af4324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a character is valid for being inside of a real number.  <a href="classhandler_1_1Sqlite3Db.html#ad74ae0402eca2ae6e952f5ef48af4324">More...</a><br /></td></tr>
+<tr class="separator:ad74ae0402eca2ae6e952f5ef48af4324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaed37d3f2d15fdf699451056e896b512"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhandler_1_1Sqlite3Db.html#aaed37d3f2d15fdf699451056e896b512">isInt</a> (char c)</td></tr>
+<tr class="memdesc:aaed37d3f2d15fdf699451056e896b512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a character is valid for being inside of an integer number.  <a href="classhandler_1_1Sqlite3Db.html#aaed37d3f2d15fdf699451056e896b512">More...</a><br /></td></tr>
+<tr class="separator:aaed37d3f2d15fdf699451056e896b512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -229,7 +232,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </table>
   </dd>
 </dl>
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">  hanlder::Sqlite3Db MyHandler(<span class="stringliteral">&quot;dbname.db&quot;</span>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 
 </div>
 </div>
@@ -330,8 +339,64 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 
 <p>Close connection to the current database. </p>
-<p>The closing of the connection also destroys the handler, since it's main purpose is to manage the action in an open database </p>
+<p>The closing of the connection is not recommended, since the main purpose of the Handler is to manage an open database while connected to it.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">  hanlder::Sqlite3Db MyHandler(<span class="stringliteral">&quot;dbname.db&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">/*</span></div>
+<div class="line"><span class="comment">  ..............</span></div>
+<div class="line"><span class="comment">  operations on database</span></div>
+<div class="line"><span class="comment">  .......</span></div>
+<div class="line"><span class="comment">   */</span></div>
+<div class="line">  MyHandler.closeConnection();</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="ab00a27f88a8182e7a004f02e0ef88325"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab00a27f88a8182e7a004f02e0ef88325">&#9670;&nbsp;</a></span>connectDb()</h2>
 
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool handler::Sqlite3Db::connectDb </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reconnects the handler to it's linked database. </p>
+<p>While doing the reconnection all the data inside of the handler is renewed, in case some changes took place during the time it was offline.</p>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if the db was reopened and it's information loaded correctly. EXIT_FAILURE otherwise.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line">  hanlder::Sqlite3Db MyHandler(<span class="stringliteral">&quot;dbname.db&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">/*</span></div>
+<div class="line"><span class="comment">  ..............</span></div>
+<div class="line"><span class="comment">  operations on database</span></div>
+<div class="line"><span class="comment">  .......</span></div>
+<div class="line"><span class="comment">   */</span></div>
+<div class="line">  MyHandler.closeConnection();</div>
+<div class="line"> </div>
+<div class="line">  ...</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">if</span>(MyHandler.reconnectDb() == EXIT_SUCCESS){</div>
+<div class="line">    ...</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a00479a98523cece08f5163f1fa444925"></a>
@@ -371,8 +436,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
 <p>An example of usage could be as follows:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;dbquery.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;sqlite3handler.h&quot;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;sqlite3query.hpp&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
 <div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
@@ -382,13 +447,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line">                {<span class="stringliteral">&quot;PHONE&quot;</span>, query::data::int_+query::data::not_null}, \</div>
 <div class="line">                {<span class="stringliteral">&quot;NAME&quot;</span>,query::data::char_+<a class="code" href="namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2">query::data::len</a>(50)+query::data::not_null}};</div>
 <div class="line"> </div>
-<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">createTable</a>(<span class="stringliteral">&quot;COMPANY&quot;</span>, v);</div>
+<div class="line">        <span class="keywordflow">if</span> (myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">createTable</a>(<span class="stringliteral">&quot;COMPANY&quot;</span>, v) == EXIT_SUCCESS) {</div>
+<div class="line">            ...</div>
+<div class="line">        }</div>
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:51</div></div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a00479a98523cece08f5163f1fa444925"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">handler::Sqlite3Db::createTable</a></div><div class="ttdeci">bool createTable(std::string table_name, std::vector&lt; FieldDescription &gt; fields)</div><div class="ttdoc">Create a table in the database with the specified parameters.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:62</div></div>
-<div class="ttc" id="anamespacequery_1_1data_html_a7f97816615b29f0066f9fdf761b7abb2"><div class="ttname"><a href="namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2">query::data::len</a></div><div class="ttdeci">const std::string len(int length)</div><div class="ttdoc">Generates sqlite3 definition of length for a datatype.</div><div class="ttdef"><b>Definition:</b> dbquery.cpp:8</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a00479a98523cece08f5163f1fa444925"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a00479a98523cece08f5163f1fa444925">handler::Sqlite3Db::createTable</a></div><div class="ttdeci">bool createTable(std::string table_name, std::vector&lt; FieldDescription &gt; fields)</div><div class="ttdoc">Create a table in the database with the specified parameters.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:69</div></div>
+<div class="ttc" id="anamespacequery_1_1data_html_a7f97816615b29f0066f9fdf761b7abb2"><div class="ttname"><a href="namespacequery_1_1data.html#a7f97816615b29f0066f9fdf761b7abb2">query::data::len</a></div><div class="ttdeci">const std::string len(int length)</div><div class="ttdoc">Generates sqlite3 definition of length for a datatype.</div><div class="ttdef"><b>Definition:</b> sqlite3query.cpp:8</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -429,8 +496,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
 <p>An example of usage could be as follows:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
 <div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
@@ -440,15 +506,19 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line">        std::string condition = <span class="stringliteral">&quot;ID == 1&quot;</span>;</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">//Delete record that meets condition</span></div>
-<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition);</div>
+<div class="line">        <span class="keywordflow">if</span> (myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition) == EXIT_SUCCESS){</div>
+<div class="line">            ...</div>
+<div class="line">        }</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">//Delete all records in the table &quot;table_name&quot;</span></div>
-<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition=<span class="stringliteral">&quot;all&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">if</span> (myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">deleteRecords</a>(table_name, condition=<span class="stringliteral">&quot;all&quot;</span>)){</div>
+<div class="line">            ...</div>
+<div class="line">        }</div>
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:51</div></div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a8460f486ed952c60cbb57b2764b836a0"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">handler::Sqlite3Db::deleteRecords</a></div><div class="ttdeci">bool deleteRecords(std::string table_name, std::string condition)</div><div class="ttdoc">Delete the records from a table that meet the provided condition/s.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:116</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a8460f486ed952c60cbb57b2764b836a0"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a8460f486ed952c60cbb57b2764b836a0">handler::Sqlite3Db::deleteRecords</a></div><div class="ttdeci">bool deleteRecords(std::string table_name, std::string condition)</div><div class="ttdoc">Delete the records from a table that meet the provided condition/s.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:129</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -478,28 +548,27 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
 <p>An example of usage could be as follows:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
 <div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">//In table company created previously</span></div>
+<div class="line">        <span class="comment">//In table company created previously</span></div>
 <div class="line">        std::string table_name = <span class="stringliteral">&quot;COMPANY&quot;</span>;</div>
-<div class="line">                                          <span class="comment">//ID  AGE    PHONE      NAME</span></div>
-<div class="line">        std::vector&lt;std::string&gt; values = {<span class="stringliteral">&quot;1&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;5521664&quot;</span>, <span class="stringliteral">&quot;James&quot;</span>};</div>
-<div class="line">    <span class="comment">//Insert record with all fields defined</span></div>
-<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values);</div>
 <div class="line"> </div>
-<div class="line">                                                      <span class="comment">//ID  AGE PHONE  NAME</span></div>
-<div class="line">        std::vector&lt;std::string&gt; values_incomplete = {<span class="stringliteral">&quot;2&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Thomas&quot;</span>};</div>
-<div class="line">    <span class="comment">//Insert record with one or more fields not specified</span></div>
-<div class="line">    myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values_incomplete);</div>
+<div class="line">        <span class="comment">//Delete record that meets condition</span></div>
+<div class="line">        <span class="keywordflow">if</span>(myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a771eb8f43b4924763ca9cc5c0d3a656a">dropTable</a>(table_name) == EXIT_SUCCESS){</div>
+<div class="line">      ...</div>
+<div class="line">    } <span class="keywordflow">else</span>{</div>
+<div class="line">      (error handling)</div>
+<div class="line">      ...</div>
+<div class="line">    }</div>
+<div class="line"> </div>
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:51</div></div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:218</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a771eb8f43b4924763ca9cc5c0d3a656a"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a771eb8f43b4924763ca9cc5c0d3a656a">handler::Sqlite3Db::dropTable</a></div><div class="ttdeci">bool dropTable(std::string table_name)</div><div class="ttdoc">Drop the table specified.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:160</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -551,8 +620,46 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned. The data vector is passed by reference, so the content of it is changed during the query execution. </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned. The data vector is passed by reference, so the content of it is changed during the query execution.</dd></dl>
+<p>An example of usage could be as follows:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;sqlite3query.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line"> </div>
+<div class="line">  <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> MyHandler(<span class="stringliteral">&quot;mydatabase.db&quot;</span>);</div>
+<div class="line">  <span class="comment">/*</span></div>
+<div class="line"><span class="comment">  ...</span></div>
+<div class="line"><span class="comment">  */</span></div>
+<div class="line">  <span class="comment">/* Generate custom user query */</span></div>
+<div class="line">  <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="namespacequery.html">query</a> = (query::cmd::select + query::cl::from + <span class="stringliteral">&quot;My Table&quot;</span> \</div>
+<div class="line">                + query::end_query).c_str();</div>
+<div class="line">  <span class="comment">/* Vector for data storage */</span></div>
+<div class="line">  std::vector&lt;std::string&gt; data;</div>
+<div class="line">  <span class="comment">/* Indexes to get the data from in each row of the result */</span></div>
+<div class="line">  std::vector&lt;int&gt; indexes_stmt = {1,3};</div>
+<div class="line">  <span class="comment">/* Flag for verbose mode */</span></div>
+<div class="line">  <span class="keywordtype">bool</span> verbose = <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">/* Execute the query with the settings defined and extracting data */</span></div>
+<div class="line">  MyHandler.executeQuery(<a class="code" href="namespacequery.html">query</a>, data, indexes_stmt, verbose);</div>
+<div class="line">  <span class="comment">/*</span></div>
+<div class="line"><span class="comment">  Process the data</span></div>
+<div class="line"><span class="comment">  ....</span></div>
+<div class="line"><span class="comment">   */</span></div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">/* Generate another custom user query */</span></div>
+<div class="line">  <a class="code" href="namespacequery.html">query</a> = (query::cmd::drop_table + <span class="stringliteral">&quot;My Table&quot;</span> \</div>
+<div class="line">               + query::end_query).c_str();</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">/* Execute the query in simple mode, no data extraction and not verbose mode */</span></div>
+<div class="line">  MyHandler.executeQuery(<a class="code" href="namespacequery.html">query</a>);</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+<div class="ttc" id="anamespacequery_html"><div class="ttname"><a href="namespacequery.html">query</a></div><div class="ttdoc">namespace containing the macros for queries definitons.</div><div class="ttdef"><b>Definition:</b> query.hpp:13</div></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a173e6637523656f1761a37d934fbe25f"></a>
@@ -600,12 +707,6 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 
 <p>Gets db relative path from the database. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
 
 </div>
@@ -637,40 +738,14 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="a3e75b3fa032a566cecfc96f938418755"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e75b3fa032a566cecfc96f938418755">&#9670;&nbsp;</a></span>getTables()</h2>
+<a id="ae16853bdae85d532facec4d0b7debb57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae16853bdae85d532facec4d0b7debb57">&#9670;&nbsp;</a></span>getNumTables()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::string &gt; handler::Sqlite3Db::getTables </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get table's names from the database. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">table_name</td><td>The name of the table which field's names are needed.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
-
-</div>
-</div>
-<a id="a384fcbe8835d1aa5dede836fe87c21e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a384fcbe8835d1aa5dede836fe87c21e9">&#9670;&nbsp;</a></span>getTablesSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int handler::Sqlite3Db::getTablesSize </td>
+          <td class="memname">int handler::Sqlite3Db::getNumTables </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -680,6 +755,46 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <p>Get number of tables in the database. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of tables. </dd></dl>
+
+</div>
+</div>
+<a id="a328eadaf6fdf897454eee1d8169f094b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a328eadaf6fdf897454eee1d8169f094b">&#9670;&nbsp;</a></span>getTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehandler.html#a58791a62828bd11868b1b2555fadd7c0">handler::DbTables</a> handler::Sqlite3Db::getTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get tables information map stored in the handler. </p>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
+
+</div>
+</div>
+<a id="a069afceeb1db1ec519cb1e042b27e7b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a069afceeb1db1ec519cb1e042b27e7b0">&#9670;&nbsp;</a></span>getTablesNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; handler::Sqlite3Db::getTablesNames </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get table's names from the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the names of the tables. </dd></dl>
 
 </div>
 </div>
@@ -720,8 +835,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.</dd></dl>
 <p>An example of usage could be as follows:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/dbquery.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.h&quot;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sqlite3handler.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;sqlite3query.hpp&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
 <div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> myHandler;</div>
@@ -731,17 +846,20 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="line">                                          <span class="comment">//ID  AGE    PHONE      NAME</span></div>
 <div class="line">        std::vector&lt;std::string&gt; values = {<span class="stringliteral">&quot;1&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;5521664&quot;</span>, <span class="stringliteral">&quot;James&quot;</span>};</div>
 <div class="line">    <span class="comment">//Insert record with all fields defined</span></div>
-<div class="line">        myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values);</div>
+<div class="line">        <span class="keywordflow">if</span> (MyHandler.insertRecord(table_name, values) == EXIT_SUCCESS){</div>
+<div class="line">            ...</div>
+<div class="line">        }</div>
 <div class="line"> </div>
 <div class="line">                                                      <span class="comment">//ID  AGE PHONE  NAME</span></div>
 <div class="line">        std::vector&lt;std::string&gt; values_incomplete = {<span class="stringliteral">&quot;2&quot;</span>, <span class="stringliteral">&quot;34&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Thomas&quot;</span>};</div>
 <div class="line">    <span class="comment">//Insert record with one or more fields not specified</span></div>
-<div class="line">    myHandler.<a class="code" href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">insertRecord</a>(table_name, values_incomplete);</div>
+<div class="line">        <span class="keywordflow">if</span> (MyHandler.insertRecord(table_name, values_incomplete) == EXIT_SUCCESS){</div>
+<div class="line">            ...</div>
+<div class="line">        }</div>
 <div class="line"> </div>
 <div class="line">        <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.hpp:51</div></div>
-<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html_a07224a51607ccca1c6a213c2434da072"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072">handler::Sqlite3Db::insertRecord</a></div><div class="ttdeci">bool insertRecord(std::string table_name, std::vector&lt; std::string &gt; values)</div><div class="ttdoc">Insert record data inside of a table.</div><div class="ttdef"><b>Definition:</b> sqlite3handler.cpp:218</div></div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -785,8 +903,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="a09e504d7de92813c6fbbccd504b4b831"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09e504d7de92813c6fbbccd504b4b831">&#9670;&nbsp;</a></span>isNotAplhaInt()</h2>
+<a id="aaed37d3f2d15fdf699451056e896b512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaed37d3f2d15fdf699451056e896b512">&#9670;&nbsp;</a></span>isInt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -795,7 +913,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool handler::Sqlite3Db::isNotAplhaInt </td>
+          <td class="memname">static bool handler::Sqlite3Db::isInt </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -820,8 +938,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="a3281cd5f8a30f28e35c7392596f07ab0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3281cd5f8a30f28e35c7392596f07ab0">&#9670;&nbsp;</a></span>isNotAplhaReal()</h2>
+<a id="ad74ae0402eca2ae6e952f5ef48af4324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad74ae0402eca2ae6e952f5ef48af4324">&#9670;&nbsp;</a></span>isReal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -830,7 +948,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool handler::Sqlite3Db::isNotAplhaReal </td>
+          <td class="memname">static bool handler::Sqlite3Db::isReal </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -925,27 +1043,6 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="a3927165bbc9f42601b58ff7da0fe5ca4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3927165bbc9f42601b58ff7da0fe5ca4">&#9670;&nbsp;</a></span>reconnectDb()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool handler::Sqlite3Db::reconnectDb </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reconnects the handler to it's linked database. </p>
-<p>While doing the reconnection all the data inside of the handler is renewed, in case some hcnages tool place during the time it was offline.</p>
-<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if the db was reopened and it's information loaded correctly. EXIT_FAILURE otherwise. </dd></dl>
-
-</div>
-</div>
 <a id="a61fdc0c209a92bc78c1e89861a0c5eb3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61fdc0c209a92bc78c1e89861a0c5eb3">&#9670;&nbsp;</a></span>selectRecords() <span class="overload">[1/2]</span></h2>
 
@@ -965,11 +1062,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>Selects and extracts the records that meet certain conditions. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">select_options</td><td>structure containing all the necessary options to be used during the select statement.</td></tr>
+    <tr><td class="paramname">select_options</td><td>Structure containing all the necessary options to be used during the select statement.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.</p>
+<p>/include selectRecordsStruct.cpp </p>
+<p>Lambda to convert the input string to uppercase for further processing.</p>
 
 </div>
 </div>
@@ -1064,7 +1163,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector containing all the values retrieved in order. This means that, if three fuelds were given as argument, each group of three elements of this vector will correspond to a row of data. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing all the values retrieved in order. This means that, if three fuelds were given as argument, each group of three elements of this vector will correspond to a row of data.</dd></dl>
+<p>/include selectRecords.cpp </p>
+<p>Lambda to convert the input string to uppercase for further processing.</p>
 
 </div>
 </div>
@@ -1085,13 +1186,58 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <p>Updates the information contained in the handler. </p>
 <p>If multiple connections are being used in the same database, it may be possible that a table is changed, or a new one created, without the current hanlder knowing it. For this purpose, execution of this method will updated all the tables and field information that is stored in the handler, so it can operate normally from different connections.</p>
-<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if the information was updated. EXIT_FAILURE if an error occurred during the process. </dd></dl>
-
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS if the information was updated. EXIT_FAILURE if an error occurred during the process.</dd></dl>
+<p>An example of usage could be as follows, with two different programs working on same db:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.hpp&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3query.hpp&quot;</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">/* Stablish first connection to database */</span></div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> MyHandler(<span class="stringliteral">&quot;mydatabase.db&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">while</span> (<span class="comment">/* condition */</span>) {</div>
+<div class="line">      <span class="comment">/* update every time before acting on the db in case something is changed */</span></div>
+<div class="line">      MyHandler.updateHandler();</div>
+<div class="line">      <span class="comment">/*</span></div>
+<div class="line"><span class="comment">           ....</span></div>
+<div class="line"><span class="comment">           operations on db.</span></div>
+<div class="line"><span class="comment">           ...</span></div>
+<div class="line"><span class="comment">         */</span></div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+</div><!-- fragment --><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3handler.hpp&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;../source/include/sqlite3query.hpp&quot;</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[]) {</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">/* Stablish second connection to the database */</span></div>
+<div class="line">        <a class="code" href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a> AnotherHandler(<span class="stringliteral">&quot;mydatabase.db&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">while</span> (<span class="comment">/* condition */</span>) {</div>
+<div class="line">      <span class="comment">/* update every time before acting on the db in case something is changed */</span></div>
+<div class="line">      AnotherHandler.updateHandler();</div>
+<div class="line">      <span class="comment">/*</span></div>
+<div class="line"><span class="comment">           ....</span></div>
+<div class="line"><span class="comment">           operations on db.</span></div>
+<div class="line"><span class="comment">           ...</span></div>
+<div class="line"><span class="comment">         */</span></div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasshandler_1_1Sqlite3Db_html"><div class="ttname"><a href="classhandler_1_1Sqlite3Db.html">handler::Sqlite3Db</a></div><div class="ttdoc">Class for handling connection and operations in a sqlite3 database.</div><div class="ttdef"><b>Definition:</b> handler.hpp:52</div></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>source/include/<a class="el" href="sqlite3handler_8hpp_source.html">sqlite3handler.hpp</a></li>
-<li>source/lib/sqlite3handler.cpp</li>
+<li>include/<a class="el" href="handler_8hpp_source.html">handler.hpp</a></li>
+<li>src/sqlite3handler.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

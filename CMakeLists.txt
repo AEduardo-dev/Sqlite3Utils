@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set some variables for convenience
+set(DOCS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs")
 set(EXAMPLES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/examples")
 set(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -15,17 +16,18 @@ set(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(main_lib_dest "lib/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
 set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
-set(tests_dest "tests")
+set(tests_dest "tests/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(examples_dest "examples/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(docs_dest "docs/sqlite3_utils-${Sqlite3Utils_VERSION}")
 set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
 set(SQLITE3_INSTALL_DIRNAME "${CMAKE_BINARY_DIR}/sqlite-autoconf-3330000")
-# set(GTEST_ROOT "/usr/src/googletest/googletest/include" CACHE PATH "/usr/src/googletest")
 
 # Define some options for processing
 
 option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration" OFF)
 option(UNIT_TESTS "Build the google test framework program" OFF)
-option(BUILD_EXAMPLES "Build the example programs" OFF)
-option(GENERATE_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
+option(INSTALL_EXAMPLES "Build the example programs" OFF)
+option(INSTALL_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
 
 # Check if the version is good for dependencies installation
 IF(${CMAKE_VERSION} VERSION_LESS "3.18")
@@ -100,6 +102,18 @@ IF(UNIT_TESTS)
   add_subdirectory(tests)
 ENDIF()
 
+# If selected, add the subdirectories for examples
+IF(INSTALL_EXAMPLES)
+  add_subdirectory(examples)
+ENDIF()
+
+# If selected, add the subdirectories for examples
+IF(INSTALL_DOCS)
+  add_subdirectory(docs)
+ENDIF()
+
+# If selected add documentation subdirectory
+
 
 # Add the executable
 add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")
@@ -129,8 +143,7 @@ install(EXPORT query DESTINATION "${lib_dest}")
 # Include files
 install(FILES "${INCLUDES_DIR}/handler.hpp"
               "${INCLUDES_DIR}/query.hpp"
-              DESTINATION ${include_dest}
-              )
+              DESTINATION ${include_dest})
 
 include(CTest)
 

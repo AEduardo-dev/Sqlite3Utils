@@ -33,8 +33,8 @@ bin/
 *.app
 
 # Doxygen docs
-docs/
-!docs/latex/*.pdf
+latex/
+docbook/
 
 # Build files
 build/

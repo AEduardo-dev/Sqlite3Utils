@@ -25,7 +25,9 @@
 var NAVTREE =
 [
   [ "dbHandler for sqlite3", "index.html", [
-    [ "dbHandler-sqlite3", "md_README.html", null ],
+    [ "README", "md_README.html", [
+      [ "dbHandler-sqlite3", "md_README.html#autotoc_md0", null ]
+    ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
