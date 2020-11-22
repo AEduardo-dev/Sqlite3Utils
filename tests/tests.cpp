@@ -279,6 +279,7 @@ TEST(SqliteLoadedDb, InsertAfterLoad){
 }
 
 /**************************SELECT OPERATIONS***********************/
+//TODO: ANGEL 22/11/2020 Add tests for spaces (" ") values at optional arguments 
 /* Select all records inside of a table correctly */
 TEST(SqliteSelectRecords, SelectAll){
 		EXPECT_TRUE(exists("MyDB.db"));
@@ -737,26 +738,32 @@ TEST(SqliteExecuteCustomQuery, CustomQueryNonExistentIndex){
 /* Disconnecting from the db causes no exceptions or errors */
 TEST(SqliteConnection, DisconnectDB){
 		ASSERT_NO_THROW(UserHandler.closeConnection());
+		ASSERT_FALSE(UserHandler.isConnected());
 }
 
 /* Disconnecting from the db while already disconnected causes no exceptions or errors */
 TEST(SqliteConnection, DisconnectionAlreadyDisconnected){
+		ASSERT_FALSE(UserHandler.isConnected());
 		ASSERT_NO_THROW(UserHandler.closeConnection());
+		ASSERT_FALSE(UserHandler.isConnected());
 }
 
 /* Trying to create a table while disconnected is not possible */
 TEST(SqliteConnection, DisconnectedCreateTable){
+		EXPECT_FALSE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.createTable("DISCONNECT", table_definition), EXIT_FAILURE);
 }
 
 /* Insertion of elements while disconnected is not possible */
 TEST(SqliteConnection, DisconnectedInsert){
+		EXPECT_FALSE(UserHandler.isConnected());
 		std::vector<std::string> values_to_insert = {"10", "86", "5654668", "Robert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
 /* Selection of elements while disconnected is not possible */
 TEST(SqliteConnection, DisconnectedSelect){
+		EXPECT_FALSE(UserHandler.isConnected());
 		handler::select_query_param select_options;
 		select_options.table_name = table_name;
 		ASSERT_EQ(UserHandler.selectRecords(select_options), handler::empty_vec);
@@ -764,15 +771,21 @@ TEST(SqliteConnection, DisconnectedSelect){
 
 /* Reconnecting to the db is possible and loads info */
 TEST(SqliteConnection, ReconnectDB){
+		EXPECT_FALSE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.connectDb(), EXIT_SUCCESS);
+		ASSERT_TRUE(UserHandler.isConnected());
 		ASSERT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.getTablesNames()[0], table_name);
 }
 
 /* Reconnecting to the db is possible when already connected and throws no error */
 TEST(SqliteConnection, ReconnectAlreadyConnectedDB){
+		ASSERT_TRUE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.connectDb(), EXIT_FAILURE);
 }
+
+/******************************UPDATE TABLE*********************************/
+//TODO: ANGEL 22/11/2020 Add tests for update table method
 
 /**************************DELETE AND DROP OPERATIONS***********************/
 /* Delete specific records of a table using condition */
