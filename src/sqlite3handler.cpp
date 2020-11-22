@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Sqlite3Utils is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -81,6 +81,24 @@ void handler::Sqlite3Db::closeConnection(){
 				this->_db = NULL;
 		}
 
+}
+
+/******************************connectDb***********************************/
+bool handler::Sqlite3Db::connectDb(){
+		if(this->_db == NULL) {
+				_rc = sqlite3_open(_db_name.c_str(), &_db);
+				if (_rc) {
+						fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+						return EXIT_FAILURE;
+				} else {
+						_db_path = _db_name.c_str();
+						fprintf(stderr, "Opened %s database successfully\n", _db_path);
+						return (updateHandler());
+				}
+		}
+		else{
+				return EXIT_FAILURE;
+		}
 }
 
 /*********************************createTable**********************************/
@@ -369,24 +387,6 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 		}
 }
 
-/******************************reconnectDb***********************************/
-bool handler::Sqlite3Db::connectDb(){
-		if(this->_db == NULL) {
-				_rc = sqlite3_open(_db_name.c_str(), &_db);
-				if (_rc) {
-						fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
-						return EXIT_FAILURE;
-				} else {
-						_db_path = _db_name.c_str();
-						fprintf(stderr, "Opened %s database successfully\n", _db_path);
-						return (updateHandler());
-				}
-		}
-		else{
-				return EXIT_FAILURE;
-		}
-}
-
 /******************************selectRecords*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, \
                                                             std::vector<std::string> fields, \
@@ -498,10 +498,10 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 /******************************selectRecordsStruct*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param select_options){
 
-	if(this->_db == NULL) {
-			fprintf(stderr, "Database is not connected, Selection operation aborted \n");
-			return handler::empty_vec;
-	}
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Selection operation aborted \n");
+				return handler::empty_vec;
+		}
 		std::string exec_string, fields_list, group_list, order_list, condition = "";
 		std::vector<int> data_indexes;
 		std::vector<std::string> select_data;
@@ -598,10 +598,10 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 /******************************updateHandler*********************************/
 bool handler::Sqlite3Db::updateHandler(){
 
-	if(this->_db == NULL) {
-			fprintf(stderr, "Database is not connected, Update operation aborted \n");
-			return EXIT_FAILURE;
-	}
+		if(this->_db == NULL) {
+				fprintf(stderr, "Database is not connected, Update operation aborted \n");
+				return EXIT_FAILURE;
+		}
 
 		std::vector<std::string> tables_names, fields;
 
@@ -658,6 +658,48 @@ bool handler::Sqlite3Db::updateHandler(){
 		}
 }
 
+bool handler::Sqlite3Db::updateTable(std::string table_name, \
+                                     std::vector<FieldDescription> set_fields, \
+                                     std::string where_cond){
+
+		std::string exec_string, update_assignments;
+		std::vector<std::string> field_types;
+
+		/* For each of the fields to be updated, check the affinity of the value given, and
+		   concatenate the assignment to the list */
+		for (auto field_update : set_fields) {
+
+				update_assignments += field_update.first + " = ";
+
+				if (isAffined(query::affinity::numeric, field_update.second) || \
+				    isAffined("NULL", field_update.second)) {
+						update_assignments += field_update.second +",";
+				}
+				else{
+						update_assignments += "\'" + field_update.second + "\'"+",";
+				}
+		}
+
+		/* Once the last one was written, get rid of the trailing comma and add a space*/
+		update_assignments.replace(update_assignments.end()-1, update_assignments.end(), " ");
+
+		/* Construct the query */
+		exec_string = query::cmd::update + table_name + \
+		              query::cl::set + update_assignments + \
+		              (where_cond!="" ? query::cl::where + where_cond : "")+ \
+		              query::end_query;
+
+		_sql = exec_string.c_str();
+
+		/* SQL Command is executed */
+		if(executeQuery(_sql) == EXIT_SUCCESS) {
+				return EXIT_SUCCESS;
+		} else{
+				fprintf(stderr, "Update operation failed.\n");
+				return EXIT_FAILURE;
+		}
+
+}
 
 /****************GETTERS, SETTERS AND OTHER FUNCTIONS*********************************/
 
@@ -716,9 +758,15 @@ bool handler::Sqlite3Db::isAffined(const std::string affinity, const std::string
 						is_affined = true;
 
 		}else if (affinity == query::affinity::numeric) {
-				if(isValidInt(value_to_check) || isValidReal(value_to_check))
+				if(isValidReal(value_to_check))
 						is_affined = true;
+		}else if (affinity == "NULL") {
+				if(value_to_check =="NULL")
+						is_affined = true;
+		}else{
+				is_affined = true;
 		}
+
 
 		return is_affined;
 }

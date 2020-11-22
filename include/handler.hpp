@@ -191,9 +191,12 @@ public:
 		 *
 		 *
 		 * @param  sql_query    The query to be executed.
+		 *
 		 * @param  indexes_stmt The indexes of the output (each index is a field of the database)
 		 * that will be extracted from the result of the query.
+		 *
 		 * @param  data         Container to store the data retrieved from the indexes_stmt.
+		 * 
 		 * @param  verbose      If set to true, the result of the query will also be printed
 		 * through the console. Default value is false.
 		 *
@@ -235,24 +238,33 @@ public:
 		 * parameters are needed.
 		 *
 		 * @param table_name      Name of the table from where the data will be selected.
+		 *
 		 * @param fields          Container of the names of the fields of the table that will be
-		 * 												retrieved from the results in string format. Default value is "*"
-		 * 												to take all the fields.
+		 * 												retrieved from the results in string format. Default value is
+		 *  											"*" to take all the fields.
+		 *
 		 * @param select_distinct Boolean flag to set whether or not only unique results should
 		 * 												be selected. Default value is false.
-		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause in
-		 * 												the select query composition. It is empty by default.
+		 *
+		 * @param where_cond      If set, it contains the condition to apply with a WHERE clause
+		 * 												in the select query composition. It is empty by default.
+		 *
 		 * @param group_by        If set, it contains the condition that will be used to group the
 		 * 												results of the select query. It is empty  by default.
+		 *
 		 * @param having_cond     If set, it contains the condition applied to the query after a
 		 * 												HAVING clause. It is empty by default.
+		 *
 		 * @param order_by        If set, it contains the condition that will be used to order the
 		 * 												results of the select query. It is empty by default.
+		 *
 		 * @param order_type      Only applied if the order_by argument is set. Defines the type
-		 * 												of ordering to be applied. The types are "ASC" or "DESC". Default
-		 * 												value is "ASC"
+		 * 												of ordering to be applied. The types are "ASC" or "DESC".
+		 * 												Default value is "ASC"
+		 *
 		 * @param limit           If set, it defines the number of results that will be extracted
 		 * 												from the select query data. Default value is 0 for no limit.
+		 *
 		 * @param offset          If set, it defines the number of results that will be skipped
 		 * 												from the select query data before extracting them. Default value
 		 * 												is 0 for none.
@@ -317,8 +329,8 @@ public:
 		 * @return            EXIT_SUCCESS if the operation completed succesfully, EXIT_FAILURE
 		 *  otherwise
 		 */
-		bool updateTable(std::string table_name, FieldDescription set_fields,\
-			 								std::string where_cond);
+		bool updateTable(std::string table_name, std::vector<FieldDescription> set_fields,\
+			 								std::string where_cond = "");
 
 		/*!
 		 * \brief Calculate the affinity token corresponding to a datatype given.
