@@ -1,5 +1,5 @@
-#include <sqlite3handler.hpp>
-#include <sqlite3query.hpp>
+#include <handler.hpp>
+#include <query.hpp>
 
 int main(int argc, char const *argv[]) {
 		handler::Sqlite3Db myHandler;

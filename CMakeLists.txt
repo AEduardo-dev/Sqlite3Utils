@@ -24,10 +24,10 @@ set(SQLITE3_INSTALL_DIRNAME "${CMAKE_BINARY_DIR}/sqlite-autoconf-3330000")
 
 # Define some options for processing
 
-option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration" OFF)
-option(UNIT_TESTS "Build the google test framework program" OFF)
-option(INSTALL_EXAMPLES "Build the example programs" OFF)
-option(INSTALL_DOCS "Generate doxygen documentation (needs doxygen installation)" OFF)
+option(INSTALL_DEPENDENCIES "Install dependencies not found during configuration (sqlite3)" OFF)
+option(UNIT_TESTS "Build the google test framework program for unit testing" OFF)
+option(INSTALL_EXAMPLES "Install the example programs" OFF)
+option(INSTALL_DOCS "Install the doxygen documentation" OFF)
 
 # Check if the version is good for dependencies installation
 IF(${CMAKE_VERSION} VERSION_LESS "3.18")
