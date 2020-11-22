@@ -746,6 +746,7 @@ const std::string handler::Sqlite3Db::getAffinity(std::string field_datatype){
 		return affinity;
 }
 
+/******************************isAffined*******************************************/
 bool handler::Sqlite3Db::isAffined(const std::string affinity, const std::string value_to_check){
 		bool is_affined = false;
 
@@ -769,6 +770,15 @@ bool handler::Sqlite3Db::isAffined(const std::string affinity, const std::string
 
 
 		return is_affined;
+}
+
+/******************************isConnected*******************************************/
+bool handler::Sqlite3Db::isConnected(){
+		if (this->_db != NULL) {
+			return true;
+		} else {
+			return false;
+		}
 }
 
 

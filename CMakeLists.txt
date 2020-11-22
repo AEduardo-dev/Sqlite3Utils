@@ -116,18 +116,18 @@ ENDIF()
 
 
 # Add the executable
-add_executable(Sqlite3Utils "${SOURCES_DIR}/minimalHandler.cpp")
+# add_executable(Sqlite3Utils "${SOURCES_DIR}/minimalHandler.cpp")
 
 # Link libraries
-target_link_libraries(Sqlite3Utils PUBLIC handler query)
+# target_link_libraries(Sqlite3Utils PUBLIC handler query)
 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
-target_include_directories(Sqlite3Utils PUBLIC "${PROJECT_BINARY_DIR}")
+# target_include_directories(Sqlite3Utils PUBLIC "${PROJECT_BINARY_DIR}")
 
 # Installation rules
 # Executable
-install(TARGETS Sqlite3Utils DESTINATION bin)
+# install(TARGETS Sqlite3Utils DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/Sqlite3UtilsConfig.h" DESTINATION ${include_dest})
 
 # Version Control
@@ -145,37 +145,32 @@ install(FILES "${INCLUDES_DIR}/handler.hpp"
               "${INCLUDES_DIR}/query.hpp"
               DESTINATION ${include_dest})
 
-include(CTest)
-
-
-
-# Does the application run
-add_test(NAME Runs COMMAND Sqlite3Utils mydb.db)
-
-# Does the usage message work?
-add_test(NAME Usage COMMAND Sqlite3Utils)
-set_tests_properties(Usage
-  PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
-  )
+# # Does the application run
+# add_test(NAME Runs COMMAND Sqlite3Utils mydb.db)
+#
+# # Does the usage message work?
+# add_test(NAME Usage COMMAND Sqlite3Utils)
+# set_tests_properties(Usage
+#   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
+#   )
 
 # Run the unit tests deleting the databases that may have been created on previous iterations
 IF(UNIT_TESTS)
+    include(CTest)
     add_test(NAME unit_testing
       COMMAND ${CMAKE_COMMAND}
         -P ${CMAKE_CURRENT_SOURCE_DIR}/runtest.cmake
     )
+    # add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
+
+    # Define a function to simplify adding tests in the future
+    function(do_test target arg result)
+      add_test(NAME Comp${arg} COMMAND ${target} ${arg})
+      set_tests_properties(Comp${arg}
+        PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+        )
+    endfunction(do_test)
 ENDIF()
-
-
-# add_test(NAME UnitTesting COMMAND ./${tests_dest}/unit_tests)
-
-# Define a function to simplify adding tests in the future
-function(do_test target arg result)
-  add_test(NAME Comp${arg} COMMAND ${target} ${arg})
-  set_tests_properties(Comp${arg}
-    PROPERTIES PASS_REGULAR_EXPRESSION ${result}
-    )
-endfunction(do_test)
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")

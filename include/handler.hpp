@@ -139,7 +139,8 @@ public:
 		 * fields. Each
 		 *
 		 * @param  table_name  Name for the table to be created.
-		 * @param  fields      Vector of desriptions, each of them containing name of field and data specifications of the field corresponding field.
+		 * @param  fields      Vector of desriptions, each of them containing name of field and
+		 *  data specifications of the field corresponding field.
 		 *
 		 * @return EXIT_SUCCESS if correct. Otherwise EXIT_FAILURE is returned.
 		 *
@@ -196,7 +197,7 @@ public:
 		 * that will be extracted from the result of the query.
 		 *
 		 * @param  data         Container to store the data retrieved from the indexes_stmt.
-		 * 
+		 *
 		 * @param  verbose      If set to true, the result of the query will also be printed
 		 * through the console. Default value is false.
 		 *
@@ -344,21 +345,7 @@ public:
 		 * @return								Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC",
 		 * 												depending on the input.
 		 */
-
-		/*!
-		 * \brief Calculate the affinity token corresponding to a datatype given.
-		 *
-		 * Using the data affinities defined in the SQLite3 documentation, and with the rules
-		 *  specified to calculate them, this method will return the affinity according to the
-		 *  datatype it receives.
-		 *
-		 * @param  field_datatype The datatype for which the affinity token will be calculated.
-		 *
-		 * @return								Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC",
-		 * 												depending on the input.
-		 */
 		const std::string getAffinity(const std::string field_datatype);
-
 
 		/*!
 		 * \brief Get field's names from a table in the database.
@@ -453,6 +440,16 @@ public:
 		 * @return  True if the value is valid for the field given, false otherwise.
 		 */
 		bool isAffined(const std::string affinity, const std::string value_to_check);
+
+		/*!
+		 * \brief Get status of the handler's connection
+		 *
+		 * Used to check the conection status of the handler, it will print whether there is a
+		 * satabase linked to it or not, and will return a value depending on it.
+		 *
+		 * @return True if the handler is connected to a database. False otherwise.
+		 */
+		bool isConnected();
 
 		/*!
 		 * \brief Check if a character is valid for being inside of a real number
