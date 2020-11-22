@@ -10,7 +10,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Sqlite3Utils.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,11 +26,11 @@
    Definition file used for easier sql query composition
 ******************************************************************************/
 /*!
- * \brief namespace containing the macros for queries definitons.
+ * \brief Contains the macros for queries definitons.
  */
 namespace query {
   /*!
-   * \brief namespace containing the data affinity definitions and calculation.
+   * \brief The data affinity definitions are stored in this namespace.
    */
   namespace affinity {
     const std::string integer           = "INTEGER";
@@ -49,7 +49,7 @@ namespace query {
                               CLAUSES
 *********************************************************************/
   /*!
-   * \brief namespace containing the query clauses.
+   * \brief List including all the clauses available in the sqlite3 syntax
    */
  namespace cl {
 
@@ -109,6 +109,7 @@ namespace query {
     const std::string on                = " ON ";
     const std::string or_               = " OR ";
     const std::string order_by          = " ORDER BY ";
+    const std::string set               = " SET ";
     const std::string sum               = " SUM ";
 
     /*!
@@ -137,7 +138,7 @@ namespace query {
                         DB-QUERY STATEMENTS
 *********************************************************************/
   /*!
-   * \brief namespace containing the query commands.
+   * \brief List of the commands in the sqlite3 syntax
    */
   namespace cmd {
 
@@ -182,7 +183,7 @@ namespace query {
                         DATATYPES AND DB TYPES
 *********************************************************************/
   /*!
-   * \brief namespace containing the query data types and options.
+   * \brief Includes some of the different datatypes and database selectable parts.
    */
   namespace data {
 

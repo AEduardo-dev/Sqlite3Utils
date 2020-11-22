@@ -13,12 +13,12 @@ set(EXAMPLES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/examples")
 set(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-set(main_lib_dest "lib/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(main_lib_dest "lib/sqlite3utils-${Sqlite3Utils_VERSION}")
 set(lib_dest "${main_lib_dest}/${CMAKE_BUILD_TYPE}")
-set(include_dest "include/sqlite3_utils-${Sqlite3Utils_VERSION}")
-set(tests_dest "tests/sqlite3_utils-${Sqlite3Utils_VERSION}")
-set(examples_dest "examples/sqlite3_utils-${Sqlite3Utils_VERSION}")
-set(docs_dest "docs/sqlite3_utils-${Sqlite3Utils_VERSION}")
+set(include_dest "include/sqlite3utils-${Sqlite3Utils_VERSION}")
+set(tests_dest "tests/sqlite3utils-${Sqlite3Utils_VERSION}")
+set(examples_dest "examples/sqlite3utils-${Sqlite3Utils_VERSION}")
+set(docs_dest "docs/sqlite3utils-${Sqlite3Utils_VERSION}")
 set(SQLITE3_INSTALL_FILE "sqlite-autoconf-3330000.tar.gz")
 set(SQLITE3_INSTALL_DIRNAME "${CMAKE_BINARY_DIR}/sqlite-autoconf-3330000")
 
@@ -116,25 +116,25 @@ ENDIF()
 
 
 # Add the executable
-add_executable(DatabaseHandler "${SOURCES_DIR}/minimalHandler.cpp")
+add_executable(Sqlite3Utils "${SOURCES_DIR}/minimalHandler.cpp")
 
 # Link libraries
-target_link_libraries(DatabaseHandler PUBLIC handler query)
+target_link_libraries(Sqlite3Utils PUBLIC handler query)
 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
-target_include_directories(DatabaseHandler PUBLIC "${PROJECT_BINARY_DIR}")
+target_include_directories(Sqlite3Utils PUBLIC "${PROJECT_BINARY_DIR}")
 
 # Installation rules
 # Executable
-install(TARGETS DatabaseHandler DESTINATION bin)
+install(TARGETS Sqlite3Utils DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/Sqlite3UtilsConfig.h" DESTINATION ${include_dest})
 
 # Version Control
-configure_file(sqlite3_utils-config-version.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/sqlite3_utils-config-version.cmake @ONLY)
+configure_file(sqlite3utils-config-version.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/sqlite3utils-config-version.cmake @ONLY)
 
 # Package support
-install(FILES sqlite3_utils-config.cmake DESTINATION ${main_lib_dest})
+install(FILES sqlite3utils-config.cmake DESTINATION ${main_lib_dest})
 
 # Export
 install(EXPORT handler DESTINATION "${lib_dest}")
@@ -150,10 +150,10 @@ include(CTest)
 
 
 # Does the application run
-add_test(NAME Runs COMMAND DatabaseHandler mydb.db)
+add_test(NAME Runs COMMAND Sqlite3Utils mydb.db)
 
 # Does the usage message work?
-add_test(NAME Usage COMMAND DatabaseHandler)
+add_test(NAME Usage COMMAND Sqlite3Utils)
 set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
   )

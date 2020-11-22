@@ -32,7 +32,7 @@
 #include "query.hpp"
 
 
-/*! \brief namespace containing the Sqlite3Db class
+/*! \brief Contains the Sqlite3Db class and it's types
  *
  * Namespace used to contain the Sqlite3Db class and all of it's members.
  * It also uses some type definitions to make the software cleaner.
@@ -113,6 +113,24 @@ public:
 		 * \include closeConnection.cpp
 		 */
 		void closeConnection();
+
+		/*!
+		 * \brief Reconnects the handler to it's linked database
+		 *
+		 * While doing the reconnection all the data inside of the handler is renewed, in case
+		 *  some changes took place during the time it was offline.
+		 *
+		 * @return         EXIT_SUCCESS if the db was reopened and it's information loaded
+		 *  							 correctly. EXIT_FAILURE otherwise.
+		 *
+		 *
+		 * An example of usage could be as follows:
+		 *
+		 *
+		 * \include reconnectDb.cpp
+		 *
+		 */
+		bool connectDb ();
 
 		/*!
 		 * \brief Create a table in the database with the specified parameters.
@@ -210,24 +228,6 @@ public:
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
 
 		/*!
-		 * \brief Reconnects the handler to it's linked database
-		 *
-		 * While doing the reconnection all the data inside of the handler is renewed, in case
-		 *  some changes took place during the time it was offline.
-		 *
-		 * @return         EXIT_SUCCESS if the db was reopened and it's information loaded
-		 *  							 correctly. EXIT_FAILURE otherwise.
-		 *
-		 *
-		 * An example of usage could be as follows:
-		 *
-		 *
-		 * \include reconnectDb.cpp
-		 *
-		 */
-		bool connectDb ();
-
-		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
 		 *
 		 * Extracts all the data that fits the descriptions and conditions passed as arguments.
@@ -301,6 +301,37 @@ public:
 		 * \include updateHandler2.cpp
 		 */
 		bool updateHandler();
+
+		/*!
+		 * \brief Updates the information contained on a table using a condition given.
+		 *
+		 * Method used to set the value of certain field/s of a table whenever the condition
+		 * given is met.
+		 *
+		 * @param  table_name Table where the update operation will take place.
+		 * @param  set_fields Container of pairs which have, as a first element, the name of a
+		 * field at the table <table_name>, and as the second element, the value it should take
+		 * when the condition is met.
+		 * @param  where_cond Condition causing the values of the fields given to change to the
+		 * updated value.
+		 * @return            EXIT_SUCCESS if the operation completed succesfully, EXIT_FAILURE
+		 *  otherwise
+		 */
+		bool updateTable(std::string table_name, FieldDescription set_fields,\
+			 								std::string where_cond);
+
+		/*!
+		 * \brief Calculate the affinity token corresponding to a datatype given.
+		 *
+		 * Using the data affinities defined in the SQLite3 documentation, and with the rules
+		 *  specified to calculate them, this method will return the affinity according to the
+		 *  datatype it receives.
+		 *
+		 * @param  field_datatype The datatype for which the affinity token will be calculated.
+		 *
+		 * @return								Affinity values "INTEGER", "REAL", "TEXT", "BLOB" or "NUMERIC",
+		 * 												depending on the input.
+		 */
 
 		/*!
 		 * \brief Calculate the affinity token corresponding to a datatype given.

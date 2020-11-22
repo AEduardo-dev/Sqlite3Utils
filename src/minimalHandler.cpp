@@ -4,6 +4,8 @@
 
 using namespace query;
 
+void printOptions();
+
 int main(int argc, char const *argv[]) {
 
 		if (argc < 2) {
@@ -17,16 +19,20 @@ int main(int argc, char const *argv[]) {
 		handler::Sqlite3Db myHandler(argv[1]);
 
 		std::cout << "Select the operation to apply on " << myHandler.getDbPath() << '\n';
-
-		/* Declaration of the table's fields */
-		std::vector<handler::FieldDescription> table_definition = \
-		{{"ID",query::data::int_+query::data::primary_key+query::data::not_null}, \
-				{"AGE", query::data::int_+query::data::not_null}, \
-				{"PHONE", query::data::int_+query::data::null}, \
-				{"NAME",query::data::char_+query::data::len(50)+query::data::not_null}};
-
-		if(myHandler.createTable("NEWTABLE", table_definition) == EXIT_SUCCESS)
-			std::cout << "Funciona" << '\n';
+		printOptions();
 
 		return 0;
+}
+
+
+void printOptions(){
+	std::cout << "0 - Create Table	\n";
+	std::cout << "1 - Drop Table 		\n";
+	std::cout << "2 - Update Table	\n";
+	std::cout << "3 - Insert Record 	\n";
+	std::cout << "4 - Select Records 	\n";
+	std::cout << "5 - Delete Records 	\n";
+	std::cout << "6 - Update Database Information 	\n";
+	std::cout << "7 - Get Database Information 			\n"
+	std::cout << "8 - Disconnect	\n";
 }

@@ -26,7 +26,13 @@ var NAVTREE =
 [
   [ "dbHandler for sqlite3", "index.html", [
     [ "README", "md_README.html", [
-      [ "dbHandler-sqlite3", "md_README.html#autotoc_md0", null ]
+      [ "<strong>Welcome to the Sqlite3 Handler Repository! :notebook:</strong>", "md_README.html#autotoc_md1", [
+        [ "<strong>OSS Buils Status :computer:</strong>", "md_README.html#autotoc_md0", null ],
+        [ "Announcements :clipboard:", "md_README.html#autotoc_md2", null ],
+        [ "Description :scroll:", "md_README.html#autotoc_md5", null ],
+        [ "Installation :floppy_disk:", "md_README.html#autotoc_md7", null ],
+        [ ":checkered_flag: Final Notes :checkered_flag:", "md_README.html#autotoc_md10", null ]
+      ] ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
