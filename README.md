@@ -1,5 +1,3 @@
-[TOC]
-
 ## **OSS Buils Status :computer:**
 
 [![Build Status](https://travis-ci.com/AEduardo-png/Sqlite3Utils.svg?token=24Az7WhqXAJTBGASJKeQ&branch=main)](https://travis-ci.com/AEduardo-png/Sqlite3Utils) :heavy_check_mark:
