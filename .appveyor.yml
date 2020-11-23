@@ -26,14 +26,19 @@ for:
       - cmd: .\bootstrap-vcpkg.bat
       - cmd: cd %APPVEYOR_BUILD_FOLDER%
 
-    before_build: |
-        vcpkg install sqlite3:x86-windows
-        vcpkg install sqlite3:x64-windows
-        cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ...
+    before_build:
+        - cmd: vcpkg install sqlite3:x86-windows
+        - cmd: vcpkg install sqlite3:x64-windows
+        - cmd: cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ...
 
     build_script:
-    - cmd: |
+        - cmd: cd %APPVEYOR_BUILD_FOLDER%
+        - cmd: mkdir build && cd build/
+        - cmd: cmake -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DiNSTALL_DOCS=ON ..
+        - cmd: cmake --build .
+        - cmd: ctest
+        - cmd: cmake --install .
 
-             vcpkg install sqlite3:x64-windows
+
 
 cache: c:\tools\vcpkg\installed\
