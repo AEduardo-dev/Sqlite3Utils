@@ -29,7 +29,8 @@ for:
     before_build:
         - cmd: vcpkg install sqlite3:x86-windows
         - cmd: vcpkg install sqlite3:x64-windows
-        - cmd: cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ...
+        - cmd: cmake --version
+        - cmd: gcc -v && g++ -v
 
     build_script:
         - cmd: cd %APPVEYOR_BUILD_FOLDER%
