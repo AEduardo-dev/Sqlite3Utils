@@ -66,6 +66,7 @@ IF(NOT FOUND_SQLITE3)
       execute_process(COMMAND make WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
 
     ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
+      MESSAGE("Windows installation")
       execute_process(COMMAND nmake /f Makefile.msc
                       WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
 

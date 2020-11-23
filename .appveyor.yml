@@ -33,7 +33,7 @@ for:
     build_script:
         - cmd: cd %APPVEYOR_BUILD_FOLDER%
         - cmd: mkdir build && cd build/
-        - cmd: cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DiNSTALL_DOCS=ON ..
+        - cmd: cmake -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DiNSTALL_DOCS=ON ..
         - cmd: cmake --build .
         - cmd: ctest
         - cmd: cmake --install .
