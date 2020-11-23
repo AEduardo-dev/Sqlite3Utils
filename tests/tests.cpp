@@ -44,7 +44,7 @@ std::vector<std::string> data_to_check = {"1", "32", "665", "ANTHON33", \
 
 /********************CONSTRUCTOR AND DESTRUCTOR TESTS************************/
 /* Check if db is created if it does not exist */
-TEST(SqliteHandlerConstructor, CreateDatabase){
+TEST(Handler_Constructor, Should_Create_Database){
 		EXPECT_FALSE(exists("CreatedDB.db"));
 		handler::Sqlite3Db testHandler("CreatedDB.db");
 
@@ -52,7 +52,7 @@ TEST(SqliteHandlerConstructor, CreateDatabase){
 }
 
 /* Check if multiple handlers can be connected to the same db */
-TEST(SqliteHandlerConstructor, MultiConnectDB){
+TEST(Handler_Constructor, Can_MultiConnect_DB){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db firstConnection("MyDB.db");
 		handler::Sqlite3Db secondConnection("MyDB.db");
@@ -61,157 +61,157 @@ TEST(SqliteHandlerConstructor, MultiConnectDB){
 }
 
 /* If no tables exist the database should be loaded but no table will be in the handler */
-TEST(SqliteHandlerConstructor, LoadEmptyDatabase){
+TEST(Handler_Constructor, Loads_Empty_Database){
 		ASSERT_NO_THROW(handler::Sqlite3Db MyHandler("MyDB.db"));
 		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
 /* Contructor wrong db name */
-TEST(SqliteHandlerConstructor, DatabaseNoFileExtension){
+TEST(Handler_Constructor, Should_Accept_Name_Without_Extension){
 		ASSERT_NO_THROW(handler::Sqlite3Db MyHandler("NoExtensionDB"));
 		ASSERT_EQ(UserHandler.getNumTables(), 0);
 }
 
 /*******************CREATE TABLE FUNCTION*********************************/
 /* Create a table normally */
-TEST(SqliteCreateTable, CreateTable){
+TEST(Create_Table, Works_Correctly){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition), EXIT_SUCCESS);
 		ASSERT_EQ(UserHandler.getNumTables(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
 
 /* Create a table with a typo in it's definition */
-TEST(SqliteCreateTable, CreateTableWrongDefinition){
+TEST(Create_Table, Fails_If_Wrong_Query){
 		ASSERT_EQ(UserHandler.createTable(table_name, table_definition_wrong), EXIT_FAILURE);
 		ASSERT_EQ(UserHandler.getNumTables(), 1);
 		ASSERT_EQ(UserHandler.getFields(table_name), names_to_check);
 }
 
 /**********************AFFINITY OPERATIONS*****************************/
-TEST(SqliteAffinity, CheckIntAffinityLower){
+TEST(Affinity_Check, Detects_Integer_Affinity_Lowercase){
 		ASSERT_EQ(UserHandler.getAffinity("medint"), "INTEGER");
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
 
-/* Get the affinity of an integer number datatype and check a correct value against it */ TEST(SqliteAffinity, CheckIntAffinityUpper){
+/* Get the affinity of an integer number datatype and check a correct value against it */ TEST(Affinity_Check, Detects_Integer_Affinity_Uppercase){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_TRUE(UserHandler.isAffined("INTEGER", "3386"));
 }
 
 /* Get the affinity of a non integer datatype and check if no false integer is generated */
-TEST(SqliteAffinity, CheckIntWrongAffinity){
+TEST(Affinity_Check, No_False_Integer_Affinity){
 		ASSERT_NE(UserHandler.getAffinity("REAL"), "INTEGER");
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckIntAffinityWrongValue){
+TEST(Affinity_Check, Integer_Affinity_Fails_When_Real_Value){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33,86"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckIntAffinityWrongValueText){
+TEST(Affinity_Check, Integer_Affinity_Fails_When_Text_Value){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33a86"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckIntAffinityWrongValueSymbol){
+TEST(Affinity_Check, Integer_Affinity_Fails_When_Symbol_Value){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_FALSE(UserHandler.isAffined("INTEGER", "33+86"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckIntAffinityNothing){
+TEST(Affinity_Check, Integer_Affinity_Fails_When_Empty_Value){
 		ASSERT_EQ(UserHandler.getAffinity("MEDINT"), "INTEGER");
 		ASSERT_FALSE(UserHandler.isAffined("INTEGER", ""));
 }
 
 /* Get the affinity of a real number datatype in lower case*/
-TEST(SqliteAffinity, CheckRealAffinitLower){
+TEST(Affinity_Check, Detects_Real_Affinity_Lowercase){
 		ASSERT_EQ(UserHandler.getAffinity("double"), "REAL");
 }
 
 /* Get the affinity of a real number datatype in upper case*/
-TEST(SqliteAffinity, CheckRealAffinityUpper){
+TEST(Affinity_Check, Detects_Real_Affinity_Uppercase){
 		ASSERT_EQ(UserHandler.getAffinity("DOUBLE"), "REAL");
 }
 
 /* Get the affinity of a real number datatype and check a correct value against it (comma)*/
-TEST(SqliteAffinity, CheckRealAffinityComma){
+TEST(Affinity_Check, Real_Affinity_Works_With_Comma_Decimals){
 		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");
 		ASSERT_TRUE(UserHandler.isAffined("REAL", "33,86"));
 }
 
 /* Get the affinity of a real number datatype and check a correct value against it (dot)*/
-TEST(SqliteAffinity, CheckRealAffinityDot){
+TEST(Affinity_Check, Real_Affinity_Works_With_Dot_Decimals){
 		ASSERT_EQ(UserHandler.getAffinity("Short double"), "REAL");
 		ASSERT_TRUE(UserHandler.isAffined("REAL", "33.86"));
 }
 
 /* Get the affinity of a non real datatype and check if no false real affinity is generated */
-TEST(SqliteAffinity, CheckRealWrongAffinity){
+TEST(Affinity_Check, No_False_Real_Affinity){
 		ASSERT_NE(UserHandler.getAffinity("LONG INT"), "REAL");
 }
 
 /* Get the affinity of a real number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckRealAffinityWrongValue){
+TEST(Affinity_Check, Real_Affinity_Works_With_Integer_Value){
 		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");
-		ASSERT_FALSE(UserHandler.isAffined("REAL", "33a86"));
+		ASSERT_TRUE(UserHandler.isAffined("REAL", "3386"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckRealAffinityWrongValueText){
+TEST(Affinity_Check, Real_Affinity_Fails_When_Text_Value){
 		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", "33aasd86"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckRealAffinityWrongValueSymbol){
+TEST(Affinity_Check, Real_Affinity_Fails_When_Symbol_Value){
 		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", "33/86"));
 }
 
 /* Get the affinity of an integer number datatype and check a wrong value against it */
-TEST(SqliteAffinity, CheckRealAffinityNothing){
+TEST(Affinity_Check, Real_Affinity_Fails_When_Empty_Value){
 		ASSERT_EQ(UserHandler.getAffinity("LONG DOUBLE"), "REAL");              ASSERT_FALSE(UserHandler.isAffined("REAL", ""));
 }
 
 /* Get the affinity of a text datatype in lower case */
-TEST(SqliteAffinity, CheckTextAffinityLower){
+TEST(Affinity_Check, Detects_Text_Affinity_Lowercase){
 		ASSERT_EQ(UserHandler.getAffinity("char(90)"), "TEXT");
 }
 
 /* Get the affinity of a text datatype in upper case */
-TEST(SqliteAffinity, CheckTextAffinityUpper){
+TEST(Affinity_Check, Detects_Text_Affinity_Uppercase){
 		ASSERT_EQ(UserHandler.getAffinity("CHAR (90)"), "TEXT");
 }
 
 /* Get the affinity of a real datatype and check no false text is received*/
-TEST(SqliteAffinity, CheckTextWrongAffinity){
+TEST(Affinity_Check, No_False_Text_Affinity){
 		ASSERT_NE(UserHandler.getAffinity("REAL"), "TEXT");
 }
 
 /* Get the affinity of a blob datatype in lower case */
-TEST(SqliteAffinity, CheckBlobAffinityLower){
+TEST(Affinity_Check, Detects_Blob_Affinity_Lowercase){
 		ASSERT_EQ(UserHandler.getAffinity("blob"), "BLOB");
 }
 
 /* Get the affinity of a blob datatype in upper case */
-TEST(SqliteAffinity, CheckBlobAffinityUpper){
+TEST(Affinity_Check, Detects_Blob_Affinity_Uppercase){
 		ASSERT_EQ(UserHandler.getAffinity("BLOB"), "BLOB");
 }
 
 /* Get the affinity of a blob datatype with no datatype defined */
-TEST(SqliteAffinity, CheckBlobAffinityNothing){
+TEST(Affinity_Check, Detects_Blob_Affinity_Empty_Type){
 		ASSERT_EQ(UserHandler.getAffinity(""), "BLOB");
 }
 
 /* Get the affinity of a real datatype and check no false blob is received*/
-TEST(SqliteAffinity, CheckBlobWrongAffinity){
+TEST(Affinity_Check, No_False_Blob_Affinity){
 		ASSERT_NE(UserHandler.getAffinity("Text"), "BLOB");
 }
 
 /* Check all affinities with mixed upper and lower case */
-TEST(SqliteAffinity, CheckMixedCaseAffinities){
+TEST(Affinity_Check, Detects_Affinity_Mixed_Lower_And_Upper){
 		ASSERT_EQ(UserHandler.getAffinity("ChAr (100)"), "TEXT");
 		ASSERT_EQ(UserHandler.getAffinity("BlOB"), "BLOB");
 		ASSERT_EQ(UserHandler.getAffinity("InTeGer"), "INTEGER");
@@ -220,7 +220,7 @@ TEST(SqliteAffinity, CheckMixedCaseAffinities){
 
 /*******************INSERT RECORDS FUNCTION******************************/
 /* Correct insertion statement with all fields given */
-TEST(SqliteInsertion, InsertCompleteCorrect){
+TEST(Insert_Record, Succeeds_With_Complete_Insertion_Description){
 		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"1", "32", "665", "ANTHON33"};
@@ -228,7 +228,7 @@ TEST(SqliteInsertion, InsertCompleteCorrect){
 }
 
 /* Correct insertion statement with some fields given. Respecting the not null constraints */
-TEST(SqliteInsertion, InsertIncompleteCorrect){
+TEST(Insert_Record, Succeeds_With_Incomplete_Insertion_Description){
 		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"2", "43", "", "Julia"};
@@ -236,7 +236,7 @@ TEST(SqliteInsertion, InsertIncompleteCorrect){
 }
 
 /* Incorrect insertion statement with some fields given. No respecting the not null constraints */
-TEST(SqliteInsertion, InsertIncompleteIncorrect){
+TEST(Insert_Record, Fails_With_Missed_NULL_Constraint_Description){
 		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"4", "", "", "Robert"};
@@ -244,7 +244,7 @@ TEST(SqliteInsertion, InsertIncompleteIncorrect){
 }
 
 /* Incorrect insertion statement giving a non existent table name */
-TEST(SqliteInsertion, InsertNoTable){
+TEST(Insert_Record, Fails_With_Wrong_Table_Name){
 		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"5", "32", "665", "BRUNO"};
@@ -252,7 +252,7 @@ TEST(SqliteInsertion, InsertNoTable){
 }
 
 /* Incorrect insertion statement giving incorrect datatype to a field */
-TEST(SqliteInsertion, InsertIncorrectType){
+TEST(Insert_Record, Fails_With_Wrong_Datatype){
 		EXPECT_TRUE(UserHandler.getNumTables() == 1);
 
 		std::vector<std::string> values_to_insert = {"Hello", "32", "435", "Albert"};
@@ -260,7 +260,7 @@ TEST(SqliteInsertion, InsertIncorrectType){
 }
 /*********************OPERATIONS ON LOADED DB***************************/
 /* Hanlder declarations loads all the information inside of the db (tables and field in the map) */
-TEST(SqliteLoadedDb, LoadDatabase){
+TEST(Loaded_Data, Succeeds_Load_Database_Information_Through_Constructor){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 
@@ -269,7 +269,7 @@ TEST(SqliteLoadedDb, LoadDatabase){
 }
 
 /* Check if the hanlder is able to operate the db just from the data loaded at initialization */
-TEST(SqliteLoadedDb, InsertAfterLoad){
+TEST(Loaded_Data, Succeeds_Insert_Operation_After_Load){
 		EXPECT_TRUE(exists("MyDB.db"));
 		handler::Sqlite3Db LoaderHandler("MyDB.db");
 		EXPECT_GT(LoaderHandler.getNumTables(), 0);
@@ -279,9 +279,8 @@ TEST(SqliteLoadedDb, InsertAfterLoad){
 }
 
 /**************************SELECT OPERATIONS***********************/
-//TODO: ANGEL 22/11/2020 Add tests for spaces (" ") values at optional arguments 
 /* Select all records inside of a table correctly */
-TEST(SqliteSelectRecords, SelectAll){
+TEST(Select_Records, Succeeds_Select_All_Records){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
@@ -290,7 +289,7 @@ TEST(SqliteSelectRecords, SelectAll){
 }
 
 /* Select all records of a non existent table */
-TEST(SqliteSelectRecords, SelectAllNoTable){
+TEST(Select_Records, Fails_Select_All_When_Wrong_Table){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
@@ -299,7 +298,7 @@ TEST(SqliteSelectRecords, SelectAllNoTable){
 }
 
 /* Select specific field from all records */
-TEST(SqliteSelectRecords, SelectSpecific){
+TEST(Select_Records, Succeeds_Select_Specific_Field_From_Record){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
@@ -309,7 +308,16 @@ TEST(SqliteSelectRecords, SelectSpecific){
 }
 
 /* Select non existent specific field from all records of existent table */
-TEST(SqliteSelectRecords, SelectSpecificNoField){
+TEST(Select_Records, Returns_Empty_When_Blank_Field){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {" "});
+		ASSERT_TRUE(data.empty());
+}
+
+/* Select non existent specific field from all records of existent table */
+TEST(Select_Records, Fails_When_Wrong_Field_Name){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
@@ -318,7 +326,7 @@ TEST(SqliteSelectRecords, SelectSpecificNoField){
 }
 
 /* Select specific field from all records seeing only distinct results */
-TEST(SqliteSelectRecords, SelectSpecificDistinct){
+TEST(Select_Records, Succeeds_Select_Specific_Field_With_Only_Unique_Results){
 
 		/* Check the names in the records */
 		EXPECT_TRUE(exists("MyDB.db"));
@@ -346,7 +354,7 @@ TEST(SqliteSelectRecords, SelectSpecificDistinct){
 }
 
 /* Select all records from table with where condition for records selection */
-TEST(SqliteSelectRecords, SelectAllWhere){
+TEST(Select_Records, Succeeds_Select_All_With_WHERE_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 100";
@@ -358,7 +366,7 @@ TEST(SqliteSelectRecords, SelectAllWhere){
 }
 
 /* Select all records from table with where condition for records selection */
-TEST(SqliteSelectRecords, SelectSpecificWhere){
+TEST(Select_Records, Succeeds_Select_Specific_Field_With_WHERE_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 100";
@@ -370,7 +378,7 @@ TEST(SqliteSelectRecords, SelectSpecificWhere){
 }
 
 /* Select all records from table with wrong where condition for records selection */
-TEST(SqliteSelectRecords, SelectAllWhereWrong){
+TEST(Select_Records, Fails_Select_All_When_Wrong_WHERE_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGEe > 100";
@@ -380,7 +388,7 @@ TEST(SqliteSelectRecords, SelectAllWhereWrong){
 }
 
 /* Select all records from table with where condition that selects nothing */
-TEST(SqliteSelectRecords, SelectAllWhereNone){
+TEST(Select_Records, Returns_Empty_When_WHERE_Condition_Not_Met){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::string where_cond = "AGE > 1000";
@@ -390,7 +398,7 @@ TEST(SqliteSelectRecords, SelectAllWhereNone){
 }
 
 /* Select all records from table grouping by and using sum for select */
-TEST(SqliteSelectRecords, SelectSpecificGroupBy){
+TEST(Select_Records, Succeeds_Group_Results_By){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -403,7 +411,7 @@ TEST(SqliteSelectRecords, SelectSpecificGroupBy){
 }
 
 /* Select all records from table grouping by a non existent field */
-TEST(SqliteSelectRecords, SelectSpecificGroupByWrongField){
+TEST(Select_Records, Fails_Group_Results_By_When_Wrong_Field_Name){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAMEe"};
@@ -414,7 +422,7 @@ TEST(SqliteSelectRecords, SelectSpecificGroupByWrongField){
 }
 
 /* Select all records from table grouping by a field and ordering by the sum of a field*/
-TEST(SqliteSelectRecords, SelectSpecificOrderByAscendentOrder){
+TEST(Select_Records, Succeeds_Order_Results_Ascendent_Order){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -430,7 +438,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByAscendentOrder){
 }
 
 /* Select all records from table grouping by a field and ordering by the sum of a field*/
-TEST(SqliteSelectRecords, SelectSpecificOrderByDescendentOrder){
+TEST(Select_Records, Succeeds_Order_Results_Descendent_Order){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -446,7 +454,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByDescendentOrder){
 }
 
 /* Select all records from table grouping by a field and ordering by a wrong field*/
-TEST(SqliteSelectRecords, SelectSpecificOrderByWrongField){
+TEST(Select_Records, Fails_Order_Results_When_Wrong_Fields_Name){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -459,7 +467,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByWrongField){
 }
 
 /* Select all records from table grouping by a field and ordering by a wrong field*/
-TEST(SqliteSelectRecords, SelectSpecificOrderByWrongOrderType){
+TEST(Select_Records, Fails_Order_Results_When_Wrong_Order_Type){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -472,7 +480,7 @@ TEST(SqliteSelectRecords, SelectSpecificOrderByWrongOrderType){
 }
 
 /* Select all records from table grouping and ordering using having for filter*/
-TEST(SqliteSelectRecords, SelectSpecificHaving){
+TEST(Select_Records, Succeeds_Select_Records_With_HAVING_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -489,7 +497,7 @@ TEST(SqliteSelectRecords, SelectSpecificHaving){
 }
 
 /* Select all records from table grouping and ordering using having to filter getting no results*/
-TEST(SqliteSelectRecords, SelectSpecificHavingNone){
+TEST(Select_Records, Returns_Empty_When_HAVING_Condition_Not_Met){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -503,7 +511,7 @@ TEST(SqliteSelectRecords, SelectSpecificHavingNone){
 }
 
 /* Select all records from table grouping and ordering using a wrong having condition */
-TEST(SqliteSelectRecords, SelectSpecificHavingWrong){
+TEST(Select_Records, Fails_When__Wrong_HAVING_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -517,7 +525,7 @@ TEST(SqliteSelectRecords, SelectSpecificHavingWrong){
 }
 
 /* Select all records from table grouping and ordering using having and showing only 1 result */
-TEST(SqliteSelectRecords, SelectSpecificLimit){
+TEST(Select_Records, Succeeds_Limit_Number_Of_Results){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -535,7 +543,7 @@ TEST(SqliteSelectRecords, SelectSpecificLimit){
 }
 
 /* Select all records from table grouping and ordering using having and showing all results as any numbre <= 0 is considered as no limit stablished */
-TEST(SqliteSelectRecords, SelectSpecificNegativeLimit){
+TEST(Select_Records, No_Limit_When_Negative_Limit_Number){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -551,26 +559,8 @@ TEST(SqliteSelectRecords, SelectSpecificNegativeLimit){
 		ASSERT_FALSE(data.empty());
 }
 
-/* Select all records from table grouping and ordering using having and showing only 1 result */
-TEST(SqliteSelectRecords, SelectSpecificNegativeOffset){
-		EXPECT_TRUE(exists("MyDB.db"));
-		EXPECT_GT(UserHandler.getNumTables(), 0);
-		std::vector<std::string> group_by = {"NAME"};
-		std::vector<std::string> order_by = {"SUM(AGE)"};
-		std::string having_cond = "count(name) < 2";
-		std::string order_type = "DESC";
-		int limit = -1;
-		int offset = -1;
-		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
-		                                                          false, "", group_by, having_cond, \
-		                                                          order_by, order_type, limit, offset);
-
-		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
-		ASSERT_FALSE(data.empty());
-}
-
 /* Select all records from table grouping and ordering using having and limiting to one with offset to show from second */
-TEST(SqliteSelectRecords, SelectSpecificLimitOffset){
+TEST(Select_Records, Succeeds_Limit_Number_Of_Results_With_Offset){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -589,7 +579,7 @@ TEST(SqliteSelectRecords, SelectSpecificLimitOffset){
 }
 
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
-TEST(SqliteSelectRecords, SelectSpecificBiggerLimit){
+TEST(Select_Records, Succeeds_When_Limit_Number_More_Than_Results_Number){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -607,7 +597,7 @@ TEST(SqliteSelectRecords, SelectSpecificBiggerLimit){
 }
 
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
-TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
+TEST(Select_Records, Returns_Empty_When_Offset_Number_More_Than_Results_Number){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		std::vector<std::string> group_by = {"NAME"};
@@ -623,8 +613,26 @@ TEST(SqliteSelectRecords, SelectSpecificBiggerOffset){
 		ASSERT_TRUE(data.empty());
 }
 
+/* Select all records from table grouping and ordering using having and showing only 1 result */
+TEST(Select_Records, No_Offset_When_Negative_Offset_Number){
+		EXPECT_TRUE(exists("MyDB.db"));
+		EXPECT_GT(UserHandler.getNumTables(), 0);
+		std::vector<std::string> group_by = {"NAME"};
+		std::vector<std::string> order_by = {"SUM(AGE)"};
+		std::string having_cond = "count(name) < 2";
+		std::string order_type = "DESC";
+		int limit = -1;
+		int offset = -1;
+		std::vector<std::string> data = UserHandler.selectRecords(table_name, {"*"}, \
+		                                                          false, "", group_by, having_cond, \
+		                                                          order_by, order_type, limit, offset);
+
+		std::vector<std::string> data_to_get = { "1", "32", "665","ANTHON33"};
+		ASSERT_FALSE(data.empty());
+}
+
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
-TEST(SqliteSelectRecords, SelectStructSpecificAllConditions){
+TEST(Select_Records, Succeeds_Select_Struct_Overload_With_All_Options_Filled){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		handler::select_query_param select_query;
@@ -643,7 +651,7 @@ TEST(SqliteSelectRecords, SelectStructSpecificAllConditions){
 }
 
 /* Select all records from table grouping and ordering using having and limiting results to bigger number than actual number of results */
-TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
+TEST(Select_Records, Succeeds_Select_Struct_Overload_With_No_Condition_Met){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		handler::select_query_param select_query;
@@ -662,7 +670,8 @@ TEST(SqliteSelectRecords, SelectStructSpecificAllConditionsNoResult){
 
 /****************UPDATE AND MULTICONNECTION OPERATIONS*************/
 
-TEST(SqliteUpdateHandler, UpdateSingle){
+/* Update operation when no change has been applied on the db */
+TEST(Update_Handler, Succeeds_Update_With_No_Changes){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		handler::DbTables tables = UserHandler.getTables();
@@ -670,8 +679,8 @@ TEST(SqliteUpdateHandler, UpdateSingle){
 		ASSERT_EQ(UserHandler.getTables(), tables);
 }
 
-/* Try to drop a table from the db that does not exist */
-TEST(SqliteUpdateHandler, UpdateHandler){
+/* Update a second handler with the database information changed by another handler */
+TEST(Update_Handler, Succeeds_Update_With_Parallel_Handler_Changes_On_DB){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 
@@ -697,13 +706,13 @@ TEST(SqliteUpdateHandler, UpdateHandler){
 
 /*****************************EXECUTE QUERY********************************/
 /* Custom query wanting no output */
-TEST(SqliteExecuteCustomQuery, CustomQueryCorrectNoOutput){
+TEST(Execute_Custom_Query, Succeeds_With_Correct_Query_Syntax){
 		std::string query = query::cmd::select + "*" + query::cl::from + table_name;
 		ASSERT_EQ(UserHandler.executeQuery(query.c_str()), EXIT_SUCCESS);
 }
 
 /* Custom query extracting output */
-TEST(SqliteExecuteCustomQuery, CustomQueryCorrectOutput){
+TEST(Execute_Custom_Query, Succeeds_With_Data_Output){
 		std::string query = query::cmd::select + "*" + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
 		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_SUCCESS);
@@ -711,7 +720,7 @@ TEST(SqliteExecuteCustomQuery, CustomQueryCorrectOutput){
 }
 
 /* Custom query with wrong query definition and no output expected */
-TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectNoOutput){
+TEST(Execute_Custom_Query, Fails_With_Incorrect_Query_Syntax){
 		std::string query = query::cmd::select + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
 		ASSERT_EQ(UserHandler.executeQuery(query.c_str()), EXIT_FAILURE);
@@ -719,7 +728,7 @@ TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectNoOutput){
 }
 
 /* Custom query extracting output */
-TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectOutput){
+TEST(Execute_Custom_Query, Returns_Empty_With_Incorrect_Query_Syntax){
 		std::string query = query::cmd::select + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
 		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_FAILURE);
@@ -727,7 +736,7 @@ TEST(SqliteExecuteCustomQuery, CustomQueryIncorrectOutput){
 }
 
 /*Try to extract data with custom query selecting an index where no data is stored */
-TEST(SqliteExecuteCustomQuery, CustomQueryNonExistentIndex){
+TEST(Execute_Custom_Query, Returns_Empty_With_Incorrect_Data_Index){
 		std::string query = query::cmd::select + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
 		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {5}), EXIT_FAILURE);
@@ -736,33 +745,33 @@ TEST(SqliteExecuteCustomQuery, CustomQueryNonExistentIndex){
 
 /*******************DISCONNECTION AND CONNECTION**************************/
 /* Disconnecting from the db causes no exceptions or errors */
-TEST(SqliteConnection, DisconnectDB){
+TEST(Connection_Operations, Succeeds_Disconnect_From_DB){
 		ASSERT_NO_THROW(UserHandler.closeConnection());
 		ASSERT_FALSE(UserHandler.isConnected());
 }
 
 /* Disconnecting from the db while already disconnected causes no exceptions or errors */
-TEST(SqliteConnection, DisconnectionAlreadyDisconnected){
+TEST(Connection_Operations, Fails_Disconnect_When_Already_Disconnected){
 		ASSERT_FALSE(UserHandler.isConnected());
 		ASSERT_NO_THROW(UserHandler.closeConnection());
 		ASSERT_FALSE(UserHandler.isConnected());
 }
 
 /* Trying to create a table while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedCreateTable){
+TEST(Connection_Operations, Fails_Create_Table_When_Disconnected){
 		EXPECT_FALSE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.createTable("DISCONNECT", table_definition), EXIT_FAILURE);
 }
 
 /* Insertion of elements while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedInsert){
+TEST(Connection_Operations, Fails_Insertion_When_Disconnected){
 		EXPECT_FALSE(UserHandler.isConnected());
 		std::vector<std::string> values_to_insert = {"10", "86", "5654668", "Robert"};
 		ASSERT_EQ(UserHandler.insertRecord(table_name, values_to_insert), EXIT_FAILURE);
 }
 
 /* Selection of elements while disconnected is not possible */
-TEST(SqliteConnection, DisconnectedSelect){
+TEST(Connection_Operations, Fails_Select_When_Disconnected){
 		EXPECT_FALSE(UserHandler.isConnected());
 		handler::select_query_param select_options;
 		select_options.table_name = table_name;
@@ -770,7 +779,7 @@ TEST(SqliteConnection, DisconnectedSelect){
 }
 
 /* Reconnecting to the db is possible and loads info */
-TEST(SqliteConnection, ReconnectDB){
+TEST(Connection_Operations, Succeeds_Connect_To_DB){
 		EXPECT_FALSE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.connectDb(), EXIT_SUCCESS);
 		ASSERT_TRUE(UserHandler.isConnected());
@@ -779,52 +788,83 @@ TEST(SqliteConnection, ReconnectDB){
 }
 
 /* Reconnecting to the db is possible when already connected and throws no error */
-TEST(SqliteConnection, ReconnectAlreadyConnectedDB){
+TEST(Connection_Operations, Fails_Connect_When_Already_Connected){
 		ASSERT_TRUE(UserHandler.isConnected());
 		ASSERT_EQ(UserHandler.connectDb(), EXIT_FAILURE);
 }
 
 /******************************UPDATE TABLE*********************************/
-//TODO: ANGEL 22/11/2020 Add tests for update table method
+/* Update a table giving the same value to a field for all records */
+TEST(Update_Table, Succeeds_Update){
+		std::pair<std::string, std::string> field_update = {"NAME", "New Name"};
+		ASSERT_EQ(UserHandler.updateTable(table_name, {field_update}), EXIT_SUCCESS);
+		std::vector<std::string> new_names = UserHandler.selectRecords(table_name, {"NAME"});
+		std::vector<std::string> expected_names = {"New Name","New Name","New Name","New Name"};
+		ASSERT_EQ(new_names, expected_names);
+}
+
+TEST(Update_Table, Succeeds_Update_With_Condition){
+		std::pair<std::string, std::string> field_update = {"AGE", "99"};
+		ASSERT_EQ(UserHandler.updateTable(table_name, {field_update}, "AGE > 40"), EXIT_SUCCESS);
+		std::vector<std::string> new_ages = UserHandler.selectRecords(table_name, {"AGE"});
+		std::vector<std::string> expected_ages= {"32", "99", "23", "99"};
+		ASSERT_EQ(new_ages, expected_ages);
+}
+
+TEST(Update_Table, Fails_Update_When_Wrong_Table){
+		std::pair<std::string, std::string> field_update = {"NAME", "New Name"};
+		ASSERT_EQ(UserHandler.updateTable("WRONG_TABLE", {field_update}), EXIT_FAILURE);
+}
+
+TEST(Update_Table, Fails_Update_When_Wrong_Field){
+		std::pair<std::string, std::string> wrong_field_update = {"NAMEe", "New Name"};
+		ASSERT_EQ(UserHandler.updateTable(table_name, {wrong_field_update}), EXIT_FAILURE);
+}
+
+TEST(Update_Table, Fails_Update_When_Wrong_Condition){
+		std::pair<std::string, std::string> field_update = {"NAME", "New Name"};
+		ASSERT_EQ(UserHandler.updateTable(table_name, {field_update}, "GE == 0"), EXIT_FAILURE);
+}
+
 
 /**************************DELETE AND DROP OPERATIONS***********************/
 /* Delete specific records of a table using condition */
-TEST(SqliteDelete, DeleteRecord){
+TEST(Deletion_Operations, Succeeds_Delete_Record){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "ID > 7"), EXIT_SUCCESS);
 }
 
 /* Delete all records in a table */
-TEST(SqliteDelete, DeleteAllRecords){
+TEST(Deletion_Operations, Succeeds_Delete_All_Records_Of_Table){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "all"), EXIT_SUCCESS);
 }
 
 /* Try to delete records of non existent table */
-TEST(SqliteDelete, DeleteWrongTable){
+TEST(Deletion_Operations, Fails_Delete_Record_When_Wrong_Table){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords("CONECTIONS", "all"), EXIT_FAILURE);
 }
 
 /* Try to delete records with non possible condition */
-TEST(SqliteDelete, DeleteWrongCondition){
+TEST(Deletion_Operations, Fails_Delete_Record_When_Wrong_Condition){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.deleteRecords(table_name, "UD == 4"), EXIT_FAILURE);
 }
 
 /* Try to drop a table from the db that does not exist */
-TEST(SqliteDropTable, DropNonexistentTable){
+TEST(SqliteDropTable, Fails_Drop_Table_When_Wrong_Table){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.dropTable("CONECTIONS"), EXIT_FAILURE);
 }
 
 /* Drop a table from the db */
-TEST(SqliteDropTable, DropTable){
+TEST(SqliteDropTable, Succeeds_Drop_Table){
 		EXPECT_TRUE(exists("MyDB.db"));
 		EXPECT_GT(UserHandler.getNumTables(), 0);
 		ASSERT_EQ(UserHandler.dropTable(table_name), EXIT_SUCCESS);
