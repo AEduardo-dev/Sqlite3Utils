@@ -27,15 +27,13 @@ for:
       - cmd: cd %APPVEYOR_BUILD_FOLDER%
 
     before_build:
-        - cmd: vcpkg install sqlite3:x86-windows
-        - cmd: vcpkg install sqlite3:x64-windows
-        - cmd: cmake --version
-        - cmd: gcc -v && g++ -v
+        - cmd: vcpkg install sqlite3
+        - cmd: vcpkg integrate install
 
     build_script:
         - cmd: cd %APPVEYOR_BUILD_FOLDER%
         - cmd: mkdir build && cd build/
-        - cmd: cmake -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DiNSTALL_DOCS=ON ..
+        - cmd: cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DiNSTALL_DOCS=ON ..
         - cmd: cmake --build .
         - cmd: ctest
         - cmd: cmake --install .
