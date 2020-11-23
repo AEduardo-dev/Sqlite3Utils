@@ -3,7 +3,13 @@ add_library(handler SHARED "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3handler.cpp")
 add_library(query SHARED "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3query.cpp")
 
 # Link sqlite3handler with it's dependencies
-target_link_libraries(handler PUBLIC sqlite3)
+IF(UNIX)
+  target_link_libraries(handler PRIVATE sqlite3)
+
+ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
+  target_link_libraries(handler PRIVATE unofficial::sqlite3::sqlite3)
+
+ENDIF()
 target_link_libraries(handler PUBLIC query)
 
 # Installation rules

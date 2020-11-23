@@ -30,7 +30,7 @@ option(INSTALL_EXAMPLES "Install the example programs" OFF)
 option(INSTALL_DOCS "Install the doxygen documentation" OFF)
 
 # Check if the version is good for dependencies installation
-IF(${CMAKE_VERSION} VERSION_LESS "3.18")
+IF(${CMAKE_VERSION} VERSION_LESS "3.18" AND UNIX)
   IF(INSTALL_DEPENDENCIES)
       MESSAGE(FATAL_ERROR "Your cmake version does not support functions used in the dependencies installation (available in cmake 3.18)")
   ENDIF()
@@ -44,31 +44,37 @@ configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
 message(CHECK_START " FINDING --> sqlite3")
 
 # Check for dependency sqlite3 library
-find_library(FOUND_SQLITE3 sqlite3)
+IF(UNIX)
+  find_library(FOUND_SQLITE3 sqlite3)
+
+ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
+  find_package(FOUND_SQLITE3 unofficial-sqlite3 CONFIG)
+
+ENDIF()
 
 IF(NOT FOUND_SQLITE3)
   message(CHECK_FAIL " sqlite3 NOT FOUND")
 
   # Ask if the user wants the Installation to be done for sqlite3
   IF(INSTALL_DEPENDENCIES)
-    file(DOWNLOAD "https://www.sqlite.org/2020/${SQLITE3_INSTALL_FILE}" "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf"
-         TIMEOUT 60
-         TLS_VERIFY ON
-         EXPECTED_HASH SHA3_256=6e94e9453cedf8f2023e3923f856741d1e28a2271e9f93d24d95fa48870edaad
-         )
-    file(ARCHIVE_EXTRACT INPUT sqlite-autoconf)
-
     execute_process(COMMAND echo "Installation starting...")
 
     IF(UNIX)
+      file(DOWNLOAD "https://www.sqlite.org/2020/${SQLITE3_INSTALL_FILE}" "${Sqlite3Utils_BINARY_DIR}/sqlite-autoconf"
+           TIMEOUT 60
+           TLS_VERIFY ON
+           EXPECTED_HASH SHA3_256=6e94e9453cedf8f2023e3923f856741d1e28a2271e9f93d24d95fa48870edaad
+           )
+      file(ARCHIVE_EXTRACT INPUT sqlite-autoconf)
+
       execute_process(COMMAND ./configure
                       WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
       execute_process(COMMAND make WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
 
     ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
-      MESSAGE("Windows installation")
-      execute_process(COMMAND nmake /f Makefile.msc
-                      WORKING_DIRECTORY ${SQLITE3_INSTALL_DIRNAME})
+      execute_process(COMMAND vcpkg install sqlite3)
+      execute_process(COMMAND vcpkg integrate install)
+
 
     ENDIF()
 
@@ -83,8 +89,13 @@ IF(NOT FOUND_SQLITE3)
 
   # Check if installation was done. If not, exit with error message
   message(CHECK_START " VERIFYING INSTALLATION sqlite3 ->")
+  IF(UNIX)
+    find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
 
-  find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
+  ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
+    find_package(FOUND_SQLITE3 unofficial-sqlite3 CONFIG REQUIRED True)
+
+  ENDIF()
 
   IF(FOUND_SQLITE3)
     message(CHECK_PASS " Sqlite3 installed succesfully")
@@ -115,20 +126,6 @@ ENDIF()
 
 # If selected add documentation subdirectory
 
-
-# Add the executable
-# add_executable(Sqlite3Utils "${SOURCES_DIR}/minimalHandler.cpp")
-
-# Link libraries
-# target_link_libraries(Sqlite3Utils PUBLIC handler query)
-
-# add the binary tree to the search path for include files
-# so that we will find TutorialConfig.h
-# target_include_directories(Sqlite3Utils PUBLIC "${PROJECT_BINARY_DIR}")
-
-# Installation rules
-# Executable
-# install(TARGETS Sqlite3Utils DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/Sqlite3UtilsConfig.h" DESTINATION ${include_dest})
 
 # Version Control
@@ -145,15 +142,6 @@ install(EXPORT query DESTINATION "${lib_dest}")
 install(FILES "${INCLUDES_DIR}/handler.hpp"
               "${INCLUDES_DIR}/query.hpp"
               DESTINATION ${include_dest})
-
-# # Does the application run
-# add_test(NAME Runs COMMAND Sqlite3Utils mydb.db)
-#
-# # Does the usage message work?
-# add_test(NAME Usage COMMAND Sqlite3Utils)
-# set_tests_properties(Usage
-#   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*<database_name || database_path>"
-#   )
 
 # Run the unit tests deleting the databases that may have been created on previous iterations
 IF(UNIT_TESTS)
