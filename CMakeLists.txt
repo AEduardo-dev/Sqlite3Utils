@@ -51,7 +51,7 @@ IF(UNIX)
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
   find_package(SQLite3 REQUIRED)
 
-ENDIF(UNIX)
+ENDIF()
 
 IF(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
   message(CHECK_FAIL " sqlite3 NOT FOUND")
@@ -77,15 +77,15 @@ IF(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
       execute_process(COMMAND vcpkg integrate install)
 
 
-    ENDIF(UNIX)
+    ENDIF()
 
-  ELSE(INSTALL_DEPENDENCIES)
+  ELSE()
     # If installation is not selected, let the user know they can re-run the cmake
     message(NOTICE "\nRequired dependency sqlite3 missing.\n")
     message(NOTICE "Please re-run this cmake like the following->\"cmake -DINSTALL_DEPENDENCIES=ON ..\", or install it manually\n")
     # Exit the configuration with an error
     message(FATAL_ERROR "Sqlite3 is not installed. Configuration stopped.")
-  ENDIF(INSTALL_DEPENDENCIES)
+  ENDIF()
 
 
   # Check if installation was done. If not, exit with error message
@@ -96,15 +96,15 @@ IF(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
   ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
     find_package(SQLite3 REQUIRED True)
     include_directories(${sqlite3_INCLUDE_DIRS})
-  ENDIF(UNIX)
+  ENDIF()
 
   IF(sqlite3_FOUND)
     message(CHECK_PASS " Sqlite3 installed succesfully")
   ENDIF()
 
-ELSE(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
+ELSE()
   message(CHECK_PASS " Sqlite3 FOUND")
-ENDIF(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
+ENDIF(NOT sqlite3_FOUND)
 
 # Add subdirectories for source and include files
 add_subdirectory(src)
@@ -113,17 +113,17 @@ add_subdirectory(include)
 # If selected, add the subdirectories for tests
 IF(UNIT_TESTS)
   add_subdirectory(tests)
-ENDIF(UNIT_TESTS)
+ENDIF()
 
 # If selected, add the subdirectories for examples
 IF(INSTALL_EXAMPLES)
   add_subdirectory(examples)
-ENDIF(INSTALL_EXAMPLES)
+ENDIF()
 
 # If selected, add the subdirectories for examples
 IF(INSTALL_DOCS)
   add_subdirectory(docs)
-ENDIF(INSTALL_DOCS)
+ENDIF()
 
 # If selected add documentation subdirectory
 
@@ -160,7 +160,7 @@ IF(UNIT_TESTS)
         PROPERTIES PASS_REGULAR_EXPRESSION ${result}
         )
     endfunction(do_test)
-ENDIF(UNIT_TESTS)
+ENDIF()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")

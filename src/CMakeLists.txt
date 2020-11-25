@@ -8,9 +8,9 @@ IF(UNIX)
 
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
   target_include_directories(handler PRIVATE ${SQLite3_INCLUDE_DIRS})
-  target_link_libraries(handler PRIVATE sqlite3)
+  target_link_libraries(handler sqlite3)
 
-ENDIF(UNIX)
+ENDIF()
 target_link_libraries(handler PUBLIC query)
 
 # Installation rules
