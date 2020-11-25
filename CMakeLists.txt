@@ -49,8 +49,7 @@ IF(UNIX)
   find_library(sqlite3_FOUND sqlite3)
 
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
-  find_package(sqlite3 CONFIG)
-  include_directories(${sqlite3_INCLUDE_DIRS})
+  find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
 ENDIF()
 
