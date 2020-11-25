@@ -50,6 +50,7 @@ IF(UNIX)
 
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
   find_package(sqlite3 CONFIG)
+  include_directories(${sqlite3_INCLUDE_DIRS})
 
 ENDIF()
 
@@ -95,7 +96,7 @@ IF(NOT sqlite3_FOUND)
 
   ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
     find_package(sqlite3 CONFIG REQUIRED True)
-
+    include_directories(${sqlite3_INCLUDE_DIRS})
   ENDIF()
 
   IF(sqlite3_FOUND)
