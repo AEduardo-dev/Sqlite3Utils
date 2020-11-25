@@ -44,15 +44,16 @@ configure_file(Sqlite3UtilsConfig.h.in Sqlite3UtilsConfig.h)
 message(CHECK_START " FINDING --> sqlite3")
 
 # Check for dependency sqlite3 library
-IF(UNIX)
-  find_library(FOUND_SQLITE3 sqlite3)
 
-ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
-  find_package(FOUND_SQLITE3 unofficial-sqlite3 CONFIG)
+IF(UNIX)
+  find_library(sqlite3_FOUND sqlite3)
+
+ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
+  find_package(sqlite3 CONFIG)
 
 ENDIF()
 
-IF(NOT FOUND_SQLITE3)
+IF(NOT sqlite3_FOUND)
   message(CHECK_FAIL " sqlite3 NOT FOUND")
 
   # Ask if the user wants the Installation to be done for sqlite3
@@ -90,20 +91,20 @@ IF(NOT FOUND_SQLITE3)
   # Check if installation was done. If not, exit with error message
   message(CHECK_START " VERIFYING INSTALLATION sqlite3 ->")
   IF(UNIX)
-    find_library(FOUND_SQLITE3 sqlite3 REQUIRED True)
+    find_library(sqlite3_FOUND sqlite3 REQUIRED True)
 
   ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
-    find_package(FOUND_SQLITE3 unofficial-sqlite3 CONFIG REQUIRED True)
+    find_package(sqlite3 CONFIG REQUIRED True)
 
   ENDIF()
 
-  IF(FOUND_SQLITE3)
+  IF(sqlite3_FOUND)
     message(CHECK_PASS " Sqlite3 installed succesfully")
   ENDIF()
 
 ELSE()
   message(CHECK_PASS " Sqlite3 FOUND")
-ENDIF(NOT FOUND_SQLITE3)
+ENDIF(NOT sqlite3_FOUND)
 
 # Add subdirectories for source and include files
 add_subdirectory(src)
