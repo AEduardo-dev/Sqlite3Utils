@@ -33,6 +33,7 @@ bin/
 *.app
 
 # Doxygen docs
+Doxyfile
 latex/
 docbook/
 
