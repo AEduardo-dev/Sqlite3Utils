@@ -33,7 +33,7 @@ for:
         - cmd: vcpkg list
         - cmd: cd %APPVEYOR_BUILD_FOLDER%
         - cmd: mkdir build && cd build/
-        - cmd: cmake -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DINSTALL_DOCS=ON ..
+        - cmd: cmake -G "Visual Studio 19" -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DINSTALL_DOCS=ON ..
         - cmd: cmake --build .
         - cmd: ctest
         - cmd: cmake --install .
