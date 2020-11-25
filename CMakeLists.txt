@@ -53,7 +53,7 @@ ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS
 
 ENDIF()
 
-IF(NOT sqlite3_FOUND)
+IF(NOT sqlite3_FOUND AND NOT SQLite3_FOUND)
   message(CHECK_FAIL " sqlite3 NOT FOUND")
 
   # Ask if the user wants the Installation to be done for sqlite3
@@ -94,7 +94,7 @@ IF(NOT sqlite3_FOUND)
     find_library(sqlite3_FOUND sqlite3 REQUIRED True)
 
   ELSEIF(${CMAKE_SYSTEM_NAME} STREQUAL Windows OR ${CMAKE_SYSTEM_NAME} STREQUAL MSYS)
-    find_package(sqlite3 CONFIG REQUIRED True)
+    find_package(SQLite3 REQUIRED True)
     include_directories(${sqlite3_INCLUDE_DIRS})
   ENDIF()
 

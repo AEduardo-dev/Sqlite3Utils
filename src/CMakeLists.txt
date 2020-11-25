@@ -7,7 +7,7 @@ IF(UNIX)
   target_link_libraries(handler PRIVATE sqlite3)
 
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
-  target_link_libraries(handler PRIVATE unofficial::sqlite3::sqlite3)
+  target_link_libraries(handler PRIVATE ${SQLite3_LIBRARIES})
 
 ENDIF()
 target_link_libraries(handler PUBLIC query)
