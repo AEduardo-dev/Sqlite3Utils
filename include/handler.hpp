@@ -329,6 +329,11 @@ public:
 		 * updated value.
 		 * @return            EXIT_SUCCESS if the operation completed succesfully, EXIT_FAILURE
 		 *  otherwise
+		 *
+		 *  An example of usage could be as follows, with two different programs working on same db:
+		 *
+		 * \include updateTable.cpp
+		 *
 		 */
 		bool updateTable(std::string table_name, std::vector<FieldDescription> set_fields,\
 			 								std::string where_cond = "");
