@@ -35,6 +35,7 @@ var namespacequery =
       [ "on", "namespacequery_1_1cl.html#a3d7a8a0fb31b182eb867d0bc1a302d6d", null ],
       [ "or_", "namespacequery_1_1cl.html#a09de9a02709a6ead2eef2f24af48686a", null ],
       [ "order_by", "namespacequery_1_1cl.html#ab36d06317f23cfe2ab24bc17fabb5800", null ],
+      [ "set", "namespacequery_1_1cl.html#a99d4f7827c730f675f1abf6cc8a25fab", null ],
       [ "sum", "namespacequery_1_1cl.html#a01ccccb48961b31f35ad682cbd7a7d7b", null ],
       [ "values", "namespacequery_1_1cl.html#acd3472d909df62d9b0993fbf88af3be7", null ],
       [ "where", "namespacequery_1_1cl.html#a35c43fe2f84f777d59b7a890ae37bda7", null ]

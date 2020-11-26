@@ -12,15 +12,17 @@ var classhandler_1_1Sqlite3Db =
     [ "getAffinity", "classhandler_1_1Sqlite3Db.html#a173e6637523656f1761a37d934fbe25f", null ],
     [ "getDbPath", "classhandler_1_1Sqlite3Db.html#a7cdb3a597859dc9782539bbdf9c22e3c", null ],
     [ "getFields", "classhandler_1_1Sqlite3Db.html#aed0f2adcae3e7ea4b9c4e7433f90ccb2", null ],
-    [ "getNumTables", "classhandler_1_1Sqlite3Db.html#ae16853bdae85d532facec4d0b7debb57", null ],
+    [ "getNumTables", "classhandler_1_1Sqlite3Db.html#a4b63ca8b9d9731b0d67bb694057c598f", null ],
     [ "getTables", "classhandler_1_1Sqlite3Db.html#a328eadaf6fdf897454eee1d8169f094b", null ],
     [ "getTablesNames", "classhandler_1_1Sqlite3Db.html#a069afceeb1db1ec519cb1e042b27e7b0", null ],
     [ "insertRecord", "classhandler_1_1Sqlite3Db.html#a07224a51607ccca1c6a213c2434da072", null ],
     [ "isAffined", "classhandler_1_1Sqlite3Db.html#a4e36920e78f1232804ffe05031cf1620", null ],
+    [ "isConnected", "classhandler_1_1Sqlite3Db.html#ad87f74dab5b72614c4d6e4da0175a9df", null ],
     [ "isValidInt", "classhandler_1_1Sqlite3Db.html#a927a8accadf7e2b4a1a115524052de94", null ],
     [ "isValidReal", "classhandler_1_1Sqlite3Db.html#a59013bdda1a243788c681329e47570d0", null ],
     [ "selectRecords", "classhandler_1_1Sqlite3Db.html#a61fdc0c209a92bc78c1e89861a0c5eb3", null ],
     [ "selectRecords", "classhandler_1_1Sqlite3Db.html#afffad63c6732bfab591b37eed1c2a1bb", null ],
     [ "updateHandler", "classhandler_1_1Sqlite3Db.html#a8a84491f3ac991ac24c2db0eca2a5344", null ],
+    [ "updateTable", "classhandler_1_1Sqlite3Db.html#a60c4a5b9eb8377729c3e419f22c990b2", null ],
     [ "operator<<", "classhandler_1_1Sqlite3Db.html#afd77a2d59979232d3cdb86a588c46e20", null ]
 ];
