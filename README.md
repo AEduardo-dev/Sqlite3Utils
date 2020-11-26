@@ -23,7 +23,7 @@ Also, the inclusion of [sqlite3_bind()](https://www.sqlite.org/c3ref/bind_blob.h
 
 #### :pushpin: Integration :warning:
 
-Windows integration is yet to be tested and is not guaranteed to work. Check Appveyor build status.
+Windows integration is yet to be tested and is not guaranteed to work. Check [Appveyor build status](https://ci.appveyor.com/project/AEduardo-png/sqlite3utils.
 
 ## Description :scroll:
 
