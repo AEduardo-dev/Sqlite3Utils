@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.com/AEduardo-dev/Sqlite3Utils.svg?token=24Az7WhqXAJTBGASJKeQ&branch=main)](https://travis-ci.com/AEduardo-dev/Sqlite3Utils)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/9u3gysvrsuhc8c46?svg=true)](https://ci.appveyor.com/project/AEduardo-png/sqlite3utils)
+
+
 # **Welcome to the Sqlite3 Handler Repository! :notebook:**
 
 ## Announcements :clipboard:
