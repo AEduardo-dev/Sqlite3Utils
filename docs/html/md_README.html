@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>dbHandler for sqlite3: dbHandler-sqlite3</title>
+<title>dbHandler for sqlite3: README</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,10 +83,86 @@ $(document).ready(function(){initNavTree('md_README.html',''); initResizable(); 
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">dbHandler-sqlite3 </div>  </div>
+<div class="title">README </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Handler for sqlite database management using C++ </p>
+<div class="toc"><h3>Table of Contents</h3>
+<ul><ul><li class="level2"><a href="#autotoc_md0">&lt;strong&gt;OSS Buils Status :computer:&lt;/strong&gt;</a></li>
+</ul>
+<li class="level1"><a href="#autotoc_md1">&lt;strong&gt;Welcome to the Sqlite3 Handler Repository! :notebook:&lt;/strong&gt;</a><ul><li class="level2"><a href="#autotoc_md2">Announcements :clipboard:</a><ul><ul><li class="level4"><a href="#autotoc_md3">:pushpin: Actual release version</a></li>
+<li class="level4"><a href="#autotoc_md4">:pushpin: Future Additions :construction:</a></li>
+</ul>
+</ul>
+</li>
+<li class="level2"><a href="#autotoc_md5">Description :scroll:</a><ul><ul><li class="level4"><a href="#autotoc_md6">Custom method executeQuery() :information_source:</a></li>
+</ul>
+</ul>
+</li>
+<li class="level2"><a href="#autotoc_md7">Installation :floppy_disk:</a><ul><ul><li class="level4"><a href="#autotoc_md8">Generation flags :wrench:</a></li>
+<li class="level4"><a href="#autotoc_md9">Installation Options :cd:</a></li>
+</ul>
+</ul>
+</li>
+<li class="level2"><a href="#autotoc_md10">:checkered_flag: Final Notes :checkered_flag:</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="textblock"><h2><a class="anchor" id="autotoc_md0"></a>
+&lt;strong&gt;OSS Buils Status :computer:&lt;/strong&gt;</h2>
+<p><a href="https://travis-ci.com/AEduardo-png/Sqlite3Utils"><img src="https://travis-ci.com/AEduardo-png/Sqlite3Utils.svg?token=24Az7WhqXAJTBGASJKeQ&amp;branch=main" alt="Build Status" style="pointer-events: none;" class="inline"/></a> :heavy_check_mark:</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+&lt;strong&gt;Welcome to the Sqlite3 Handler Repository! :notebook:&lt;/strong&gt;</h1>
+<h2><a class="anchor" id="autotoc_md2"></a>
+Announcements :clipboard:</h2>
+<h4><a class="anchor" id="autotoc_md3"></a>
+:pushpin: Actual release version</h4>
+<p>This is the first release of this project (1.0.X)</p>
+<h4><a class="anchor" id="autotoc_md4"></a>
+:pushpin: Future Additions :construction:</h4>
+<p>As only the so called "basic functionality" of sqlite3 is implemented at the moment, all the advanced methods will be included in the future.</p>
+<p>The terms "basic" and "advanced" have been extracted from the <a href="https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm">Tutorials Point page</a> referenced to the C++ interface of sqlite3.</p>
+<p>Also, the inclusion of <a href="https://www.sqlite.org/c3ref/bind_blob.html">sqlite3_bind()</a> for internal parameters, and <a href="https://www.sqlite.org/c3ref/reset.html">sqlite3_reset()</a> for the usage of commands without needing to prepare them again, is planned.</p>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Description :scroll:</h2>
+<p>This project is based, and depends on, the sqlite3 official libraries. Check the <a href="https://www.sqlite.org/index.html"><b>SQLite3 website</b></a> for more information about them, and how they can be installed on your system.</p>
+<p>The objective of this project is to provide an straight-forward, parameterized approach on sqlite3 database management, using the <b>C++</b> interface provided from sqlite3. The idea is to apply the main functionality of the database management without the need of writing a query in plain text.</p>
+<p>With this project you receive a set of two .hpp libraries, consisting of:</p>
+<ol type="1">
+<li><em><a class="el" href="query_8hpp_source.html">query.hpp</a></em>: An aggregate of sqlite3 query commands and clauses, for you to use on your queries definition. It uses different name spaces to differentiate between command, clauses and conditions.</li>
+<li><em><a class="el" href="handler_8hpp_source.html">handler.hpp</a></em>: Contains a handler class which can execute it's different methods on the database selected.</li>
+</ol>
+<p>The doxygen generated documentation of the software is included in the <a href="https://github.com/AEduardo-png/Sqlite3Utils/tree/cmake_installer/docs/refman.pdf">docs/refman.pdf</a>, containing the list of variables available in <a class="el" href="query_8hpp_source.html">query.hpp</a>, and the description of all the methods in <a class="el" href="handler_8hpp_source.html">handler.hpp</a>. An html version of the documentation is also available in the <a href="https://github.com/AEduardo-png/Sqlite3Utils/tree/cmake_installer/docs">docs</a> folder.</p>
+<p>Each of the methods available at the moment have a pseudo code example that can be seen in the <a href="https://github.com/AEduardo-png/Sqlite3Utils/tree/cmake_installer/examples">examples folder</a>.</p>
+<h4><a class="anchor" id="autotoc_md6"></a>
+Custom method executeQuery() :information_source:</h4>
+<p>In case the use of any query not currently supported by the methods implemented, executeQuery() can operate with any (correctly built) sqlite3 query. Check the <a href="https://github.com/AEduardo-png/Sqlite3Utils/tree/cmake_installer/docs">docs</a> for more information about how to use this method, the arguments it can take, and the information it can provide.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Installation :floppy_disk:</h2>
+<p><b>IMPORTANT NOTE :memo: This process has not been completely tested on windows yet.</b></p>
+<p>The installation is managed with cmake, which you should already have installed on your system. The minimum supported version is 3.11, but some functionalities need at least the 3.18 one. If you try to execute the installer without having the proper version the process will abort, so nothing will break on your machine.</p>
+<p>For installation it is recommended for you to create a _"build/"_ directory inside of the project source folder, then from there run "_cmake &amp;lt;options&gt; .._". After that is done, execute "_cmake --build ._", and finally "_cmake --install ._", where you may want to add an installation prefix. Please take a look at <a href="https://cmake.org/cmake/help/v3.19/manual/cmake.1.html">this tutorial</a> for more information about the native options you can add to each instruction.</p>
+<p>Now lets take a look at what does the installer do in the default mode and the different options that can be added to apply more changes.</p>
+<h4><a class="anchor" id="autotoc_md8"></a>
+Generation flags :wrench:</h4>
+<p>When calling cmake .. for generating the build files, there are some option flags that you can set for customizing your installation.</p>
+<ul>
+<li><b>-DINSTALL_DEPENDENCIES=ON</b> - This will ask the installer to install sqlite3 in your system if you do not have it already. If sqlite3 is found this option will not change the generating process. <b>NOTE: this process requires some cmake functionalities only available from the 3.18 version. If you do not have this or a later version, the generation process will fail. On windows this will also require nmake.</b></li>
+<li><b>-DUNIT_TESTS=ON</b> - This option downloads the <a href="https://github.com/google/googletest">google test framework</a> locally, and uses it's source code to build a test suite, that could be executed using the ctest executable generated inside of the build directory. This tests ensure that the methods included in the handler library work as expected, but they are not necessary for you to build.If you do so, the <a href="https://github.com/AEduardo-png/Sqlite3Utils/blob/cmake_installer/tests/tests.cpp">tests.cpp</a> file will also be installed on your system, so it may be interesting if you would like to develop this project further on.</li>
+<li><b>-DINSTALL_EXAMPLES=ON</b> - If this is set to ON, the examples folder will be installed to the installation prefix. This examples are used as documentation, as well as a simple introduction to the methods available inside of the handler library.</li>
+<li><b>-DINSTALL_DOCS=ON</b> - The documentation is generated both in pdf and in html format. Both of them will be installed if this option is set to ON. This README will also be installed with them.</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md9"></a>
+Installation Options :cd:</h4>
+<ul>
+<li><b>System installation</b>: This installs the libraries to the system, using the location in which all C++ includes are stored. This way you will be able to use this libraries as #include &lt;library_name.hpp&gt; instead of using the relative or absolute path of it using #include "&amp;lt;path to library&gt;/library_name.hpp".</li>
+<li><b>Prefix Installation</b>: The libraries and their source files will be installed at the given path, at an <b>include</b> and <b>lib</b> folders respectively. This installation could be interesting if you would like to use them as a part of other project without having them on your system.</li>
+</ul>
+<p>For both of them, all the other options you may have activated will be installed at the provided path.</p>
+<h2><a class="anchor" id="autotoc_md10"></a>
+:checkered_flag: Final Notes :checkered_flag:</h2>
+<p>The installation folder is include/sqliteutils-&lt;version_number&gt;/library files. So your includes should be #include &lt;sqliteutils-x.x.x/library_name&gt;</p>
+<p>The provided libraries can operate in parallel or separately from the sqlite3 C++ official interface without any issue. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

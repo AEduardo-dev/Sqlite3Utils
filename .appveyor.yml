@@ -1,0 +1,43 @@
+#TODO:                           Check windows environment build
+
+environment:
+  matrix:
+
+  - job_name: Windows build
+    appveyor_build_worker_image: Visual Studio 2019
+
+matrix:
+  fast_finish: true
+
+init:
+  - appveyor version
+
+# job-specific configurations
+for:
+  -
+    matrix:
+      only:
+        - job_name: Windows build
+
+
+    install:
+      - cmd: cd C:\Tools\vcpkg
+      - cmd: git pull
+      - cmd: .\bootstrap-vcpkg.bat
+      - cmd: cd %APPVEYOR_BUILD_FOLDER%
+      - cmd: vcpkg install sqlite3:x64-windows
+      - cmd: vcpkg integrate install
+
+
+    build_script:
+        - cmd: vcpkg list
+        - cmd: cd %APPVEYOR_BUILD_FOLDER%
+        - cmd: mkdir build && cd build/
+        - cmd: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DINSTALL_DOCS=ON ..
+        - cmd: cmake --build .
+        - cmd: ctest
+        - cmd: cmake --install .
+
+
+
+cache: c:\tools\vcpkg\installed\

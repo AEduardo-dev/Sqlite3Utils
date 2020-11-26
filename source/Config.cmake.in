@@ -1,5 +1,0 @@
-
-@PACKAGE_INIT@
-
-include ( "${CMAKE_CURRENT_LIST_DIR}/HandlerTargets.cmake" )
-include ( "${CMAKE_CURRENT_LIST_DIR}/QueryTargets.cmake" )
