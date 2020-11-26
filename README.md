@@ -1,6 +1,6 @@
 ## **OSS Buils Status :computer:**
 
-[![Build Status](https://travis-ci.com/AEduardo-dev/Sqlite3Utils.svg?token=24Az7WhqXAJTBGASJKeQ&branch=main)](https://travis-ci.com/AEduardo-dev/Sqlite3Utils) :heavy_check_mark:
+[![Build Status](https://travis-ci.com/AEduardo-dev/Sqlite3Utils.svg?token=24Az7WhqXAJTBGASJKeQ&branch=main)](https://travis-ci.com/AEduardo-dev/Sqlite3Utils)
 
 # **Welcome to the Sqlite3 Handler Repository! :notebook:**
 
