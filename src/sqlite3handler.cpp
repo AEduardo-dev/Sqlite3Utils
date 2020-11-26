@@ -810,7 +810,7 @@ std::vector<std::string> handler::Sqlite3Db::getFields(std::string table_name){
 		return fields;
 };
 
-int handler::Sqlite3Db::getNumTables(){
+size_t handler::Sqlite3Db::getNumTables(){
 		return this->_tables.size();
 };
 

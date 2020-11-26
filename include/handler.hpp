@@ -361,7 +361,7 @@ public:
 		 *
 		 * @return The number of tables.
 		 */
-		int getNumTables();
+		size_t getNumTables();
 
 		/*!
 		 * \brief Get tables information map stored in the handler.
