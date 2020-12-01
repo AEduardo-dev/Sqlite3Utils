@@ -26,6 +26,8 @@ install:
   - cmd: cd %APPVEYOR_BUILD_FOLDER%
   - cmd: vcpkg install sqlite3:x64-windows
   - cmd: vcpkg integrate install
+  - cmd: vcpkg list
+  - cmd: cd %APPVEYOR_BUILD_FOLDER%
 
 cache:
 - i686-4.9.2-release-win32-sjlj-rt_v3-rev1.7z
