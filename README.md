@@ -21,6 +21,10 @@ The terms "basic" and "advanced" have been extracted from the [Tutorials Point p
 
 Also, the inclusion of [sqlite3_bind()](https://www.sqlite.org/c3ref/bind_blob.html) for internal parameters, and [sqlite3_reset()](https://www.sqlite.org/c3ref/reset.html) for the usage of commands without needing to prepare them again, is planned.
 
+#### :pushpin: Integration :warning:
+
+Windows integration is yet to be tested and is not guaranteed to work. Check [Appveyor build status](https://ci.appveyor.com/project/AEduardo-png/sqlite3utils)
+
 ## Description :scroll:
 
 This project is based, and depends on, the sqlite3 official libraries. Check the [**SQLite3 website**](https://www.sqlite.org/index.html) for more information about them, and how they can be installed on your system.
