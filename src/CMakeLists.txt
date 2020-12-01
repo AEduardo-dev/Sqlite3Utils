@@ -17,3 +17,5 @@ target_link_libraries(handler PUBLIC query)
 # Libraries
 install(TARGETS handler EXPORT handler DESTINATION ${lib_dest})
 install(TARGETS query EXPORT query DESTINATION ${lib_dest})
+install(EXPORT handler DESTINATION ${lib_dest}/handler)
+install(EXPORT query DESTINATION ${lib_dest}/query)

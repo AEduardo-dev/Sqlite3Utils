@@ -34,6 +34,7 @@ add_executable(unit_tests "${TESTS_DIR}/tests.cpp")
 target_link_libraries(unit_tests PUBLIC handler query)
 target_link_libraries(unit_tests PRIVATE gtest_main)
 
+
 # Installation rules
 # Tests source file
 install(FILES "${TESTS_DIR}/tests.cpp" DESTINATION ${tests_dest})

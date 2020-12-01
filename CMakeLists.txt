@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
+cmake_policy(VERSION 3.14)
 
 # Set the project name
 project(Sqlite3Utils VERSION 1.0.0)
@@ -134,10 +135,6 @@ configure_file(sqlite3utils-config-version.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/
 
 # Package support
 install(FILES sqlite3utils-config.cmake DESTINATION ${main_lib_dest})
-
-# Export
-install(EXPORT handler DESTINATION "${lib_dest}")
-install(EXPORT query DESTINATION "${lib_dest}")
 
 # Include files
 install(FILES "${INCLUDES_DIR}/handler.hpp"
