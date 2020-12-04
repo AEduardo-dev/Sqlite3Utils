@@ -6,8 +6,6 @@ The following is a set of guidelines for contributing to the Sqlite3Utils projec
 
 #### Table Of Contents
 
-[Code of Conduct](#code-of-conduct)
-
 [I don't want to read this whole thing, I just have a question!!!](#i-dont-want-to-read-this-whole-thing-i-just-have-a-question)
 
 [How Can I Contribute?](#how-can-i-contribute)
@@ -19,9 +17,6 @@ The following is a set of guidelines for contributing to the Sqlite3Utils projec
 [Additional Notes](#additional-notes)
   * [Issue and Pull Request Labels](#issue-and-pull-request-labels)
 
-<!-- ## Code of Conduct
-
-This project and everyone participating in it is governed by the [Atom Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [atom@github.com](mailto:atom@github.com). -->
 
 ## I don't want to read this whole thing I just have a question!!!
 
@@ -92,14 +87,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 <!-- * **Specify which version of Sqlite3Utils you're using.** You can get the exact version by running `Sqlite3Utils -v` in your terminal. -->
 * **Specify the name and version of the OS you're using.**
 
-### Your First Code Contribution
-
-Unsure where to begin contributing to Sqlite3Utils? You can start by looking through these `beginner` and `help-wanted` issues:
-
-* [Beginner issues][beginner] - issues which should only require a few lines of code, and a test or two.
-* [Help wanted issues][help-wanted] - issues which should be a bit more involved than `beginner` issues.
-
-Both issue lists are sorted by total number of comments. While not perfect, number of comments is a reasonable proxy for impact a given change will have.
+<!-- ### Your First Code Contribution -->
 
 <!-- ### Pull Requests
 
