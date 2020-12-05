@@ -1,4 +1,4 @@
-⚛👋 Hello there! Welcome. Please follow the steps below to tell us about your contribution.
+👋 Hello there! Welcome. Please follow the steps below to tell us about your contribution.
 
 1. Copy the correct template for your contribution
   - 🐛 Are you fixing a bug? Copy the template from [bug fix template](https://github.com/AEduardo-dev/Sqlite3Utils/tree/main/.github/PULL_REQUEST_TEMPLATE/bugfix_pull_request.md)
