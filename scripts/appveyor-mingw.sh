@@ -18,7 +18,6 @@ else
   7z x $f > /dev/null
   mv mingw64 /MinGW
 fi
-cd build
 cmake -G"$GENERATOR" -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DINSTALL_DEPENDENCIES=ON -DUNIT_TESTS=ON -DINSTALL_EXAMPLES=ON -DINSTALL_DOCS=ON ..
 cmake --build .
 cmake --install .
