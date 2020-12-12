@@ -7,7 +7,7 @@ IF(UNIX)
   target_link_libraries(handler PRIVATE sqlite3)
 
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES Windows OR ${CMAKE_SYSTEM_NAME} MATCHES MSYS)
-  MESSAGE("WINDOWS BUILD LINKAGE FOR SQLITE3")
+  MESSAGE(INFO "WINDOWS BUILD LINKAGE FOR SQLITE3")
   target_include_directories(handler PRIVATE ${SQLite3_INCLUDE_DIRS})
   target_link_libraries(handler PRIVATE ${SQLite3_LIBRARIES})
 
