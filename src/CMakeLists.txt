@@ -1,6 +1,6 @@
 # Add the sources of libraries in this directory
-add_library(handler SHARED "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3handler.cpp")
-add_library(query SHARED "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3query.cpp")
+add_library(handler SHARED "${INCLUDES_DIR}/handler.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3handler.cpp")
+add_library(query SHARED "${INCLUDES_DIR}/query.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/sqlite3query.cpp")
 
 # Link sqlite3handler with it's dependencies
 IF(UNIX)
