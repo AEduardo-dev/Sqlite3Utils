@@ -25,7 +25,7 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <stdlib.h>
-#include <string.h> //strlen
+#include <cstring> //strlen
 #include <sys/types.h>
 #include <vector>
 #include <map>
@@ -230,6 +230,22 @@ public:
 		 *
 		 */
 		bool insertRecord(std::string table_name, std::vector<std::string> values);
+
+		/*!
+		 * \brief pragma query execution Method.
+		 *
+		 * special command to be used to control various environmental variables and state flags
+		 * within the SQLite environment. A PRAGMA value can be read and it can also be set based
+		 * on the requirements.
+		 * An optional argument is taken for assignment, if this argument is not set, the pragma
+		 * pragma_name is queried.
+		 *
+		 * @param  pragma_name 	 Name of the pragma to be checked or modified.
+		 * @param  new_value     Optional.Value to be set for the pragma pragma_name.
+		 * @return               EXIT_SUCCESS if the query executed correctly. EXIT_FAILURE
+		 * otherwise.
+		 */
+		bool pragma(std::string pragma_name, std::string new_value = "");
 
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.

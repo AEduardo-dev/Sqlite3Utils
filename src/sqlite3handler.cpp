@@ -253,7 +253,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 				while ((_rc = sqlite3_step(_stmt)) == SQLITE_ROW) {
 
 						/* Get the data in the positions we want from the output */
-						if(!indexes_stmt.empty())
+						if(!indexes_stmt.empty()) {
 								for (int x : indexes_stmt) {
 
 										/* Check if the index we try to retrieve has something in it */
@@ -265,8 +265,10 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 												    std::cout <<"";
 										}
 								}
+
+						}
 						(verbose) ? std::cout << '\n' : \
-						    std::cout <<"";
+						    				std::cout <<"";
 				}
 		}
 		if (_rc != SQLITE_DONE) {
@@ -376,7 +378,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				_sql = exec_string.c_str();
 
 				/* Execute SQL exec_string */
-				if(executeQuery(_sql, handler::empty_vec, {}, true) == EXIT_SUCCESS) {
+				if(executeQuery(_sql, handler::empty_vec, {}, false) == EXIT_SUCCESS) {
 						fprintf(stdout, "Records created successfully.\n");
 						/* Then exit with success value */
 						return EXIT_SUCCESS;
@@ -384,6 +386,25 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				} else {
 						return EXIT_FAILURE;
 				}
+		}
+}
+
+/******************************pragma*********************************/
+bool handler::Sqlite3Db::pragma(std::string pragma_name, std::string new_value){
+
+		std::string exec_string = query::cmd::pragma + pragma_name + \
+															(new_value != "" ? " = " + new_value : "") +\
+															query::end_query;
+		_sql = exec_string.c_str();
+
+		std::vector<std::string> pragma_value;
+
+		if (executeQuery(_sql, pragma_value, {0}) == EXIT_SUCCESS) {
+			std::cout << "pragma "<< pragma_name << " = " << pragma_value[0] << '\n';
+			return EXIT_SUCCESS;
+
+		} else {
+			return EXIT_FAILURE;
 		}
 }
 
@@ -775,9 +796,9 @@ bool handler::Sqlite3Db::isAffined(const std::string affinity, const std::string
 /******************************isConnected*******************************************/
 bool handler::Sqlite3Db::isConnected(){
 		if (this->_db != NULL) {
-			return true;
+				return true;
 		} else {
-			return false;
+				return false;
 		}
 }
 

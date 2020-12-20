@@ -826,6 +826,27 @@ TEST(Update_Table, Fails_Update_When_Wrong_Condition){
 		ASSERT_EQ(UserHandler.updateTable(table_name, {field_update}, "GE == 0"), EXIT_FAILURE);
 }
 
+/******************************PRAGMA OPERATIONS****************************/
+
+TEST(Pragma, Succeeds_When_Query_Pragma_Exists){
+		using namespace query::pragma;
+		ASSERT_EQ(UserHandler.pragma(auto_vacuum), EXIT_SUCCESS);
+}
+
+TEST(Pragma, Succeeds_When_Assigning_Pragma_Value){
+		using namespace query::pragma;
+		ASSERT_EQ(UserHandler.pragma(auto_vacuum, "1"), EXIT_SUCCESS);
+}
+
+TEST(Pragma, Fails_When_Query_Pragma_Does_Not_Exist){
+		ASSERT_EQ(UserHandler.pragma("cahe_size"), EXIT_FAILURE);
+}
+
+TEST(Pragma, Fails_When_Invalid_Value_Assigned){
+		using namespace query::pragma;
+		ASSERT_EQ(UserHandler.pragma(count_changes, "fase"), EXIT_FAILURE);
+}
+
 
 /**************************DELETE AND DROP OPERATIONS***********************/
 /* Delete specific records of a table using condition */
