@@ -227,8 +227,8 @@ bool handler::Sqlite3Db::dropTable(std::string table_name){
 
 /******************************executeQuery***********************************/
 bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
-                                      std::vector<std::string> &data, \
-                                      std::vector<int> indexes_stmt, \
+																			std::vector<int> indexes_stmt, \
+                                      std::vector<std::string>* data, \
                                       bool verbose){
 		if(this->_db == NULL) {
 				fprintf(stderr, "Database is not connected, Query Execution operation aborted \n");
@@ -237,7 +237,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 
 
 		/* First make sure we are working with an empty vector */
-		data.clear();
+		data->clear();
 		/* Store the query in the handler to keep track of it */
 		this->_sql = sql_query;
 		/* Then SQL Command is executed if no error occurs */
@@ -259,7 +259,7 @@ bool handler::Sqlite3Db::executeQuery(const char *sql_query, \
 										/* Check if the index we try to retrieve has something in it */
 										if(sqlite3_column_text(_stmt, x) != NULL) {
 												/* Extract the data in text format and then put it in the vector */
-												data.push_back(reinterpret_cast< char const* > \
+												data->push_back(reinterpret_cast< char const* > \
 												               (sqlite3_column_text(_stmt, x)));
 												(verbose) ? std::cout << sqlite3_column_text(_stmt, x) << "  " : \
 												    std::cout <<"";
@@ -316,7 +316,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				_sql = exec_string.c_str();
 
 				/* Get type of data to be inserted in the field */
-				if (executeQuery(_sql, field_types, {2}) == EXIT_FAILURE) {
+				if (executeQuery(_sql, {2}, &field_types) == EXIT_FAILURE) {
 						fprintf(stderr, "Error loading field types from %s\n", table_name.c_str());
 						return EXIT_FAILURE;
 				}
@@ -378,7 +378,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 				_sql = exec_string.c_str();
 
 				/* Execute SQL exec_string */
-				if(executeQuery(_sql, handler::empty_vec, {}, false) == EXIT_SUCCESS) {
+				if(executeQuery(_sql) == EXIT_SUCCESS) {
 						fprintf(stdout, "Records created successfully.\n");
 						/* Then exit with success value */
 						return EXIT_SUCCESS;
@@ -390,23 +390,25 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 }
 
 /******************************pragma*********************************/
-bool handler::Sqlite3Db::pragma(std::string pragma_name, std::string new_value){
-
-		std::string exec_string = query::cmd::pragma + pragma_name + \
-															(new_value != "" ? " = " + new_value : "") +\
-															query::end_query;
-		_sql = exec_string.c_str();
-
-		std::vector<std::string> pragma_value;
-
-		if (executeQuery(_sql, pragma_value, {0}) == EXIT_SUCCESS) {
-			std::cout << "pragma "<< pragma_name << " = " << pragma_value[0] << '\n';
-			return EXIT_SUCCESS;
-
-		} else {
-			return EXIT_FAILURE;
-		}
-}
+// bool handler::Sqlite3Db::pragma(const std::string pragma_name, const std::string new_value){
+//
+// 		std::string exec_string = query::cmd::pragma + pragma_name + \
+// 															(new_value != "" ? " = " + new_value : "") +\
+// 															query::end_query;
+// 		_sql = exec_string.c_str();
+// 		std::cout << _sql << '\n';
+// 		std::vector<std::string> pragma_value;
+//
+// 		if ((new_value == "" ? executeQuery(_sql, {0}, &pragma_value) : executeQuery(_sql)) == EXIT_SUCCESS) {
+// 			std::cout << "pragma "<< pragma_name << " = " << pragma_value[0] << '\n';
+// 			return EXIT_SUCCESS;
+//
+// 		}
+// 		else {
+// 			return EXIT_FAILURE;
+// 		}
+// 		return EXIT_FAILURE;
+// }
 
 /******************************selectRecords*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, \
@@ -507,7 +509,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_na
 
 		_sql = exec_string.c_str();
 
-		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
+		if(executeQuery(_sql, data_indexes, &select_data) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
 				fprintf(stderr, "Select operation failed, no data loaded\n");
@@ -607,7 +609,7 @@ std::vector<std::string>  handler::Sqlite3Db::selectRecords(select_query_param s
 
 		_sql = exec_string.c_str();
 
-		if(executeQuery(_sql, select_data, data_indexes) == EXIT_SUCCESS) {
+		if(executeQuery(_sql, data_indexes, &select_data) == EXIT_SUCCESS) {
 				return select_data;
 		} else{
 				fprintf(stderr, "Select operation failed, no data loaded\n");
@@ -641,7 +643,7 @@ bool handler::Sqlite3Db::updateHandler(){
 
 		/* SQL Command is executed */
 		/* For each of the tables in the _db if there are any, extract the name of it (index 0)*/
-		if (executeQuery(_sql, tables_names, {0}) == EXIT_SUCCESS) {
+		if (executeQuery(_sql, {0}, &tables_names) == EXIT_SUCCESS) {
 				/* First reset the tables information for the new load */
 				this->_tables.clear();
 				/* Load the names to the handler variable */
@@ -661,7 +663,7 @@ bool handler::Sqlite3Db::updateHandler(){
 								_sql = exec_string.c_str();
 
 								/* If something went wrong it means no field names were loaded. Else-> all was loaded*/
-								if (executeQuery(_sql, fields, {1}) == EXIT_SUCCESS) {
+								if (executeQuery(_sql, {1}, &fields) == EXIT_SUCCESS) {
 										/* Insert them to the tables storage */
 										this->_tables[table.first] = fields;
 								}

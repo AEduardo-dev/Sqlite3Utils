@@ -715,7 +715,7 @@ TEST(Execute_Custom_Query, Succeeds_With_Correct_Query_Syntax){
 TEST(Execute_Custom_Query, Succeeds_With_Data_Output){
 		std::string query = query::cmd::select + "*" + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
-		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_SUCCESS);
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), {0, 1, 2, 3}, &data_vec), EXIT_SUCCESS);
 		ASSERT_FALSE(data_vec.empty());
 }
 
@@ -731,7 +731,7 @@ TEST(Execute_Custom_Query, Fails_With_Incorrect_Query_Syntax){
 TEST(Execute_Custom_Query, Returns_Empty_With_Incorrect_Query_Syntax){
 		std::string query = query::cmd::select + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
-		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {0, 1, 2, 3}), EXIT_FAILURE);
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), {0, 1, 2, 3}, &data_vec), EXIT_FAILURE);
 		ASSERT_TRUE(data_vec.empty());
 }
 
@@ -739,7 +739,7 @@ TEST(Execute_Custom_Query, Returns_Empty_With_Incorrect_Query_Syntax){
 TEST(Execute_Custom_Query, Returns_Empty_With_Incorrect_Data_Index){
 		std::string query = query::cmd::select + query::cl::from + table_name;
 		std::vector<std::string> data_vec;
-		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), data_vec, {5}), EXIT_FAILURE);
+		ASSERT_EQ(UserHandler.executeQuery(query.c_str(), {5}, &data_vec), EXIT_FAILURE);
 		ASSERT_TRUE(data_vec.empty());
 }
 
@@ -828,24 +828,22 @@ TEST(Update_Table, Fails_Update_When_Wrong_Condition){
 
 /******************************PRAGMA OPERATIONS****************************/
 
-TEST(Pragma, Succeeds_When_Query_Pragma_Exists){
-		using namespace query::pragma;
-		ASSERT_EQ(UserHandler.pragma(auto_vacuum), EXIT_SUCCESS);
-}
-
-TEST(Pragma, Succeeds_When_Assigning_Pragma_Value){
-		using namespace query::pragma;
-		ASSERT_EQ(UserHandler.pragma(auto_vacuum, "1"), EXIT_SUCCESS);
-}
-
-TEST(Pragma, Fails_When_Query_Pragma_Does_Not_Exist){
-		ASSERT_EQ(UserHandler.pragma("cahe_size"), EXIT_FAILURE);
-}
-
-TEST(Pragma, Fails_When_Invalid_Value_Assigned){
-		using namespace query::pragma;
-		ASSERT_EQ(UserHandler.pragma(count_changes, "fase"), EXIT_FAILURE);
-}
+// TEST(Pragma, Succeeds_When_Query_Pragma_Exists){
+// 		ASSERT_EQ(UserHandler.pragma(query::pragma::auto_vacuum), EXIT_SUCCESS);
+// }
+//
+// TEST(Pragma, Succeeds_When_Assigning_Pragma_Value){
+// 		ASSERT_EQ(UserHandler.pragma(query::pragma::auto_vacuum, "1"), EXIT_SUCCESS);
+// }
+// //
+// // TEST(Pragma, Fails_When_Query_Pragma_Does_Not_Exist){
+// // 		ASSERT_EQ(UserHandler.pragma("cahe_size"), EXIT_FAILURE);
+// // }
+// //
+// // TEST(Pragma, Fails_When_Invalid_Value_Assigned){
+// // 		using namespace query::pragma;
+// // 		ASSERT_EQ(UserHandler.pragma(count_changes, "fase"), EXIT_FAILURE);
+// // }
 
 
 /**************************DELETE AND DROP OPERATIONS***********************/

@@ -209,8 +209,10 @@ public:
 		 *
 		 * \include executeQuery.cpp
 		 */
-		bool executeQuery(const char *sql_query, std::vector<std::string> &data = empty_vec, \
-		                  std::vector<int> indexes_stmt = {}, bool verbose = false);
+		bool executeQuery(const char *sql_query, \
+											std::vector<int> indexes_stmt = {}, \
+											std::vector<std::string>* data = new std::vector<std::string>, \
+											bool verbose = false);
 
 		/*!
 		 * \brief Insert record data inside of a table.
@@ -245,7 +247,7 @@ public:
 		 * @return               EXIT_SUCCESS if the query executed correctly. EXIT_FAILURE
 		 * otherwise.
 		 */
-		bool pragma(std::string pragma_name, std::string new_value = "");
+		bool pragma(const std::string pragma_name, const std::string new_value = "");
 
 		/*!
 		 * \brief Selects and extracts the records that meet certain conditions.
