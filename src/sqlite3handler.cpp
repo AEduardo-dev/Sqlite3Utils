@@ -410,6 +410,7 @@ bool handler::Sqlite3Db::insertRecord(std::string table_name, std::vector<std::s
 // 		return EXIT_FAILURE;
 // }
 
+//TODO: Generate the remaining code for the use of the union keyword
 /******************************selectRecords*********************************/
 std::vector<std::string>  handler::Sqlite3Db::selectRecords(std::string table_name, \
                                                             std::vector<std::string> fields, \

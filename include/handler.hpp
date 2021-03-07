@@ -57,8 +57,12 @@ struct select_query_param {
 		std::vector<std::string> order_by = {};/*!< Fields or conditions to order the results*/
 		std::string order_type = "ASC";/*!< Type of ordering of the results "ASC" or "DESC"*/
 		int limit = 0;/*!< Maximum number of results to be processed*/
-		int offset = 0;/*!< Starting point in the results to apply the limit quantity
-		*/
+		int offset = 0;/*!< Starting point in the results to apply the limit quantity*/
+		int join_type = query::joins::no_join;/*!< Type of join to apply. 0 means NONE*/
+		std::string join_table = "";/*!< Table to join with the select query result*/
+		std::string inner_join_cond = ""; /*!< If inner join is selected, a condition needs to be set for it to work */
+		std::string outer_join_cond = ""; /*!< Same as above, but for an outer left join (only outer left is supported using sqlite)*/
+
 };/*!< Structure used for storing all options that may be used during a select query.*/
 
 /*! \brief Class for handling connection and operations in a sqlite3 database.

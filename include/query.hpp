@@ -76,6 +76,9 @@ namespace query {
       const std::string group_by          = " GROUP BY ";
       const std::string having            = " HAVING ";
       const std::string in                = " IN ";
+      const std::string cross_join = " CROSS JOIN ";
+      const std::string inner_join = " INNER JOIN ";
+      const std::string outer_join = " OUTER JOIN ";
 
       /*!
        * \brief generates a LIKE sqlite3 clause with the pattern given.
@@ -226,38 +229,61 @@ namespace query {
     } /* data */
 
     /*********************************************************************
-                            DATATYPES AND DB TYPES
+                            JOINS AND UNIONS TYPES
     *********************************************************************/
-        /*!
-         * \brief Includes some of the different datatypes and database selectable parts.
-         */
-        namespace pragma {
+    /*!
+     * \brief
+     */
+    namespace joins{
+      enum Joins{
+          NO_JOIN,
+          CROSS_JOIN,
+          INNER_JOIN,
+          OUTER_LEFT_JOIN,
+      };
+      const int no_join = NO_JOIN;
+      const int cross = CROSS_JOIN;
+      const int inner = INNER_JOIN;
+      const int outer = OUTER_LEFT_JOIN;
+    }; /* joins */
 
-          const std::string auto_vacuum           = "auto_vacuum";
-          const std::string cache_size            = "cache_size";
-          const std::string case_sensitive_like   = "case_sensitive_like";
-          const std::string count_changes         = "count_changes";
-          const std::string database_list         = "database_list";
-          const std::string encoding              = "encoding";
-          const std::string freelist_count        = "freelist_count";
-          const std::string index_info            = "index_info";
-          const std::string index_list            = "index_list";
-          const std::string journal_mode          = "journal_mode";
-          const std::string max_page_count        = "max_page_count";
-          const std::string page_count            = "page_count";
-          const std::string page_size             = "page_size";
-          const std::string parser_trace          = "parser_trace";
-          const std::string recursive_triggers    = "recursive_triggers";
-          const std::string schema_version        = "schema_version";
-          const std::string secure_delete         = "secure_delete";
-          const std::string sql_trace             = "sql_trace";
-          const std::string synchronous           = "synchronous";
-          const std::string temp_store            = "temp_store";
-          const std::string temp_store_directory  = "temp_store_directory";
-          const std::string user_version          = "user_version";
-          const std::string writable_schema       = "writable_schema";
+    namespace unions{
 
-        } /* pragma */
+    }; /* unions */
+
+    /*********************************************************************
+                            PRAGMA OPTIONS
+    *********************************************************************/
+    /*!
+     * \brief Includes all data available for the user using the pragma query.
+     */
+    namespace pragma {
+
+      const std::string auto_vacuum           = "auto_vacuum";
+      const std::string cache_size            = "cache_size";
+      const std::string case_sensitive_like   = "case_sensitive_like";
+      const std::string count_changes         = "count_changes";
+      const std::string database_list         = "database_list";
+      const std::string encoding              = "encoding";
+      const std::string freelist_count        = "freelist_count";
+      const std::string index_info            = "index_info";
+      const std::string index_list            = "index_list";
+      const std::string journal_mode          = "journal_mode";
+      const std::string max_page_count        = "max_page_count";
+      const std::string page_count            = "page_count";
+      const std::string page_size             = "page_size";
+      const std::string parser_trace          = "parser_trace";
+      const std::string recursive_triggers    = "recursive_triggers";
+      const std::string schema_version        = "schema_version";
+      const std::string secure_delete         = "secure_delete";
+      const std::string sql_trace             = "sql_trace";
+      const std::string synchronous           = "synchronous";
+      const std::string temp_store            = "temp_store";
+      const std::string temp_store_directory  = "temp_store_directory";
+      const std::string user_version          = "user_version";
+      const std::string writable_schema       = "writable_schema";
+
+    } /* pragma */
 
     const std::string end_query             =";";
 
